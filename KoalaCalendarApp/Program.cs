@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace KoalaCalendarApp
 {
+    // ADDED comment to check if gitDesktop is syncing
     public class Program
     {
         public static void Main(string[] args)
