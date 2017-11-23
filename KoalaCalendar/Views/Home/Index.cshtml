@@ -2,105 +2,82 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-        <li data-target="#myCarousel" data-slide-to="3"></li>
-    </ol>
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="~/images/banner1.svg" alt="ASP.NET" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how to build ASP.NET apps that can run anywhere.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner2.svg" alt="Visual Studio" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    There are powerful new features in Visual Studio for building modern web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner3.svg" alt="Package Management" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Bring in libraries from NuGet and npm, and automate tasks using Grunt or Gulp.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525029&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner4.svg" alt="Microsoft Azure" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-    </div>
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
-</div>
+<h1> Personal Calendar </h1>
 
-<div class="row">
-    <div class="col-md-3">
-        <h2>Application uses</h2>
-        <ul>
-            <li>Sample pages using ASP.NET Core MVC</li>
-            <li>Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
-        </ul>
+<!-- need 5 ROWS and 7 COLUMNS-->
+
+<style>
+    p {
+        padding: 3px;
+    }
+
+    div {
+        border: 1px solid black;
+    }
+
+</style>
+
+<div class="container-fluid">
+
+    <div class="row" >
+        <div class="col-xs-1"> <p> Sunday </p> </div>
+        <div class="col-xs-1"> <p> Monday </p> </div>
+        <div class="col-xs-1"> <p> Tuesday </p></div>
+        <div class="col-xs-1"> <p> Wednesday </p></div>
+        <div class="col-xs-1"> <p> Thursday </p></div>
+        <div class="col-xs-1"> <p> Friday </p></div>
+        <div class="col-xs-1"> <p> Saturday </p></div>
     </div>
-    <div class="col-md-3">
-        <h2>How to</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600">Add a Controller and View</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a></li>
-        </ul>
+
+    <div class="row">
+        <div class="col-xs-1"> <p>1</p> </div>
+        <div class="col-xs-1"> <p>2</p></div>
+        <div class="col-xs-1"> <p>3</p></div>
+        <div class="col-xs-1"> <p>4</p></div>
+        <div class="col-xs-1"> <p>5</p></div>
+        <div class="col-xs-1"> <p>6</p></div>
+        <div class="col-xs-1"> <p>7</p></div>
     </div>
-    <div class="col-md-3">
-        <h2>Overview</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET Core</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET Core such as Startup and middleware.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">Security</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a></li>
-        </ul>
+
+    <div class="row">
+        <div class="col-xs-1"> <p>8</p> </div>
+        <div class="col-xs-1"> <p>9</p></div>
+        <div class="col-xs-1"> <p>10</p></div>
+        <div class="col-xs-1"> <p>11</p></div>
+        <div class="col-xs-1"> <p>12</p></div>
+        <div class="col-xs-1"> <p>13</p></div>
+        <div class="col-xs-1"> <p>14</p></div>
     </div>
-    <div class="col-md-3">
-        <h2>Run &amp; Deploy</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">Run tools such as EF migrations and more</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure Web Apps</a></li>
-        </ul>
+
+    <div class="row">
+        <div class="col-xs-1"> <p>15</p> </div>
+        <div class="col-xs-1"> <p>16</p></div>
+        <div class="col-xs-1"> <p>17</p></div>
+        <div class="col-xs-1"> <p>18</p></div>
+        <div class="col-xs-1"> <p>19</p></div>
+        <div class="col-xs-1"> <p>20</p></div>
+        <div class="col-xs-1"> <p>21</p></div>
     </div>
+
+    <div class="row">
+        <div class="col-xs-1"> <p>22</p> </div>
+        <div class="col-xs-1"> <p>23</p></div>
+        <div class="col-xs-1"> <p>24</p></div>
+        <div class="col-xs-1"> <p>25</p></div>
+        <div class="col-xs-1"> <p>26</p></div>
+        <div class="col-xs-1"> <p>27</p></div>
+        <div class="col-xs-1"> <p>28</p></div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-1"> <p>29</p> </div>
+        <div class="col-xs-1"> <p>30</p></div>
+        <div class="col-xs-1"> <p>31</p></div>
+        <div class="col-xs-1"> <p>:)</p></div>
+        <div class="col-xs-1"> <p>:D</p></div>
+        <div class="col-xs-1"> <p>:O</p></div>
+        <div class="col-xs-1"> <p>;)</p></div>
+    </div>
+    
+
 </div>
