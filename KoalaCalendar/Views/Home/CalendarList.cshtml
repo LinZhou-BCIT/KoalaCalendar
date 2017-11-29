@@ -34,4 +34,11 @@
 <br /><p>
     <a asp-action="Create">Create New</a>
 </p>
-<p>@Html.ActionLink("Subscribe", "Details", new { /* id=item.PrimaryKey */ })</p>
+<p>@Html.ActionLink("Subscribe", "Subscribe", new { /* id=item.PrimaryKey */ })</p>
+
+<br /><form asp-controller="Home" asp-action="CalendarList">
+    <p>
+        <input type="text" name="SearchString"><br /><br />
+        <input type="submit" value="Search" />
+    </p>
+</form>
