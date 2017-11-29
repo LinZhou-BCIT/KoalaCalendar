@@ -15,6 +15,11 @@ namespace KoalaCalendar.Controllers
             return View();
         }
 
+        public IActionResult CalendarList()
+        {
+            return View();
+        }
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
