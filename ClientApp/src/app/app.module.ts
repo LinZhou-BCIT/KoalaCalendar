@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -10,6 +11,7 @@ import { EventCreateComponent } from './components/event-create/event-create.com
 import { AboutComponent } from './components/about/about.component';
 import { AppNavbarComponent } from './components/app-navbar/app-navbar.component';
 
+import { AppRouter } from './app.routing'
 
 @NgModule({
   declarations: [
@@ -22,7 +24,7 @@ import { AppNavbarComponent } from './components/app-navbar/app-navbar.component
     AppNavbarComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule, AppRouter
   ],
   providers: [],
   bootstrap: [AppComponent]
