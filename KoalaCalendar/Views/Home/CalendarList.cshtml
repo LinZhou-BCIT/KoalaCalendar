@@ -30,9 +30,10 @@
 }
     </tbody>
 </table>*@
-
+                      
 <br /><p>
-    <a asp-action="CreateEvent">Create New</a>
+    @*@Html.Partial("~/Views/Home/CalendarCreate.cshtml", Model)*@
+    <a asp-action="CreateCalendar">Create New</a>
 </p>
 <p>@Html.ActionLink("Subscribe", "Subscribe", new { /* id=item.PrimaryKey */ })</p>
 
