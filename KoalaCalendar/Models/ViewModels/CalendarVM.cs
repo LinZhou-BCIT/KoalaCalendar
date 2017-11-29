@@ -8,7 +8,7 @@ namespace KoalaCalendar.Models.ViewModels
 {
     public class CalendarVM
     {
-        [DisplayName("Title")]
+        [DisplayName("Calendar Name")]
         public string Title { get; set; }
         [DisplayName("Key")]
         public string Key { get; set; }
