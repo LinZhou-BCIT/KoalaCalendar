@@ -8,6 +8,7 @@ import { CalendarListComponent } from './components/calendar-list/calendar-list.
 import { CalendarSubComponent } from './components/calendar-sub/calendar-sub.component';
 import { EventCreateComponent } from './components/event-create/event-create.component';
 import { AboutComponent } from './components/about/about.component';
+import { AppNavbarComponent } from './components/app-navbar/app-navbar.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { AboutComponent } from './components/about/about.component';
     CalendarListComponent,
     CalendarSubComponent,
     EventCreateComponent,
-    AboutComponent
+    AboutComponent,
+    AppNavbarComponent
   ],
   imports: [
     BrowserModule
