@@ -64,6 +64,49 @@ namespace KoalaCalendar.Data.Migrations
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
+            //Calender table
+            migrationBuilder.CreateTable(
+                name: "Calendar",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false),
+                    CalendarName = table.Column<string>(nullable: false),
+                    UserId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Calendar", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Calendar_AspNetUsers",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            //Events table
+            migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false),
+                    EventName = table.Column<string>(nullable: false),
+                    StartTime = table.Column<DateTime>(nullable: true),
+                    EndTime = table.Column<DateTime>(nullable: true),
+                    CalenderKey = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Events_Calendar_CalendarKey",
+                        column: x => x.CalenderKey,
+                        principalTable: "Calendar",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
@@ -211,6 +254,12 @@ namespace KoalaCalendar.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Calendar");
+
+            migrationBuilder.DropTable(
+                name: "Events");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
