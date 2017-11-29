@@ -71,17 +71,17 @@ namespace KoalaCalendar.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false),
                     CalendarName = table.Column<string>(nullable: false),
-                    UserId = table.Column<string>(nullable: false)
+                    //UserId = table.Column<string>(maxLength: 450, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Calendar", x => x.Id);
-                    table.ForeignKey(
+                    /*table.ForeignKey(
                         name: "FK_Calendar_AspNetUsers",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade);*/
                 });
 
             //Events table
@@ -99,7 +99,7 @@ namespace KoalaCalendar.Data.Migrations
                 {
                     table.PrimaryKey("PK_Events", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Events_Calendar_CalendarKey",
+                        name: "FK_Events_Calendars",
                         column: x => x.CalenderKey,
                         principalTable: "Calendar",
                         principalColumn: "Id",
@@ -193,6 +193,31 @@ namespace KoalaCalendar.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            //Bridge Table
+            migrationBuilder.CreateTable(
+                name: "UserCalendar",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(maxLength: 450, nullable: false),
+                    CalendarId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserCalendar", x => new { x.UserId, x.CalendarId });
+                    table.ForeignKey(
+                        name: "FK_Calendar_AspNetUsers",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_",
+                        column: x => x.CalendarId,
+                        principalTable: "Calendar",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
@@ -202,6 +227,12 @@ namespace KoalaCalendar.Data.Migrations
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
+
+            //Create Calendar Index
+            migrationBuilder.CreateIndex(
+                name: "IX_UserCalendar_UserId",
+                table: "UserCalendar",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
