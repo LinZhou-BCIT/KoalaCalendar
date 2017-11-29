@@ -1,9 +1,7 @@
 ﻿@model IEnumerable<KoalaCalendar.Models.ViewModels.CalendarVM>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+
+@*<table class="table">
     <thead>
         <tr>
                 <th>
@@ -26,10 +24,14 @@
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Subscribe", "Details", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
 }
     </tbody>
-</table>
+</table>*@
+
+<br /><p>
+    <a asp-action="Create">Create New</a>
+</p>
+<p>@Html.ActionLink("Subscribe", "Details", new { /* id=item.PrimaryKey */ })</p>
