@@ -10,6 +10,7 @@ import { AboutComponent } from './components/about/about.component'
 const appRoutes: Routes = [
     { path: 'calendar', component: CalendarListComponent },
     { path: 'calendar/create', component: CalendarCreateComponent },
+    { path: 'calendar/list', component: CalendarListComponent },
     { path: 'calendar/sub', component: CalendarSubComponent },
     { path: 'event/create', component: EventCreateComponent },
     { path: 'about', component: AboutComponent },
