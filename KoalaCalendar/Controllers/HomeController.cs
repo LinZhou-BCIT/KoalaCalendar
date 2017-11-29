@@ -20,6 +20,11 @@ namespace KoalaCalendar.Controllers
             return PartialView();
         }
 
+        public IActionResult CreateCalendar()
+        {
+            return PartialView();
+        }
+
         public IActionResult CreateEvent()
         {
             return View();
