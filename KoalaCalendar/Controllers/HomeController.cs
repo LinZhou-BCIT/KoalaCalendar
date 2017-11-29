@@ -17,7 +17,7 @@ namespace KoalaCalendar.Controllers
 
         public IActionResult CalendarList()
         {
-            return View();
+            return PartialView();
         }
 
         public IActionResult About()
