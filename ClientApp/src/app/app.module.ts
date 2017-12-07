@@ -10,8 +10,8 @@ import { CalendarSubComponent } from './components/calendar-sub/calendar-sub.com
 import { EventCreateComponent } from './components/event-create/event-create.component';
 import { AboutComponent } from './components/about/about.component';
 import { AppNavbarComponent } from './components/app-navbar/app-navbar.component';
-
-import { AppRouter } from './app.routing'
+import { LoginComponent } from './components/login/login.component';
+import { AppRouter } from './app.routing';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,8 @@ import { AppRouter } from './app.routing'
     CalendarSubComponent,
     EventCreateComponent,
     AboutComponent,
-    AppNavbarComponent
+    AppNavbarComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule, AppRouter
