@@ -13,6 +13,7 @@ import { AppNavbarComponent } from './components/app-navbar/app-navbar.component
 import { LoginComponent } from './components/login/login.component';
 import { AppRouter } from './app.routing';
 import { RegisterComponent } from './components/register/register.component';
+import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { RegisterComponent } from './components/register/register.component';
     AboutComponent,
     AppNavbarComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ForgetPasswordComponent
   ],
   imports: [
     BrowserModule, AppRouter
