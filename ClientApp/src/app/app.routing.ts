@@ -15,7 +15,7 @@ const appRoutes: Routes = [
     { path: 'calendar/sub', component: CalendarSubComponent },
     { path: 'event/create', component: EventCreateComponent },
     { path: 'about', component: AboutComponent },
-    { path: 'login', component: LoginComponent },
+    { path: 'account/login', component: LoginComponent },
     { path: '', redirectTo: '/calendar', pathMatch: 'full' },
     { path: '**', redirectTo: '/calendar', pathMatch: 'full'}
 ];
