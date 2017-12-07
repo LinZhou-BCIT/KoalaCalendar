@@ -7,6 +7,7 @@ import { CalendarSubComponent } from './components/calendar-sub/calendar-sub.com
 import { EventCreateComponent } from './components/event-create/event-create.component';
 import { AboutComponent } from './components/about/about.component';
 import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
 
 const appRoutes: Routes = [
     { path: 'calendar', component: CalendarListComponent },
@@ -16,6 +17,7 @@ const appRoutes: Routes = [
     { path: 'event/create', component: EventCreateComponent },
     { path: 'about', component: AboutComponent },
     { path: 'account/login', component: LoginComponent },
+    { path: 'account/register', component: RegisterComponent },
     { path: '', redirectTo: '/calendar', pathMatch: 'full' },
     { path: '**', redirectTo: '/calendar', pathMatch: 'full'}
 ];
