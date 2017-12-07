@@ -1,0 +1,46 @@
+type: C_GET
+CK: 1
+Event day: 10
+Event Name: name
+Event Desc: name
+Event Start: 10:00
+Event End: 10:00
+
+type: C_GET
+CK: 1
+Event day: 10
+Event Name: name
+Event Desc: name
+Event Start: 10:00
+Event End: 10:00,
+Event day: 11
+Event Name: name
+Event Desc: name
+Event Start: 10:00
+Event End: 10:00,
+Event day: 12
+Event Name: name
+Event Desc: name
+Event Start: 10:00
+Event End: 10:00
+
+type: C_GET
+CK: 1
+
+"{"type":"C_GET"};{"CK":"1"};{"Event ID":"1","EVENT_DAY":"20","EVENT NAME":"test","EVENT DESC":"generic",""EVENT_START":"datetime","EVENT_END":"datetime"}"
+
+
+
+"Event_ID":{"EVENT_DAY":"20","EVENT_NAME":"test","EVENT_DESC":"generic","EVENT_START":"datetime","EVENT_END":"datetime"}
+
+
+{"type":"C_GET","CK":"1",
+"Event_ID":{"EVENT_DAY":"20","EVENT_NAME":"test","EVENT_DESC":"generic","EVENT_START":"datetime","EVENT_END":"datetime"},
+"Event_ID":{"EVENT_DAY":"20","EVENT_NAME":"test","EVENT_DESC":"generic","EVENT_START":"datetime","EVENT_END":"datetime"},
+"Event_ID":{"EVENT_DAY":"20","EVENT_NAME":"test","EVENT_DESC":"generic","EVENT_START":"datetime","EVENT_END":"datetime"},
+"Event_ID":{"EVENT_DAY":"20","EVENT_NAME":"test","EVENT_DESC":"generic","EVENT_START":"datetime","EVENT_END":"datetime"},
+"Event_ID":{"EVENT_DAY":"20","EVENT_NAME":"test","EVENT_DESC":"generic","EVENT_START":"datetime","EVENT_END":"datetime"}
+}
+
+split(";");
+
