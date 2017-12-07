@@ -1,11 +1,11 @@
-<p>
-  calendar-sub works!
-</p>
+<hr>
+<h4>Subscribe</h4>
+<hr>
 
-<form class="form-inline my-2 my-lg-0">
-    
-    
-    <label>Course Url</label>
-    <input class="form-control mr-sm-2" type="text" placeholder="Course Url" aria-label=""><br><br><br><br>
-    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Subscribe</button>
-  </form>
+<form action="/calendar">
+  <div class="form-group">
+    <label for="subKey">Calendar Key</label>
+    <input id="subKey" name="subKey" class="form-control mr-sm-2" type="text" placeholder="Calendar Key" aria-label="">
+  </div>
+  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Subscribe</button>
+</form>
