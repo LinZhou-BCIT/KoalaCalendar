@@ -9,6 +9,7 @@ import { AboutComponent } from './components/about/about.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 const appRoutes: Routes = [
     { path: 'calendar', component: CalendarListComponent },
@@ -20,6 +21,7 @@ const appRoutes: Routes = [
     { path: 'account/login', component: LoginComponent },
     { path: 'account/register', component: RegisterComponent },
     { path: 'account/forgetPassword', component: ForgetPasswordComponent },
+    { path: 'account/profile', component: ProfileComponent },
     { path: '', redirectTo: '/calendar', pathMatch: 'full' },
     { path: '**', redirectTo: '/calendar', pathMatch: 'full'}
 ];
