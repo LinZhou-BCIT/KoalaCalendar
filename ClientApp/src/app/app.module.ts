@@ -14,6 +14,7 @@ import { LoginComponent } from './components/login/login.component';
 import { AppRouter } from './app.routing';
 import { RegisterComponent } from './components/register/register.component';
 import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ForgetPasswordComponent } from './components/forget-password/forget-pas
     AppNavbarComponent,
     LoginComponent,
     RegisterComponent,
-    ForgetPasswordComponent
+    ForgetPasswordComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule, AppRouter
