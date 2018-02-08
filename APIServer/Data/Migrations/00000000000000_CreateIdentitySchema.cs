@@ -68,6 +68,7 @@ namespace APIServer.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false), //ID of calendar
                     CalendarName = table.Column<string>(nullable: false),
+                    ownerID = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
