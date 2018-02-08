@@ -24,6 +24,7 @@ namespace APIServer.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountAPI(
         UserManager<ApplicationUser> userManager,
