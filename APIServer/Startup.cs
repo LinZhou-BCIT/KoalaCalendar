@@ -11,6 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 using APIServer.Data;
 using APIServer.Models;
 using APIServer.Services;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace APIServer
 {
@@ -35,6 +38,31 @@ namespace APIServer
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddCors(options => {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
+                    });
+            });
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
+            services.AddAuthentication()
+            .AddJwtBearer(cfg => {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = Configuration["TokenInformation:Issuer"],
+                    ValidAudience = Configuration["TokenInformation:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(Configuration["TokenInformation:Key"])),
+                    ClockSkew = TimeSpan.Zero // remove delay of token when expire
+                };
+            });
 
             services.AddMvc();
         }
@@ -53,6 +81,17 @@ namespace APIServer
             }
 
             app.UseStaticFiles();
+
+            app.Use(async (context, next) => {
+                await next();
+                if (context.Response.StatusCode == 404)
+                {
+                    context.Request.Path = "/dist/index.html";
+                    await next();
+                }
+            }).UseDefaultFiles().UseStaticFiles();
+
+            app.UseCors("AllowAll");
 
             app.UseAuthentication();
 
