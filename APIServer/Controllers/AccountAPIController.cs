@@ -78,13 +78,19 @@ namespace APIServer.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
                     return await GenerateJwtToken(model.Email, appUser);
                 }
-                return NotFound();
+
+                if (result.IsLockedOut)
+                {
+                    return Forbid();
+                }
+
+                return Unauthorized();
             }
             return BadRequest();
         }
