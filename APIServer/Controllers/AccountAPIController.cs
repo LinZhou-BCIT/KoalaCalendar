@@ -24,13 +24,13 @@ namespace APIServer.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
-        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountAPI(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IConfiguration configuration,
-        RoleManager<ApplicationRole> roleManager)
+        RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -50,12 +50,20 @@ namespace APIServer.Controllers
         [AllowAnonymous]
         public async Task<object> Register([FromBody] RegisterViewModel model)
         {
+            // quick hack
+            await CreateInitialRolesAsync();
+
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    var userRoleSucceeded = await AddUserRole(model.Email, model.Role);
+                    if (!userRoleSucceeded)
+                    {
+                        return BadRequest();
+                    }
                     await _signInManager.SignInAsync(user, false);
                     return await GenerateJwtToken(model.Email, user);
                 }
@@ -116,10 +124,10 @@ namespace APIServer.Controllers
                 var roleExist = await _roleManager.RoleExistsAsync(roleName);
                 if (!roleExist)
                 {
-                    roleResult = await _roleManager.CreateAsync(new ApplicationRole(roleName));
-                    if (roleResult.Succeeded)
+                    roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
+                    if (!roleResult.Succeeded)
                     {
-                        return true;
+                        return false;
                     }
                 }
             }
@@ -131,7 +139,7 @@ namespace APIServer.Controllers
         {
             var user = await _userManager.FindByEmailAsync(email);
 
-            ApplicationRole applicationRole = await _roleManager.FindByNameAsync(roleName);
+            IdentityRole applicationRole = await _roleManager.FindByNameAsync(roleName);
 
             if(applicationRole != null)
             {
