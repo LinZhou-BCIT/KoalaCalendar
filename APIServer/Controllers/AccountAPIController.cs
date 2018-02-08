@@ -24,16 +24,18 @@ namespace APIServer.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
 
         public AccountAPI(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        RoleManager<ApplicationRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _roleManager = roleManager;
         }
 
         [HttpGet]
@@ -101,6 +103,42 @@ namespace APIServer.Controllers
             );
             var formattedToken = new JwtSecurityTokenHandler().WriteToken(token);
             return Ok(new { token = formattedToken });
+        }
+
+
+        public async Task<bool> CreateInitialRolesAsync()
+        {
+            string[] roleNames = { "Professor", "Student" };
+            IdentityResult roleResult;
+
+            foreach(var roleName in roleNames)
+            {
+                var roleExist = await _roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    roleResult = await _roleManager.CreateAsync(new ApplicationRole(roleName));
+                    if (roleResult.Succeeded)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public async Task<bool> AddUserRole(string email, string roleName)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            ApplicationRole applicationRole = await _roleManager.FindByNameAsync(roleName);
+
+            if(applicationRole != null)
+            {
+                IdentityResult roleResult = await _userManager.AddToRoleAsync(user, roleName);
+            }
+
+            return true;
         }
     }
 }
