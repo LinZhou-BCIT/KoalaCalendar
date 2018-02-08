@@ -34,7 +34,7 @@ CK: 1
 "Event_ID":{"EVENT_DAY":"20","EVENT_NAME":"test","EVENT_DESC":"generic","EVENT_START":"datetime","EVENT_END":"datetime"}
 
 
-{"type":"C_GET","CK":"1",
+{"type":"C_GET","CK":"1","Auth":"<something to do with auth>",
 "Event_ID":{"EVENT_DAY":"20","EVENT_NAME":"test","EVENT_DESC":"generic","EVENT_START":"datetime","EVENT_END":"datetime"},
 "Event_ID":{"EVENT_DAY":"20","EVENT_NAME":"test","EVENT_DESC":"generic","EVENT_START":"datetime","EVENT_END":"datetime"},
 "Event_ID":{"EVENT_DAY":"20","EVENT_NAME":"test","EVENT_DESC":"generic","EVENT_START":"datetime","EVENT_END":"datetime"},

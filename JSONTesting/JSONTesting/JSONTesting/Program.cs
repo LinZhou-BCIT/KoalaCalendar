@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace JSON_Testing
+namespace JSONTesting
 {
     class Program
     {
