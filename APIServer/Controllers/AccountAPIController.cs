@@ -87,7 +87,7 @@ namespace APIServer.Controllers
 
                 if (result.IsLockedOut)
                 {
-                    return Forbid();
+                    return NotFound();
                 }
 
                 return Unauthorized();
