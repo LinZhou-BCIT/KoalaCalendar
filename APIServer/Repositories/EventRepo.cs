@@ -2,13 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using APIServer.Models.CalendarViewModels;
 
 namespace APIServer.Repositories
 {
     public class EventRepo
     {
-        // list of events
-        //GetAllEvents
+        public async Task<IEnumerable<EventVM>> GetAllEvents(string calendarID, DateTime startTime, DateTime endTime)
+        {
+            //if calendarID is a match
+            //query based on time range
+
+            return null;
+        }
 
         //Create Event
         // pass in calendarID as a parameter
