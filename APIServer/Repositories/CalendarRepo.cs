@@ -7,9 +7,11 @@ namespace APIServer.Repositories
 {
     public class CalendarRepo
     {
-        public async Task<bool> CreateCalendar(string calendarName, string accessCode)
+        public async Task<string> CreateCalendar(string calendarName)
         {
-            return true;
+            //return calendarID once it is created
+
+            return null;
         }
 
         public async Task<IEnumerable<string>> GetAllCalendars()
@@ -20,6 +22,23 @@ namespace APIServer.Repositories
         public async Task<IEnumerable<string>> SearchCalendar(string searchInput)
         {
             return null;
+        }
+
+        public async Task<bool> UpdateCalendar(string calendarID, string calendarName)
+        {
+            return true;
+        }
+
+        public async Task<string> GenerateAccessCode(string calendarID)
+        {
+            // calendarID will be used to generate the accessCode
+            //return access code
+            return null;
+        }
+
+        public async Task<bool> RemoveCalendar(string calendarID)
+        {
+            return true;
         }
 
     }
