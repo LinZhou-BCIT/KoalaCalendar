@@ -16,17 +16,20 @@ namespace APIServer.Controllers
     public class CalendarAPI : Controller
     {
         private readonly CalendarRepo _calendarRepo;
+        private readonly EventRepo _eventRepo;
 
         //injection
         public CalendarAPI(
-        CalendarRepo calendarRepo)
+        CalendarRepo calendarRepo,
+        EventRepo eventRepo)
         {
             _calendarRepo = calendarRepo;
+            _eventRepo = eventRepo;
         }
 
-        [Authorize (Roles = "Professor")]
+        //[Authorize (Roles = "Professor")]
         [HttpPost]
-        public async Task<object> AddCalendar([FromBody] AddCalendarVM model)
+        public async Task<object> AddCalendar([FromBody] CalendarVM model)
         {
             return Ok();
         }
@@ -50,10 +53,19 @@ namespace APIServer.Controllers
             return _calendarRepo.SearchCalendar(searchInput);
         }
 
+        // Get any events of any calendar by ID, starttime and endtime
         [HttpPost]
-        public async Task<object> ViewCalendar()
+        public async Task<object> GetEventsByCalendarIDs([FromBody] EventRequestVM model)
         {
-            return View();
+            List<IEnumerable<EventVM>> listOfEventLists = new List<IEnumerable<EventVM>>();
+
+            foreach(string calendarID in model.CalendarIDs)
+            {
+                var events = await _eventRepo.GetEvents(calendarID, model.StartTime, model.EndTime);
+                listOfEventLists.Add(events);
+            }
+
+            return listOfEventLists;
         }
 
         [HttpDelete]

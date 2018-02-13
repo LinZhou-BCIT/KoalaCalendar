@@ -8,10 +8,8 @@ namespace APIServer.Repositories
 {
     public class EventRepo
     {
-        public async Task<IEnumerable<EventVM>> GetAllEvents(string calendarID, DateTime startTime, DateTime endTime)
+        public async Task<IEnumerable<EventVM>> GetEvents(string calendarID, DateTime startTime, DateTime endTime)
         {
-            //if calendarID is a match
-            //query based on time range
 
             return null;
         }

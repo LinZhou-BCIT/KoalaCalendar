@@ -7,6 +7,11 @@ namespace APIServer.Repositories
 {
     public class CalendarRepo
     {
+        public async Task<bool> CreateCalendar(string calendarName, string accessCode)
+        {
+            return true;
+        }
+
         public async Task<IEnumerable<string>> GetAllCalendars()
         {
             return null;
@@ -16,5 +21,6 @@ namespace APIServer.Repositories
         {
             return null;
         }
+
     }
 }
