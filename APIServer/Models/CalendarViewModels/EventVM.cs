@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace APIServer.Models.AccountViewModels
+namespace APIServer.Models.CalendarViewModels
 {
     public class EventVM
     {
@@ -11,6 +11,5 @@ namespace APIServer.Models.AccountViewModels
         public string EventName { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-
     }
 }
