@@ -7,5 +7,6 @@ namespace APIServer.Repositories
 {
     public class EventRepo
     {
+
     }
 }
