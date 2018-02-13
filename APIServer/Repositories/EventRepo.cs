@@ -10,16 +10,31 @@ namespace APIServer.Repositories
     {
         public async Task<IEnumerable<EventVM>> GetEvents(string calendarID, DateTime startTime, DateTime endTime)
         {
-
             return null;
         }
 
-        //Create Event
-        // pass in calendarID as a parameter
+        public async Task<string> CreateEvent(string calendarID, string eventName, DateTime startTime, DateTime endTime)
+        {
+            // return eventID
+            return null;
+        }
 
-        //Update Event
+        public async Task<bool> UpdateEvent(string eventID, string eventName, DateTime startTime, DateTime endTime)
+        {
+            return true;
+        }
 
-        //Delete Event
+        public async Task<bool> DeleteEvent(string eventID)
+        {
+            return true;
+        }
+
+        public async Task<EventVM> GetEventByID(string eventID)
+        {
+            EventVM e = new EventVM();
+        
+            return e;
+        }
 
         //controller verify that userID = ownerID
         // check if user is subscribe to that calendar

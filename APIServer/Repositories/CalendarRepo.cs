@@ -10,7 +10,6 @@ namespace APIServer.Repositories
         public async Task<string> CreateCalendar(string calendarName)
         {
             //return calendarID once it is created
-
             return null;
         }
 
@@ -37,6 +36,11 @@ namespace APIServer.Repositories
         }
 
         public async Task<bool> RemoveCalendar(string calendarID)
+        {
+            return true;
+        }
+
+        public async Task<bool> UnassignCalendar(string userID, string calendarID)
         {
             return true;
         }

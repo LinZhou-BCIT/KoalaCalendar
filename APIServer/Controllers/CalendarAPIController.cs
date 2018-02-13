@@ -69,27 +69,55 @@ namespace APIServer.Controllers
         }
 
         [HttpDelete]
-        public async Task<object> DeleteCalendar()
+        public async Task<object> DeleteCalendar([FromBody] CalendarVM model)
         {
-            return View();
+            bool result = await _calendarRepo.RemoveCalendar(model.CalendarID);
+
+            if (result)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
         [HttpPost]
-        public IActionResult AddEvent()
+        public async Task<object> UnsubscribeCalendar([FromBody] CalendarVM model)
         {
-            return View();
+            string userID = "sampleid";
+           
+            bool result = await _calendarRepo.UnassignCalendar(userID, model.CalendarID);
+
+            if (result)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost]
+        public async Task<string> AddEvent([FromBody] EventVM model)
+        {
+            return await _eventRepo.CreateEvent(model.CalendarID, model.EventName, model.StartTime, model.EndTime);
         }
 
         [HttpPut]
-        public IActionResult UpdateEvent()
+        public async Task<bool> UpdateEvent([FromBody] EventVM model)
         {
-            return View();
+            return await _eventRepo.UpdateEvent(model.EventID, model.EventName, model.StartTime, model.EndTime);
         }
 
         [HttpDelete]
-        public IActionResult DeleteEvent()
+        public async Task<bool> DeleteEvent([FromBody] EventVM model)
         {
-            return View();
+            return await _eventRepo.DeleteEvent(model.EventID);
+        }
+
+        [HttpPost]
+        public async Task<object> GetEventByID([FromBody] EventVM model)
+        {
+            return await _eventRepo.GetEventByID(model.EventID);
         }
     }
 }
