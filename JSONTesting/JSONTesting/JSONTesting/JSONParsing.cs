@@ -10,10 +10,26 @@ namespace CalendarJson
     {
         public void Test()
         {
-            string testString = @"{ 'test' : 1 }";
+            string testString = 
+@"{
+	'type':'C_GET',
+	'CK':'1','Auth':
+	'<something to do with auth>',
+	'Events': 
+		[
+			{
+				'Event_ID':'1',
+				'EVENT_DAY':'20',
+				'EVENT_NAME':'test',
+				'EVENT_DESC':'generic',
+				'EVENT_START':'datetime',
+				'EVENT_END':'datetime'
+			}
+		]
+}";
             Calendar test = JsonConvert.DeserializeObject<Calendar>(testString);
             
-            Console.WriteLine(test.type);
+            Console.WriteLine(test.CalendarEvents);
 
             
 
