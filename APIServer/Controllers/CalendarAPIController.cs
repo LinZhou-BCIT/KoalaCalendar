@@ -29,15 +29,15 @@ namespace APIServer.Controllers
 
         //[Authorize (Roles = "Professor")]
         [HttpPost]
-        public async Task<object> AddCalendar([FromBody] CalendarVM model)
+        public async Task<object> CreateCalendar([FromBody] CalendarVM model)
         {
-            return Ok();
+            return Ok("Calendar has been created successfully.");
         }
 
         [HttpPost]
         public async Task<object> SubscribeCalendar(string accesCode)
         {
-            return Ok();
+            return Ok("You are now subscribed to the calendar.");
         }
 
         [HttpGet]
@@ -75,10 +75,11 @@ namespace APIServer.Controllers
 
             if (result)
             {
-                return Ok();
+                string message = "Calendar has been deleted successfully.";
+                return Ok(message);
             }
 
-            return BadRequest();
+            return BadRequest("The calendar cannot be deleted.");
         }
 
         [HttpPost]
@@ -90,10 +91,10 @@ namespace APIServer.Controllers
 
             if (result)
             {
-                return Ok();
+                return Ok("You have successfully unsubscribe to the calendar");
             }
 
-            return BadRequest();
+            return BadRequest("The request to unsubscribe to the calendar is unsuccessful.");
         }
 
         [HttpPost]
