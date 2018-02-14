@@ -30,32 +30,31 @@ CK: 1
 "{"type":"C_GET"};{"CK":"1"};{"Event ID":"1","EVENT_DAY":"20","EVENT NAME":"test","EVENT DESC":"generic",""EVENT_START":"datetime","EVENT_END":"datetime"}"
 
 
-
-"EVENT_ID":
 {
-	"EVENT_DAY":"20",
-	"EVENT_NAME":"test",
-	"EVENT_DESC":"generic",
-	"EVENT_START":"datetime",
-	"EVENT_END":"datetime"
+	'Event_ID':1
+	'EVENT_DAY':20,
+	'EVENT_NAME':'test',
+	'EVENT_DESC':'generic',
+	'EVENT_START':'datetime',
+	'EVENT_END':'datetime'
 }
 
 
 {
-	"type":"C_GET",
-	"CK": 1,
-	"Auth":"<AuthKey>",
-	"CalendarEvents":
-	[
-		"EVENT_ID":
-		{
-			"EVENT_DAY":"20",
-			"EVENT_NAME":"test",
-			"EVENT_DESC":"generic",
-			"EVENT_START":"datetime",
-			"EVENT_END":"datetime"
-		}
-	]
+	'type':'C_GET',
+	'CK':'1','Auth':
+	'<something to do with auth>',
+	'Events': 
+		'{
+			{
+				'Event_ID':1
+				'EVENT_DAY':20,
+				'EVENT_NAME':'test',
+				'EVENT_DESC':'generic',
+				'EVENT_START':'datetime',
+				'EVENT_END':'datetime'
+			}
+		}'
 }
 
 split(";");

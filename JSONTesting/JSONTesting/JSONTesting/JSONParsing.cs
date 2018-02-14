@@ -1,64 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Runtime.Serialization.Json;
-using System.Runtime.Serialization;
+using Newtonsoft.Json.Schema;
+using Newtonsoft.Json;
 
-namespace JSONTesting
+namespace CalendarJson
 {
-    class JSONParsing
+    public class JSONParsing
     {
-        internal class CalendarEvent
-        {
-            internal int date;
-
-            internal string name;
-
-            internal string description;
-
-            internal string eventStart;
-
-            internal string eventEnd;
-        }
-
-        internal class CalendarEventList
-        {
-            internal CalendarEvent calenderEvents;
-        }
-
-        [DataContract]
-        internal class CalendarData
-        {
-            [DataMember]
-            internal string CallType;
-
-            [DataMember]
-            internal int CalKey;
-
-            [DataMember]
-            internal string Auth;
-
-            [DataMember]
-            internal CalendarEventList EventList;
-        }
-
         public void Test()
         {
-            CalendarData c = new CalendarData();
-            c.CallType = "C_GET";
-            c.CalKey = 1;
-            c.Auth = "aaaa";
-            //c.Events = "";
+            string testString = @"{ 'test' : 1 }";
+            Calendar test = JsonConvert.DeserializeObject<Calendar>(testString);
+            
+            Console.WriteLine(test.type);
+
+            
+
         }
+    }
 
-        public IDictionary<string, string> Parse(string jsonString)
-        {
-            IDictionary<string, string> JsonMap = new Dictionary<string, string>();
+    public class CalendarEvent
+    {
+        public int eventID          { get; set; }
+        public int eventDay         { get; set; }
+        public string eventName     { get; set; }
+        public string eventDesc     { get; set; }
+        public string eventStart    { get; set; }
+        public string eventEnd      { get; set; }
+    }
 
-
-
-
-            return JsonMap;
-        }
+    public class Calendar
+    {
+        public string type { get; set; }
+        public string calendarKey { get; set; }
+        public string Auth { get; set; }
+        public CalendarEvent[] CalendarEvents { get; set; }
     }
 }

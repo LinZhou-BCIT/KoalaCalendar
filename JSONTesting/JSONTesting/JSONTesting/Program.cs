@@ -1,4 +1,5 @@
 ﻿using System;
+using CalendarJson;
 
 namespace JSONTesting
 {
@@ -6,7 +7,9 @@ namespace JSONTesting
     {
         static void Main(string[] args)
         {
-
+            JSONParsing a = new JSONParsing();
+            a.Test();
+            Console.ReadLine();
         }
     }
 }
