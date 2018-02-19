@@ -6,11 +6,6 @@
         <section>
             <form action="/calendar">
               <!-- <div class="text-danger validation-summary-valid" data-valmsg-summary="true"><ul><li style="display:none"></li></ul></div> -->
-              <div class="form-group">
-                    <label for="Username">Username</label>
-                    <input class="form-control" type="text" id="Username" name="Username" value="" />
-                    <!-- <span class="text-danger field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span> -->
-                </div>
                 <div class ="form-group">
                         <label class="radio-inline">
                             <input type="radio" name="role" value="professor"> Professor &nbsp;&nbsp;</label> 
@@ -20,17 +15,17 @@
                 </div>
               <div class="form-group">
                   <label for="Email">Email</label>
-                  <input class="form-control" type="email" id="Email" name="Email" value="" />
+                  <input class="form-control" type="email" id="Email" name="Email" [(ngModel)]="email" />
                   <!-- <span class="text-danger field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span> -->
               </div>
               <div class="form-group">
                   <label for="Password">Password</label>
-                  <input class="form-control" type="password" id="Password" name="Password" />
+                  <input class="form-control" type="password" id="Password" name="Password" [(ngModel)]="password"/>
                   <!-- <span class="text-danger field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span> -->
               </div>
               <div class="form-group">
                   <label for="ConfirmPassword">Confirm Password</label>
-                  <input class="form-control" type="password" id="ConfirmPassword" name="ConfirmPassword" />
+                  <input class="form-control" type="password" id="ConfirmPassword" name="ConfirmPassword" [(ngModel)]="confirmPassword"/>
                   <!-- <span class="text-danger field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span> -->
               </div>
               <div class="form-group">

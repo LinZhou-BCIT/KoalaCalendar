@@ -1,6 +1,8 @@
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule }    from '@angular/forms';
+import { HttpModule} from '@angular/http';
 
 
 import { AppComponent } from './app.component';
@@ -11,10 +13,14 @@ import { EventCreateComponent } from './components/event-create/event-create.com
 import { AboutComponent } from './components/about/about.component';
 import { AppNavbarComponent } from './components/app-navbar/app-navbar.component';
 import { LoginComponent } from './components/login/login.component';
-import { AppRouter } from './app.routing';
+// import { AppRouter } from './app.routing';
 import { RegisterComponent } from './components/register/register.component';
 import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
 import { ProfileComponent } from './components/profile/profile.component';
+
+import { AppRoutingModule } from './app-routing/app-routing.module';
+import { RemoteConnectService } from './services/remote-connect.service'
+import { AuthGuardService } from './services/auth-guard.service'
 
 @NgModule({
   declarations: [
@@ -31,9 +37,15 @@ import { ProfileComponent } from './components/profile/profile.component';
     ProfileComponent
   ],
   imports: [
-    BrowserModule, AppRouter
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    AppRoutingModule
   ],
-  providers: [],
+  providers: [
+    RemoteConnectService,
+    AuthGuardService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
