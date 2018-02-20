@@ -9,7 +9,7 @@ namespace APIServer.Models
 {
     public class Calendar
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Key]
         public Guid CalendarID { get; set; }
         public string Name { get; set; }
