@@ -8,6 +8,7 @@ import { CalendarSubComponent } from '../components/calendar-sub/calendar-sub.co
 import { EventCreateComponent } from '../components/event-create/event-create.component';
 import { AboutComponent } from '../components/about/about.component';
 
+import { LogoutComponent } from '../components/logout/logout.component';
 import { LoginComponent } from '../components/login/login.component';
 import { RegisterComponent } from '../components/register/register.component';
 import { ForgetPasswordComponent } from '../components/forget-password/forget-password.component';
@@ -22,6 +23,7 @@ const appRoutes: Routes = [
   { path: 'event/create', component: EventCreateComponent, canActivate: [AuthGuardService] },
   { path: 'about', component: AboutComponent },
   { path: 'account/login', component: LoginComponent },
+  { path: 'account/logout', component: LogoutComponent },
   { path: 'account/register', component: RegisterComponent },
   { path: 'account/forgetPassword', component: ForgetPasswordComponent },
   { path: 'account/profile', component: ProfileComponent, canActivate: [AuthGuardService] },
