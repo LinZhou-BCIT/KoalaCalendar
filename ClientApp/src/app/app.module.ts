@@ -20,7 +20,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { RemoteConnectService } from './services/remote-connect.service'
-import { AuthGuardService } from './services/auth-guard.service'
+import { AuthGuardService } from './services/auth-guard.service';
+import { LogoutComponent } from './components/logout/logout.component'
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AuthGuardService } from './services/auth-guard.service'
     LoginComponent,
     RegisterComponent,
     ForgetPasswordComponent,
-    ProfileComponent
+    ProfileComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,
