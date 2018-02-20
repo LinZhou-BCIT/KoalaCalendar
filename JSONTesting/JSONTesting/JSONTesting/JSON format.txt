@@ -42,8 +42,8 @@ CK: 1
 
 {
 	'TYPE':'C_GET',
-	'CALENDAR_KEY':'1','AUTH':
-	'<something to do with auth>',
+	'CALENDAR_KEY':'1',
+	'AUTH': '<something to do with auth>',
 	'CalendarEvents': 
 		[
 			{
