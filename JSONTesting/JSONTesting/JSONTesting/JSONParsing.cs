@@ -10,26 +10,34 @@ namespace CalendarJson
     {
         public void Test()
         {
-            string testString = 
+            string testString =
 @"{
-	'type':'C_GET',
-	'CK':'1','Auth':
+	'TYPE':'C_GET',
+	'CALENDAR_KEY':'1','AUTH':
 	'<something to do with auth>',
-	'Events': 
+	'CalendarEvents': 
 		[
 			{
-				'Event_ID':'1',
+				'EVENT_ID':'1',
 				'EVENT_DAY':'20',
 				'EVENT_NAME':'test',
 				'EVENT_DESC':'generic',
 				'EVENT_START':'datetime',
 				'EVENT_END':'datetime'
+			},
+            {
+				'EVENT_ID':'2',
+				'EVENT_DAY':'21',
+				'EVENT_NAME':'test1',
+				'EVENT_DESC':'generic1',
+				'EVENT_START':'datetime1',
+				'EVENT_END':'datetime1'
 			}
 		]
 }";
             Calendar test = JsonConvert.DeserializeObject<Calendar>(testString);
             
-            Console.WriteLine(test.CalendarEvents);
+            Console.WriteLine(test.CalendarEvents[0].EVENT_ID);
 
             
 
@@ -38,19 +46,19 @@ namespace CalendarJson
 
     public class CalendarEvent
     {
-        public int eventID          { get; set; }
-        public int eventDay         { get; set; }
-        public string eventName     { get; set; }
-        public string eventDesc     { get; set; }
-        public string eventStart    { get; set; }
-        public string eventEnd      { get; set; }
+        public int EVENT_ID { get; set; }
+        public int EVENT_DAY { get; set; }
+        public string EVENT_NAME { get; set; }
+        public string EVENT_DESC { get; set; }
+        public string EVENT_START { get; set; }
+        public string EVENT_END { get; set; }
     }
 
     public class Calendar
     {
-        public string type { get; set; }
-        public string calendarKey { get; set; }
-        public string Auth { get; set; }
+        public string TYPE { get; set; }
+        public string CALENDAR_KEY { get; set; }
+        public string AUTH { get; set; }
         public CalendarEvent[] CalendarEvents { get; set; }
     }
 }
