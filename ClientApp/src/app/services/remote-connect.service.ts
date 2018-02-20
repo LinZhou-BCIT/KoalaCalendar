@@ -45,10 +45,6 @@ export class RemoteConnectService {
         .catch(this.handleError); 
   } 
 
-  postLogout(){
-    
-  }
-
   getUsers(): Observable<Comment[]> {
     let headers = new Headers({ 'Content-Type': 'application/json' }); 
 
