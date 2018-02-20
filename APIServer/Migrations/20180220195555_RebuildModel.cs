@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace APIServer.Data.Migrations
+namespace APIServer.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class RebuildModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,20 +20,6 @@ namespace APIServer.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserTokens",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(nullable: false),
-                    LoginProvider = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(nullable: false),
-                    Value = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                 });
 
             migrationBuilder.CreateTable(
@@ -61,48 +47,12 @@ namespace APIServer.Data.Migrations
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
-            //Calender table
-            migrationBuilder.CreateTable(
-                name: "Calendar",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false), //ID of calendar
-                    CalendarName = table.Column<string>(nullable: false),
-                    ownerID = table.Column<int>(nullable: false),
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Calendar", x => x.Id);
-                });
-
-            //Events table
-            migrationBuilder.CreateTable(
-                name: "Events",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false),
-                    EventName = table.Column<string>(nullable: false),
-                    StartTime = table.Column<DateTime>(nullable: true),
-                    EndTime = table.Column<DateTime>(nullable: true),
-                    CalenderKey = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Events", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Events_Calendars",
-                        column: x => x.CalenderKey,
-                        principalTable: "Calendar",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
+                        .Annotation("Sqlite:Autoincrement", true),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
                     RoleId = table.Column<string>(nullable: false)
@@ -123,7 +73,7 @@ namespace APIServer.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("Autoincrement", true),
+                        .Annotation("Sqlite:Autoincrement", true),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: false)
@@ -183,47 +133,102 @@ namespace APIServer.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            //Bridge Table
             migrationBuilder.CreateTable(
-                name: "UserCalendar",
+                name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(maxLength: 450, nullable: false),
-                    CalendarId = table.Column<int>(nullable: false)
+                    UserId = table.Column<string>(nullable: false),
+                    LoginProvider = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: false),
+                    Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserCalendar", x => new { x.UserId, x.CalendarId });
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
-                        name: "FK_Calendar_AspNetUsers",
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_",
-                        column: x => x.CalendarId,
-                        principalTable: "Calendar",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "AspNetRoles",
-                column: "NormalizedName");
+            migrationBuilder.CreateTable(
+                name: "Calendars",
+                columns: table => new
+                {
+                    CalendarID = table.Column<Guid>(nullable: false),
+                    AccessCode = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    OwnerID = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Calendars", x => x.CalendarID);
+                    table.ForeignKey(
+                        name: "FK_Calendars_AspNetUsers_OwnerID",
+                        column: x => x.OwnerID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Events",
+                columns: table => new
+                {
+                    EventID = table.Column<Guid>(nullable: false),
+                    CalendarID = table.Column<Guid>(nullable: false),
+                    EndTime = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    StartTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Events", x => x.EventID);
+                    table.ForeignKey(
+                        name: "FK_Events_Calendars_CalendarID",
+                        column: x => x.CalendarID,
+                        principalTable: "Calendars",
+                        principalColumn: "CalendarID",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Subscriptions",
+                columns: table => new
+                {
+                    UserID = table.Column<string>(nullable: false),
+                    CalendarID = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Subscriptions", x => new { x.UserID, x.CalendarID });
+                    table.UniqueConstraint("AK_Subscriptions_CalendarID_UserID", x => new { x.CalendarID, x.UserID });
+                    table.ForeignKey(
+                        name: "FK_Subscriptions_Calendars_CalendarID",
+                        column: x => x.CalendarID,
+                        principalTable: "Calendars",
+                        principalColumn: "CalendarID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Subscriptions_AspNetUsers_UserID",
+                        column: x => x.UserID,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
 
-            //Create Calendar Index
             migrationBuilder.CreateIndex(
-                name: "IX_UserCalendar_UserId",
-                table: "UserCalendar",
-                column: "UserId");
-
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -241,11 +246,6 @@ namespace APIServer.Data.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_UserId",
-                table: "AspNetUserRoles",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
@@ -255,6 +255,22 @@ namespace APIServer.Data.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Calendars_AccessCode",
+                table: "Calendars",
+                column: "AccessCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Calendars_OwnerID",
+                table: "Calendars",
+                column: "OwnerID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Events_CalendarID",
+                table: "Events",
+                column: "CalendarID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -275,16 +291,16 @@ namespace APIServer.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Events");
+
+            migrationBuilder.DropTable(
+                name: "Subscriptions");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-            name: "Calendar");
-
-            migrationBuilder.DropTable(
-                name: "Events");
+                name: "Calendars");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
