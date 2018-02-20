@@ -14,11 +14,12 @@ export class LogoutComponent implements OnInit {
   ngOnInit() {
     this.message = sessionStorage.getItem('message');
     sessionStorage.removeItem('message');
-  }
 
-  logout(){
+    // 
     sessionStorage.setItem('auth_token', null);
+    sessionStorage.setItem('logged_in', 'false');
     this.message = "You are logged out.";
+    this.router.navigate(['/account/login']);
   }
 
 }

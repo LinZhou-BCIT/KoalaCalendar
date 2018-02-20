@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
           sessionStorage.setItem('auth_token', data["token"]);
           sessionStorage.setItem('logged_in', 'true');
           console.log(data);   
-          this.router.navigate(['/calendar']); 
+          this.router.navigate(['/calendar']);
       },
       // Error.
       error => {
