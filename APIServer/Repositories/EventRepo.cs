@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using APIServer.Data;
-using APIServer.Models.CalendarViewModels;
+using APIServer.Models;
 
 namespace APIServer.Repositories
 {
-    public class EventRepo
+    public class EventRepo: IEventRepo
     {
         ApplicationDbContext _context;
         public EventRepo(ApplicationDbContext context)
@@ -15,7 +15,7 @@ namespace APIServer.Repositories
             _context = context;
 
         }
-        public async Task<IEnumerable<EventVM>> GetEvents(string calendarID, DateTime startTime, DateTime endTime)
+        public async Task<IEnumerable<Event>> GetEvents(string calendarID, DateTime startTime, DateTime endTime)
         {
             return null;
         }
@@ -36,9 +36,9 @@ namespace APIServer.Repositories
             return true;
         }
 
-        public async Task<EventVM> GetEventByID(string eventID)
+        public async Task<Event> GetEventByID(string eventID)
         {
-            EventVM e = new EventVM();
+            Event e = new Event();
         
             return e;
         }

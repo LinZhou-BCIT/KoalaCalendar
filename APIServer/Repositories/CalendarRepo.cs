@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 
 namespace APIServer.Repositories
 {
-    public class CalendarRepo
+    public class CalendarRepo: ICalendarRepo
     {
         ApplicationDbContext _context;
         public CalendarRepo(ApplicationDbContext context)
         {
             _context = context;
         }
-        public async Task<string> CreateCalendar(string calendarName)
+        public async Task<string> CreateCalendar(string calendarName, string ownerID)
         {
             Calendar newCal = new Calendar()
             {
                 Name = calendarName,
-                CalendarID = Guid.NewGuid()
-                //,OwnerID = ??
+                CalendarID = Guid.NewGuid(),
+                OwnerID = ownerID
             };
             _context.Calendars.Add(newCal);
 
@@ -29,12 +29,13 @@ namespace APIServer.Repositories
             return newCal.CalendarID.ToString();
         }
 
-        public async Task<IEnumerable<Calendar>> GetAllCalendars()
+        public async Task<IEnumerable<Calendar>> GetAllCalendarsForUser(string userID)
         {
+            // query for user
             return _context.Calendars.ToList();
         }
 
-        public async Task<IEnumerable<string>> SearchCalendar(string searchInput)
+        public async Task<IEnumerable<Calendar>> SearchCalendar(string searchInput)
         {
             return null;
         }
@@ -63,7 +64,7 @@ namespace APIServer.Repositories
             return true;
         }
 
-        public async Task<bool> UnassignCalendar(string userID, string calendarID)
+        public async Task<bool> UnsubUserFromCalendar(string userID, string calendarID)
         {
             return true;
         }

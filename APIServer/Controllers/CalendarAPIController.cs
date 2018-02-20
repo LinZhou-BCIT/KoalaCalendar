@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using APIServer.Models.CalendarViewModels;
 using APIServer.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,8 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace APIServer.Controllers
 {
     [Produces("application/json")]
-    [Route("api/CalendarAPI")]
-    [Authorize]
+    [Route("api/[controller]/[action]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CalendarAPI : Controller
     {
         private readonly CalendarRepo _calendarRepo;
@@ -25,6 +26,7 @@ namespace APIServer.Controllers
         {
             _calendarRepo = calendarRepo;
             _eventRepo = eventRepo;
+            var claim = HttpContext.User.Claims.ElementAt(0);
         }
 
         //[Authorize (Roles = "Professor")]
@@ -43,14 +45,15 @@ namespace APIServer.Controllers
         [HttpGet]
         public async Task<object> GetCalendar(string searchInput)
         {
-            var listOfCalendars = await _calendarRepo.GetAllCalendars();
+            //var listOfCalendars = await _calendarRepo.GetAllCalendarsForUser();
 
-            if (searchInput == null)
-            {
-                return listOfCalendars;
-            }
-            
-            return _calendarRepo.SearchCalendar(searchInput);
+            //if (searchInput == null)
+            //{
+            //    return listOfCalendars;
+            //}
+
+            //return _calendarRepo.SearchCalendar(searchInput);
+            return null;
         }
 
         // Get any events of any calendar by ID, starttime and endtime
