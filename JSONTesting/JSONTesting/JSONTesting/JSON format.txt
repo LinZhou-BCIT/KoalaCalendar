@@ -41,23 +41,30 @@ CK: 1
 
 
 {
-	'type':'C_GET',
-	'CK':'1','Auth':
+	'TYPE':'C_GET',
+	'CALENDAR_KEY':'1','AUTH':
 	'<something to do with auth>',
-	'Events': 
-		'{
+	'CalendarEvents': 
+		[
 			{
-				'Event_ID':1
-				'EVENT_DAY':20,
+				'EVENT_ID':'1',
+				'EVENT_DAY':'20',
 				'EVENT_NAME':'test',
 				'EVENT_DESC':'generic',
 				'EVENT_START':'datetime',
 				'EVENT_END':'datetime'
+			},
+            {
+				'EVENT_ID':'2',
+				'EVENT_DAY':'21',
+				'EVENT_NAME':'test1',
+				'EVENT_DESC':'generic1',
+				'EVENT_START':'datetime1',
+				'EVENT_END':'datetime1'
 			}
-		}'
+		]
 }
 
-split(";");
 
 
 
