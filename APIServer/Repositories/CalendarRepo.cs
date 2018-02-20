@@ -1,4 +1,5 @@
 ﻿using APIServer.Data;
+using APIServer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,17 +13,25 @@ namespace APIServer.Repositories
         public CalendarRepo(ApplicationDbContext context)
         {
             _context = context;
-
         }
         public async Task<string> CreateCalendar(string calendarName)
         {
+            Calendar newCal = new Calendar()
+            {
+                Name = calendarName,
+                CalendarID = Guid.NewGuid()
+                //,OwnerID = ??
+            };
+            _context.Calendars.Add(newCal);
+
+            _context.SaveChanges();
             //return calendarID once it is created
-            return null;
+            return newCal.CalendarID.ToString();
         }
 
-        public async Task<IEnumerable<string>> GetAllCalendars()
+        public async Task<IEnumerable<Calendar>> GetAllCalendars()
         {
-            return null;
+            return _context.Calendars.ToList();
         }
 
         public async Task<IEnumerable<string>> SearchCalendar(string searchInput)
@@ -37,6 +46,13 @@ namespace APIServer.Repositories
 
         public async Task<string> GenerateAccessCode(string calendarID)
         {
+            int codeLen = 5;
+            String acCode = "";
+            for (int i = 0; i < codeLen; i++)
+            {
+                Random ran = new Random();
+                acCode += calendarID[ran.Next(0,calendarID.Length)];
+            }
             // calendarID will be used to generate the accessCode
             //return access code
             return null;
