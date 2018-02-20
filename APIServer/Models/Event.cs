@@ -9,7 +9,7 @@ namespace APIServer.Models
 {
     public class Event
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Key]
         public Guid EventID { get; set; }
         public string Name { get; set; }
