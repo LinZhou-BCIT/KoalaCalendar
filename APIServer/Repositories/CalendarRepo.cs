@@ -1,4 +1,5 @@
-﻿using System;
+﻿using APIServer.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,12 @@ namespace APIServer.Repositories
 {
     public class CalendarRepo
     {
+        ApplicationDbContext _context;
+        public CalendarRepo(ApplicationDbContext context)
+        {
+            _context = context;
+
+        }
         public async Task<string> CreateCalendar(string calendarName)
         {
             //return calendarID once it is created

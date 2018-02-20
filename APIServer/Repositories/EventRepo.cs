@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using APIServer.Data;
 using APIServer.Models.CalendarViewModels;
 
 namespace APIServer.Repositories
 {
     public class EventRepo
     {
+        ApplicationDbContext _context;
+        public EventRepo(ApplicationDbContext context)
+        {
+            _context = context;
+
+        }
         public async Task<IEnumerable<EventVM>> GetEvents(string calendarID, DateTime startTime, DateTime endTime)
         {
             return null;
