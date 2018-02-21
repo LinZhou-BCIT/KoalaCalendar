@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using APIServer.Models;
 using APIServer.Models.CalendarViewModels;
 using APIServer.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,23 +17,24 @@ namespace APIServer.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CalendarAPI : Controller
     {
-        private readonly CalendarRepo _calendarRepo;
-        private readonly EventRepo _eventRepo;
+        private readonly ICalendarRepo _calendarRepo;
+        private readonly IEventRepo _eventRepo;
 
         //injection
         public CalendarAPI(
-        CalendarRepo calendarRepo,
-        EventRepo eventRepo)
+            ICalendarRepo calendarRepo,
+            IEventRepo eventRepo)
         {
             _calendarRepo = calendarRepo;
             _eventRepo = eventRepo;
-            var claim = HttpContext.User.Claims.ElementAt(0);
         }
 
         //[Authorize (Roles = "Professor")]
         [HttpPost]
         public async Task<object> CreateCalendar([FromBody] CalendarVM model)
         {
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+
             return Ok("Calendar has been created successfully.");
         }
 
@@ -60,7 +62,7 @@ namespace APIServer.Controllers
         [HttpPost]
         public async Task<object> GetEventsByCalendarIDs([FromBody] EventRequestVM model)
         {
-            List<IEnumerable<EventVM>> listOfEventLists = new List<IEnumerable<EventVM>>();
+            List<IEnumerable<Event>> listOfEventLists = new List<IEnumerable<Event>>();
 
             foreach(string calendarID in model.CalendarIDs)
             {
@@ -90,7 +92,7 @@ namespace APIServer.Controllers
         {
             string userID = "sampleid";
            
-            bool result = await _calendarRepo.UnassignCalendar(userID, model.CalendarID);
+            bool result = await _calendarRepo.UnsubUserFromCalendar(userID, model.CalendarID);
 
             if (result)
             {

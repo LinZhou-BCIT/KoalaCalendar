@@ -14,6 +14,7 @@ using APIServer.Services;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using APIServer.Repositories;
 
 namespace APIServer
 {
@@ -63,6 +64,8 @@ namespace APIServer
                     ClockSkew = TimeSpan.Zero // remove delay of token when expire
                 };
             });
+            services.AddScoped<ICalendarRepo, CalendarRepo>();
+            services.AddScoped<IEventRepo, EventRepo>();
 
             services.Configure<IdentityOptions>(options => {
                 //// Password settings if you want to ensure password strength.
