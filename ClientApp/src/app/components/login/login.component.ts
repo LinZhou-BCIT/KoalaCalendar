@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit {
           // Store token with session data.
           sessionStorage.setItem('auth_token', data["token"]);
           sessionStorage.setItem('logged_in', 'true');
+          sessionStorage.setItem('email', this.email);
           console.log(data);   
           this.router.navigate(['/calendar']);
       },

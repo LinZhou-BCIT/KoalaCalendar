@@ -8,23 +8,21 @@
               <!-- <div class="text-danger validation-summary-valid" data-valmsg-summary="true"><ul><li style="display:none"></li></ul></div> -->
               <div class="form-group">
                   <label for="Username">Username</label>
-                  <input class="form-control" type="text" id="Username" name="Username" value="" />
+                  <input class="form-control" type="text" readonly id="Username" name="Username" value="{{email}}" />
                   <!-- <span class="text-danger field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span> -->
               </div>
               <div class="form-group">
                   <label for="Email">Email</label>
-                  <input class="form-control" type="email" id="Email" name="Email" value="" />
+                  <input class="form-control" type="email" id="Email" name="Email" value="{{email}}" />
                   <!-- <span class="text-danger field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span> -->
               </div>
               <div class="form-group">
-                  <label for="Password">Password</label>
-                  <input class="form-control" type="password" id="Password" name="Password" />
-                  <!-- <span class="text-danger field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span> -->
-              </div>
+                <p>
+                    <a routerLink="/account/resetPassword" routerLinkActive="active">Reset your password</a>
+                </p>
+            </div>
               <div class="form-group">
-              </div>
-              <div class="form-group">
-                  <button type="submit" class="btn btn-default">Save</button>
+                  <button type="submit" class="btn btn-default">Update</button>
               </div>
             </form>
         </section>
