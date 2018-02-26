@@ -113,9 +113,10 @@ namespace APIServer.Controllers
         private async Task<object> AuthOkWithToken()
         {
             // get current user
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            ApplicationUser currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            string role = await _userManager.IsInRoleAsync(currentUser, "PROFESSOR") ? "PROFESSOR": "STUDENT";
             string token = await GenerateJwtToken(currentUser);
-            return Ok(new { token });
+            return Ok(new { token, role });
         }
 
         private async Task<string> GenerateJwtToken(IdentityUser user)
