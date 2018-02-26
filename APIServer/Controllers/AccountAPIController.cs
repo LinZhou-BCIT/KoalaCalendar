@@ -51,25 +51,38 @@ namespace APIServer.Controllers
         public async Task<object> Register([FromBody] RegisterViewModel model)
         {
             // quick hack
-            await CreateInitialRolesAsync();
+            //await CreateInitialRolesAsync();
 
             if (ModelState.IsValid)
             {
+                // check if user exists first
+                //var check = _userManager.FindByEmailAsync(model.Email);
+                //if (check != null)
+                //{
+                //    return StatusCode(409, new { Error = "Email Already Exists" });
+                //}
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    var userRoleSucceeded = await AddUserRole(model.Email, model.Role);
+                    // default to student role
+                    string roleToAdd = String.IsNullOrEmpty(model.Role) ? "STUDENT" : (await _roleManager.RoleExistsAsync(model.Role) ? model.Role : "STUDENT");
+                    bool userRoleSucceeded = await AddUserRole(model.Email, roleToAdd);
                     if (!userRoleSucceeded)
                     {
-                        return BadRequest();
+                        return StatusCode(500, new { Message = "Role Assignment Failed." });
                     }
+                    // change this to not auto login after register
                     await _signInManager.SignInAsync(user, false);
-                    return await GenerateJwtToken(model.Email, user);
+                    return await AuthOkWithToken();
                 }
-                throw new ApplicationException("UNKNOWN_ERROR");
+                else
+                {
+                    // general errors
+                    return StatusCode(500, new { result.Errors });
+                }    
             }
-            return BadRequest();
+            return BadRequest(ModelState);
         }
 
         [HttpPost]
@@ -81,25 +94,34 @@ namespace APIServer.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-                    var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                    return await GenerateJwtToken(model.Email, appUser);
+                    // I don't think this line is the cleanest way to get current user
+                    // new method refer to AuthOkWithToken()
+                    // var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+                    return await AuthOkWithToken();
                 }
 
                 if (result.IsLockedOut)
                 {
-                    return NotFound();
+                    return StatusCode(403, new { Message = "User is locked out due to too many failed attempts." }); ;
                 }
 
-                return Unauthorized();
+                return StatusCode(401, new { Message = "Incorrect username or password." });
             }
-            return BadRequest();
+            return BadRequest(ModelState);
         }
 
+        private async Task<object> AuthOkWithToken()
+        {
+            // get current user
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            string token = await GenerateJwtToken(currentUser);
+            return Ok(new { token });
+        }
 
-        private async Task<object> GenerateJwtToken(string email, IdentityUser user)
+        private async Task<string> GenerateJwtToken(IdentityUser user)
         {
             var claims = new List<Claim> {
-                new Claim(JwtRegisteredClaimNames.Sub, email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
@@ -115,8 +137,8 @@ namespace APIServer.Controllers
                 expires: expires,
                 signingCredentials: creds
             );
-            var formattedToken = new JwtSecurityTokenHandler().WriteToken(token);
-            return Ok(new { token = formattedToken });
+            string formattedToken = new JwtSecurityTokenHandler().WriteToken(token);
+            return formattedToken;
         }
 
 
