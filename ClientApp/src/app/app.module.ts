@@ -22,6 +22,8 @@ import { RemoteConnectService } from './services/remote-connect.service'
 import { AuthGuardService } from './services/auth-guard.service';
 import { LogoutComponent } from './components/logout/logout.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component'
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   declarations: [
@@ -43,7 +45,8 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
     BrowserModule,
     FormsModule,
     HttpModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgbModule.forRoot()
   ],
   providers: [
     RemoteConnectService,
