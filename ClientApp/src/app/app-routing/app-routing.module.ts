@@ -13,6 +13,7 @@ import { LoginComponent } from '../components/login/login.component';
 import { RegisterComponent } from '../components/register/register.component';
 import { ResetPasswordComponent } from '../components/reset-password/reset-password.component';
 import { ForgetPasswordComponent } from '../components/forget-password/forget-password.component';
+import { ChangePasswordComponent } from '../components/change-password/change-password.component';
 import { ProfileComponent } from '../components/profile/profile.component';
 import { AuthGuardService } from '../services/auth-guard.service'
 
@@ -27,6 +28,7 @@ const appRoutes: Routes = [
   { path: 'account/logout', component: LogoutComponent },
   { path: 'account/register', component: RegisterComponent },
   { path: 'account/resetPassword', component: ResetPasswordComponent },
+  { path: 'account/changePassword', component: ChangePasswordComponent },
   { path: 'account/forgetPassword', component: ForgetPasswordComponent },
   { path: 'account/profile', component: ProfileComponent, canActivate: [AuthGuardService] },
   { path: '', redirectTo: '/calendar', pathMatch: 'full' },
