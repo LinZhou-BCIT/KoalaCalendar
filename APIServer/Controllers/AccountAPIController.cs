@@ -14,32 +14,37 @@ using APIServer.Models;
 using APIServer.Models.AccountViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
+using APIServer.Services;
 
 namespace APIServer.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AccountAPI : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEmailSender _emailSender;
 
         public AccountAPI(
-        UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager,
-        IConfiguration configuration,
-        RoleManager<IdentityRole> roleManager)
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            IConfiguration configuration,
+            RoleManager<IdentityRole> roleManager,
+            IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _roleManager = roleManager;
+            _emailSender = emailSender;
         }
 
-        [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        // test data action for authorzation 
+        [HttpGet]       
         public IEnumerable<string> Users()
         {
             return _userManager.Users.Select(u => u.UserName);
@@ -72,9 +77,16 @@ namespace APIServer.Controllers
                     {
                         return StatusCode(500, new { Message = "Role Assignment Failed." });
                     }
-                    // change this to not auto login after register
+
+                    // send confirmation email 
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    await _emailSender.SendEmailAsync(model.Email, "Confirm your email",
+                        $"Please confirm your account with this code: {code}");
+
+                    // change this part to not auto login after register
                     await _signInManager.SignInAsync(user, false);
-                    ApplicationUser appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+                    //ApplicationUser appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+                    ApplicationUser appUser = await _userManager.FindByEmailAsync(model.Email);
                     return await AuthOkWithToken(appUser);
                 }
                 else
@@ -95,9 +107,8 @@ namespace APIServer.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-                    ApplicationUser appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                    // the following line works strangely, why?
-                    // ApplicationUser currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                    //ApplicationUser appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+                    ApplicationUser appUser = await _userManager.FindByEmailAsync(model.Email);
                     return await AuthOkWithToken(appUser);
                 }
 
@@ -110,6 +121,77 @@ namespace APIServer.Controllers
             }
             return BadRequest(ModelState);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    // return Ok() if don't want to reveal that the user does not exist or is not confirmed
+                    return NotFound();
+                }
+                var result = await _userManager.ConfirmEmailAsync(user, model.Code);
+                if (result.Succeeded)
+                {
+                    return Ok();
+                }
+                return StatusCode(403, new { result.Errors });
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<object> ForgotPassword([FromBody] ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = await _userManager.FindByEmailAsync(model.Email);
+                //if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                if (user == null)
+                {
+                    // return Ok() if don't want to reveal that the user does not exist or is not confirmed
+                    return NotFound();
+                }
+                string code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                await _emailSender.SendEmailAsync(model.Email, "Reset Password",
+                    $"Please reset your password by using this code: {code}");
+                return Ok();
+            }
+            return BadRequest(ModelState);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<object> ResetPassword([FromBody] ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                // return Ok() if don't want to reveal that the user does not exist or is not confirmed
+                return NotFound();
+            }
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return Ok();
+            }
+            else
+            {
+                return StatusCode(500, new { result.Errors });
+            }
+            
+        }
+
+        #region Helpers
 
         private async Task<object> AuthOkWithToken(ApplicationUser appUser)
         {
@@ -176,5 +258,7 @@ namespace APIServer.Controllers
 
             return true;
         }
+
+        #endregion
     }
 }
