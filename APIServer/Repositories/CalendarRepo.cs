@@ -14,6 +14,7 @@ namespace APIServer.Repositories
         {
             _context = context;
         }
+
         public async Task<string> CreateCalendar(string calendarName, string ownerID)
         {
             Calendar newCal = new Calendar()
@@ -39,11 +40,21 @@ namespace APIServer.Repositories
         {
             return null;
         }
-
+        
+        /*  Update Calendar */
         public async Task<bool> UpdateCalendar(string calendarID, string calendarName)
         {
-            return true;
+            var result = _context.Calendars.First(c => c.CalendarID.ToString() == calendarID); //Find Calendar
+
+            if (result != null)
+            {
+                result.Name = calendarName; //Update name
+                _context.SaveChanges();     //Save changes
+                return true;
+            }
+            return false;
         }
+        /*  End Update Calendar */
 
         /*  Access Code Generation  */
         public async Task<string> GenerateAccessCode(string calendarID)
@@ -91,11 +102,20 @@ namespace APIServer.Repositories
         }
         /*  End Access Code Generation  */
 
+        /*  Remove Calendar */
         public async Task<bool> RemoveCalendar(string calendarID)
         {
-            var result = _context.Calendars.First(c => c.CalendarID.ToString() == calendarID);
-            return true;
+            var result = _context.Calendars.First(c => c.CalendarID.ToString() == calendarID);  //Find Calendar
+
+            if (result != null) //Check if null
+            {
+                _context.Calendars.Remove(result);  //Delete Result
+                _context.SaveChanges(); //Save Changes
+                return true;
+            }
+            return false;   //Return false if calendar was not found
         }
+        /*  End Remove Calendar */
 
         public async Task<bool> UnsubUserFromCalendar(string userID, string calendarID)
         {
