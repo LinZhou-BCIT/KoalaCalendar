@@ -154,7 +154,7 @@ namespace APIServer.Controllers
                 if (user == null)
                 {
                     // return Ok() if don't want to reveal that the user does not exist or is not confirmed
-                    return NotFound();
+                    return NotFound(new { message = "User not found." });
                 }
                 string code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 await _emailSender.SendEmailAsync(model.Email, "Reset Password",
@@ -176,7 +176,7 @@ namespace APIServer.Controllers
             if (user == null)
             {
                 // return Ok() if don't want to reveal that the user does not exist or is not confirmed
-                return NotFound();
+                return NotFound(new { message = "User not found." });
             }
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (result.Succeeded)
@@ -208,6 +208,10 @@ namespace APIServer.Controllers
             }
             string userID = HttpContext.User.Claims.ElementAt(2).Value;
             ApplicationUser user = await _userManager.FindByIdAsync(userID);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found." });
+            }
 
             if (model.Email != user.Email)
             {
@@ -222,6 +226,30 @@ namespace APIServer.Controllers
                     return StatusCode(500, new { setUsernameResult.Errors });
                 }
             }
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<object> ChangePassword([FromBody] ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            ApplicationUser user = await _userManager.FindByIdAsync(userID);
+            if (user == null)
+            {
+                return NotFound( new { message = "User not found." });
+            }
+
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            if (!changePasswordResult.Succeeded)
+            {
+                return StatusCode(403, new { changePasswordResult.Errors });
+            }
+
             return Ok();
         }
 
