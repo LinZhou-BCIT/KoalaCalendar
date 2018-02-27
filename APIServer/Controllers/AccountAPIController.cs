@@ -74,7 +74,8 @@ namespace APIServer.Controllers
                     }
                     // change this to not auto login after register
                     await _signInManager.SignInAsync(user, false);
-                    return await AuthOkWithToken();
+                    ApplicationUser appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+                    return await AuthOkWithToken(appUser);
                 }
                 else
                 {
@@ -94,10 +95,10 @@ namespace APIServer.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
-                    // I don't think this line is the cleanest way to get current user
-                    // new method refer to AuthOkWithToken()
-                    // var appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
-                    return await AuthOkWithToken();
+                    ApplicationUser appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
+                    // the following line works strangely, why?
+                    // ApplicationUser currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                    return await AuthOkWithToken(appUser);
                 }
 
                 if (result.IsLockedOut)
@@ -110,12 +111,10 @@ namespace APIServer.Controllers
             return BadRequest(ModelState);
         }
 
-        private async Task<object> AuthOkWithToken()
+        private async Task<object> AuthOkWithToken(ApplicationUser appUser)
         {
-            // get current user
-            ApplicationUser currentUser = await _userManager.GetUserAsync(HttpContext.User);
-            string role = await _userManager.IsInRoleAsync(currentUser, "PROFESSOR") ? "PROFESSOR": "STUDENT";
-            string token = await GenerateJwtToken(currentUser);
+            string role = await _userManager.IsInRoleAsync(appUser, "PROFESSOR") ? "PROFESSOR": "STUDENT";
+            string token = await GenerateJwtToken(appUser);
             return Ok(new { token, role });
         }
 
