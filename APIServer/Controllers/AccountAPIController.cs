@@ -15,6 +15,7 @@ using APIServer.Models.AccountViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using APIServer.Services;
+using APIServer.Models.ManageViewModels;
 
 namespace APIServer.Controllers
 {
@@ -79,9 +80,7 @@ namespace APIServer.Controllers
                     }
 
                     // send confirmation email 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    await _emailSender.SendEmailAsync(model.Email, "Confirm your email",
-                        $"Please confirm your account with this code: {code}");
+                    await SendConfirmationEmail(user);
 
                     // change this part to not auto login after register
                     await _signInManager.SignInAsync(user, false);
@@ -191,13 +190,71 @@ namespace APIServer.Controllers
             
         }
 
+        [HttpGet]
+        public async Task<object> UserInfo()
+        {
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            ApplicationUser user = await _userManager.FindByIdAsync(userID);
+            UserInfoViewModel userInfo = await GetUserInfo(user);
+            return Ok(userInfo);
+        }
+
+        [HttpPost]
+        public async Task<object> UpdateProfile([FromBody] UserInfoViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            ApplicationUser user = await _userManager.FindByIdAsync(userID);
+
+            if (model.Email != user.Email)
+            {
+                var setEmailResult = await _userManager.SetEmailAsync(user, model.Email);
+                if (!setEmailResult.Succeeded)
+                {
+                    return StatusCode(500, new { setEmailResult.Errors });
+                }
+                var setUsernameResult = await _userManager.SetUserNameAsync(user, model.Email);
+                if (!setUsernameResult.Succeeded)
+                {
+                    return StatusCode(500, new { setUsernameResult.Errors });
+                }
+            }
+            return Ok();
+        }
+
         #region Helpers
+        private async Task<UserInfoViewModel> GetUserInfo(ApplicationUser user)
+        {
+
+            string role = await _userManager.IsInRoleAsync(user, "PROFESSOR") ? "PROFESSOR" : "STUDENT";
+
+            UserInfoViewModel model = new UserInfoViewModel
+            {
+                Username = user.UserName,
+                IsEmailConfirmed = user.EmailConfirmed,
+                Role = role,
+                Email = user.Email
+            };
+            return model;
+        }
+
+        private async Task<bool> SendConfirmationEmail(ApplicationUser user)
+        {
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            await _emailSender.SendEmailAsync(user.Email, "Confirm your email",
+                $"Please confirm your account with this code: {code}");
+            return true;
+        }
 
         private async Task<object> AuthOkWithToken(ApplicationUser appUser)
         {
-            string role = await _userManager.IsInRoleAsync(appUser, "PROFESSOR") ? "PROFESSOR": "STUDENT";
+            //string role = await _userManager.IsInRoleAsync(appUser, "PROFESSOR") ? "PROFESSOR": "STUDENT";
+            UserInfoViewModel userInfo = await GetUserInfo(appUser);
             string token = await GenerateJwtToken(appUser);
-            return Ok(new { token, role });
+            return Ok(new { token, userInfo });
         }
 
         private async Task<string> GenerateJwtToken(IdentityUser user)
