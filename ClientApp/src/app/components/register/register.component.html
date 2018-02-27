@@ -8,10 +8,10 @@
               <!-- <div class="text-danger validation-summary-valid" data-valmsg-summary="true"><ul><li style="display:none"></li></ul></div> -->
                 <div class ="form-group">
                         <label class="radio-inline">
-                            <input type="radio" name="role" value="professor"> Professor &nbsp;&nbsp;</label> 
+                            <input type="radio" name="role" value="professor" [(ngModel)]="role"> Professor &nbsp;&nbsp;</label> 
                             
                         <label class="radio-inline">
-                            <input type="radio" name="role" value="student"> Student </label>
+                            <input type="radio" name="role" value="student" [(ngModel)]="role"> Student </label>
                 </div>
               <div class="form-group">
                   <label for="Email">Email</label>
@@ -29,7 +29,7 @@
                   <!-- <span class="text-danger field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span> -->
               </div>
               <div class="form-group">
-                  <button type="submit" class="btn btn-default">Sign Up</button>
+                  <button type="submit" class="btn btn-default" (click)="register()">Sign Up</button>
               </div>
             </form>
         </section>

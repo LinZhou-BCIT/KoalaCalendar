@@ -12,6 +12,7 @@ export class RegisterComponent implements OnInit {
   email: string;
   password: string;
   confirmPassword: string;
+  role: string;
 
   constructor(private remoteService: RemoteConnectService, 
     private router: Router) { }
@@ -22,7 +23,8 @@ export class RegisterComponent implements OnInit {
     let regInfo: RegisterModel = {
       Email : this.email,
       Password : this.password,
-      ConfirmPassword: this.confirmPassword
+      ConfirmPassword: this.confirmPassword,
+      Role: this.role
     };
     this.remoteService.postRegister(regInfo).subscribe(
       // Success.
