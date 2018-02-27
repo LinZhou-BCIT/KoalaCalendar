@@ -56,11 +56,11 @@ namespace APIServer.Controllers
             if (ModelState.IsValid)
             {
                 // check if user exists first
-                //var check = _userManager.FindByEmailAsync(model.Email);
-                //if (check != null)
-                //{
-                //    return StatusCode(409, new { Error = "Email Already Exists" });
-                //}
+                var check = _userManager.FindByEmailAsync(model.Email);
+                if (check != null)
+                {
+                    return StatusCode(409, new { Error = "Email Already Exists" });
+                }
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
