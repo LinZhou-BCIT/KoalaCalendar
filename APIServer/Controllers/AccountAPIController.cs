@@ -57,7 +57,7 @@ namespace APIServer.Controllers
         public async Task<object> Register([FromBody] RegisterViewModel model)
         {
             // quick hack
-            //await CreateInitialRolesAsync();
+            // await CreateInitialRolesAsync();
 
             if (ModelState.IsValid)
             {
@@ -195,6 +195,10 @@ namespace APIServer.Controllers
         {
             string userID = HttpContext.User.Claims.ElementAt(2).Value;
             ApplicationUser user = await _userManager.FindByIdAsync(userID);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found." });
+            }
             UserInfoViewModel userInfo = await GetUserInfo(user);
             return Ok(userInfo);
         }
