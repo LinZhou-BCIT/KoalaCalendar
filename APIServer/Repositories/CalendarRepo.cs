@@ -38,7 +38,8 @@ namespace APIServer.Repositories
 
         public async Task<IEnumerable<Calendar>> SearchCalendar(string searchInput)
         {
-            return null;
+            var results = _context.Calendars.Where(c => c.Name.Contains(searchInput));
+            return results;
         }
         
         /*  Update Calendar */
