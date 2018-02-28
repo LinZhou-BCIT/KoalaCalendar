@@ -15,6 +15,7 @@ using APIServer.Models.AccountViewModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using APIServer.Services;
+using APIServer.Models.ManageViewModels;
 
 namespace APIServer.Controllers
 {
@@ -56,7 +57,7 @@ namespace APIServer.Controllers
         public async Task<object> Register([FromBody] RegisterViewModel model)
         {
             // quick hack
-            //await CreateInitialRolesAsync();
+            // await CreateInitialRolesAsync();
 
             if (ModelState.IsValid)
             {
@@ -79,9 +80,7 @@ namespace APIServer.Controllers
                     }
 
                     // send confirmation email 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    await _emailSender.SendEmailAsync(model.Email, "Confirm your email",
-                        $"Please confirm your account with this code: {code}");
+                    await SendConfirmationEmail(user);
 
                     // change this part to not auto login after register
                     await _signInManager.SignInAsync(user, false);
@@ -155,7 +154,7 @@ namespace APIServer.Controllers
                 if (user == null)
                 {
                     // return Ok() if don't want to reveal that the user does not exist or is not confirmed
-                    return NotFound();
+                    return NotFound(new { message = "User not found." });
                 }
                 string code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 await _emailSender.SendEmailAsync(model.Email, "Reset Password",
@@ -177,7 +176,7 @@ namespace APIServer.Controllers
             if (user == null)
             {
                 // return Ok() if don't want to reveal that the user does not exist or is not confirmed
-                return NotFound();
+                return NotFound(new { message = "User not found." });
             }
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (result.Succeeded)
@@ -191,13 +190,103 @@ namespace APIServer.Controllers
             
         }
 
+        [HttpGet]
+        public async Task<object> UserInfo()
+        {
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            ApplicationUser user = await _userManager.FindByIdAsync(userID);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found." });
+            }
+            UserInfoViewModel userInfo = await GetUserInfo(user);
+            return Ok(userInfo);
+        }
+
+        [HttpPost]
+        public async Task<object> UpdateProfile([FromBody] UserInfoViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            ApplicationUser user = await _userManager.FindByIdAsync(userID);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found." });
+            }
+
+            if (model.Email != user.Email)
+            {
+                var setEmailResult = await _userManager.SetEmailAsync(user, model.Email);
+                if (!setEmailResult.Succeeded)
+                {
+                    return StatusCode(500, new { setEmailResult.Errors });
+                }
+                var setUsernameResult = await _userManager.SetUserNameAsync(user, model.Email);
+                if (!setUsernameResult.Succeeded)
+                {
+                    return StatusCode(500, new { setUsernameResult.Errors });
+                }
+            }
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<object> ChangePassword([FromBody] ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            ApplicationUser user = await _userManager.FindByIdAsync(userID);
+            if (user == null)
+            {
+                return NotFound( new { message = "User not found." });
+            }
+
+            var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            if (!changePasswordResult.Succeeded)
+            {
+                return StatusCode(403, new { changePasswordResult.Errors });
+            }
+
+            return Ok();
+        }
+
         #region Helpers
+        private async Task<UserInfoViewModel> GetUserInfo(ApplicationUser user)
+        {
+
+            string role = await _userManager.IsInRoleAsync(user, "PROFESSOR") ? "PROFESSOR" : "STUDENT";
+
+            UserInfoViewModel model = new UserInfoViewModel
+            {
+                Username = user.UserName,
+                IsEmailConfirmed = user.EmailConfirmed,
+                Role = role,
+                Email = user.Email
+            };
+            return model;
+        }
+
+        private async Task<bool> SendConfirmationEmail(ApplicationUser user)
+        {
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            await _emailSender.SendEmailAsync(user.Email, "Confirm your email",
+                $"Please confirm your account with this code: {code}");
+            return true;
+        }
 
         private async Task<object> AuthOkWithToken(ApplicationUser appUser)
         {
-            string role = await _userManager.IsInRoleAsync(appUser, "PROFESSOR") ? "PROFESSOR": "STUDENT";
+            //string role = await _userManager.IsInRoleAsync(appUser, "PROFESSOR") ? "PROFESSOR": "STUDENT";
+            UserInfoViewModel userInfo = await GetUserInfo(appUser);
             string token = await GenerateJwtToken(appUser);
-            return Ok(new { token, role });
+            return Ok(new { token, userInfo });
         }
 
         private async Task<string> GenerateJwtToken(IdentityUser user)

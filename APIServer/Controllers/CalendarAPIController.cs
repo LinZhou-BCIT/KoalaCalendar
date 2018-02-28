@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 
 namespace APIServer.Controllers
 {
@@ -19,12 +20,15 @@ namespace APIServer.Controllers
     {
         private readonly ICalendarRepo _calendarRepo;
         private readonly IEventRepo _eventRepo;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         //injection
         public CalendarAPI(
+            UserManager<ApplicationUser> userManager,
             ICalendarRepo calendarRepo,
             IEventRepo eventRepo)
         {
+            _userManager = userManager;
             _calendarRepo = calendarRepo;
             _eventRepo = eventRepo;
         }
@@ -34,8 +38,18 @@ namespace APIServer.Controllers
         public async Task<object> CreateCalendar([FromBody] CalendarVM model)
         {
             string userID = HttpContext.User.Claims.ElementAt(2).Value;
-
-            return Ok("Calendar has been created successfully.");
+            ApplicationUser user = await _userManager.FindByIdAsync(userID);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found." });
+            }
+            bool isProf = await _userManager.IsInRoleAsync(user, "PROFESSOR");
+            if (isProf)
+            {
+                string newCalendarID = await _calendarRepo.CreateCalendar(model.CalendarName, userID);
+                return Ok(new { calendarID = newCalendarID });
+            }
+            return StatusCode(403, new { Message = "Only Professors can create custom calendars." });
         }
 
         [HttpPost]
