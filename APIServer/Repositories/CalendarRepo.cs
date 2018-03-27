@@ -58,17 +58,17 @@ namespace APIServer.Repositories
         /*  End Update Calendar */
 
         /*  Access Code Generation  */
-        public async Task<string> GenerateAccessCode(string calendarID)
+        public async Task<string> GenerateAccessCode(Guid calendarID)
         {
             int codeLen = 5;            //Access code length
             String acCode = "";         //Access code string
             Random ran = new Random();  //Random generator instance
-
+            String calendarIdString = calendarID.ToString();
             while (acCode == "")
             {
                 for (int i = 0; i < codeLen; i++)
                 {
-                    acCode += calendarID[ran.Next(0, calendarID.Length)];   //  Get random character from calendar's id and add that to the access code
+                    acCode += calendarIdString[ran.Next(0, calendarIdString.Length)];   //  Get random character from calendar's id and add that to the access code
                 }
 
                 var acTest = _context.Calendars.First(c => c.AccessCode == acCode); //Test if access code is already being used
@@ -87,7 +87,7 @@ namespace APIServer.Repositories
                 */
             }
 
-            var result = _context.Calendars.First(c => c.CalendarID.ToString() == calendarID); //Get calendar to update access code
+            var result = _context.Calendars.First(c => c.CalendarID == calendarID); //Get calendar to update access code
 
             if (result != null)
             {
@@ -95,7 +95,7 @@ namespace APIServer.Repositories
                 _context.SaveChanges();     //Save changed
             }else
             {
-                throw new System.ArgumentException(String.Format("{0} is an invalid calendar id, calendar id does not exist", calendarID),"calendarID");
+                throw new System.ArgumentException(String.Format("{0} is an invalid calendar id, calendar id does not exist", calendarID));
                 //Calendar id that was fed in was not in database
             }
 
@@ -104,23 +104,34 @@ namespace APIServer.Repositories
         /*  End Access Code Generation  */
 
         /*  Remove Calendar */
-        public async Task<bool> RemoveCalendar(string calendarID)
+        public async Task<bool> RemoveCalendar(Guid calendarID)
         {
-            var result = _context.Calendars.First(c => c.CalendarID.ToString() == calendarID);  //Find Calendar
+            var result = _context.Calendars.First(c => c.CalendarID == calendarID);  //Find Calendar
 
             if (result != null) //Check if null
             {
                 _context.Calendars.Remove(result);  //Delete Result
                 _context.SaveChanges(); //Save Changes
                 return true;
+            }else
+            {
+                return false;   //Return false if calendar was not found
             }
-            return false;   //Return false if calendar was not found
         }
         /*  End Remove Calendar */
 
-        public async Task<bool> UnsubUserFromCalendar(string userID, string calendarID)
+        public async Task<bool> UnsubUserFromCalendar(string userID, Guid calendarID)
         {
-            return true;
+            var result = _context.Subscriptions.Where(c => c.UserID == userID && c.CalendarID == calendarID).FirstOrDefault();
+            if (result != null)
+            {
+                _context.Subscriptions.Remove(result);
+                _context.SaveChanges();
+                return true;
+            }else
+            {
+                return false;
+            }
         }
 
     }
