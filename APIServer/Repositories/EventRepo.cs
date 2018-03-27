@@ -15,13 +15,21 @@ namespace APIServer.Repositories
             _context = context;
 
         }
-        public async Task<IEnumerable<Event>> GetEvents(string calendarID, DateTime startTime, DateTime endTime)
+        public async Task<IEnumerable<Event>> GetEvents(Guid calendarID, DateTime startTime, DateTime endTime)
         {
             return null;
         }
 
-        public async Task<string> CreateEvent(string calendarID, string eventName, DateTime startTime, DateTime endTime)
+        public async Task<string> CreateEvent(Guid calendarID, string eventName, DateTime startTime, DateTime endTime)
         {
+            Event newEvent = new Event() {
+                EventID = Guid.NewGuid(),
+                Name = eventName,
+                StartTime = startTime,
+                EndTime = endTime,
+                CalendarID = calendarID
+            };
+
             // return eventID
             return null;
         }
