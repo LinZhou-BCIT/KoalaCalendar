@@ -27,13 +27,10 @@ export class LoginComponent implements OnInit {
     };
     this.remoteService.postLogin(loginInfo).subscribe(
       // Success.
-      data => {
-          // Store token with session data.
-          sessionStorage.setItem('auth_token', data["token"]);
-          sessionStorage.setItem('logged_in', 'true');
-          sessionStorage.setItem('email', this.email);
-          console.log(data);   
-          this.router.navigate(['/calendar']);
+      success => {
+          if(success) {
+            this.router.navigate(['/calendar']);
+          }          
       },
       // Error.
       error => {

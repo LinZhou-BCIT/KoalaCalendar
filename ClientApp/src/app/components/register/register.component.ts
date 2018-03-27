@@ -28,13 +28,11 @@ export class RegisterComponent implements OnInit {
     };
     this.remoteService.postRegister(regInfo).subscribe(
       // Success.
-      data => {
-          // Store token with session data.
-          sessionStorage.setItem('auth_token', data["token"]);
-          sessionStorage.setItem('logged_in', 'true');
-          console.log(data);   
-          this.router.navigate(['/calendar']); 
-      },
+      success => {
+        if(success) {
+          this.router.navigate(['/calendar']);
+        }          
+    },
       // Error.
       error => {
           alert(error);
