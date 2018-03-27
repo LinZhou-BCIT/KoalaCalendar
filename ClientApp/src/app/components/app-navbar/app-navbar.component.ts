@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, Event, NavigationStart } from '@angular/router';
+import { RemoteConnectService } from '../../services/remote-connect.service';
 
 @Component({
   selector: 'app-navbar',
@@ -8,14 +9,14 @@ import { Router, Event, NavigationStart } from '@angular/router';
 })
 export class AppNavbarComponent implements OnInit {
   isLoggedIn: boolean = false;
-  constructor(private router : Router) { }
+  constructor(private router : Router, private remoteService: RemoteConnectService) { }
 
   ngOnInit() {
     
     this.router.events.subscribe( 
       (event : Event ) => { if(event instanceof NavigationStart) 
       {
-        if (sessionStorage.getItem('logged_in') == 'true'){
+        if (this.remoteService.getLoginStatus()){
           this.isLoggedIn = true;
         }else{
           this.isLoggedIn = false;
