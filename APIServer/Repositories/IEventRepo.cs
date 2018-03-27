@@ -8,7 +8,7 @@ namespace APIServer.Repositories
 {
     public interface IEventRepo
     {
-        Task<IEnumerable<Event>> GetEvents(string calendarID, DateTime startTime, DateTime endTime);
+        Task<IEnumerable<Event>> GetEvents(Guid calendarID, DateTime startTime, DateTime endTime);
         Task<string> CreateEvent(Guid calendarID, string eventName, DateTime startTime, DateTime endTime);
         Task<bool> UpdateEvent(string eventID, string eventName, DateTime startTime, DateTime endTime);
         Task<bool> DeleteEvent(string eventID);
