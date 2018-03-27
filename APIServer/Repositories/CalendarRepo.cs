@@ -33,7 +33,8 @@ namespace APIServer.Repositories
         public async Task<IEnumerable<Calendar>> GetAllCalendarsForUser(string userID)
         {
             // query for user
-            return _context.Calendars.ToList();
+            var result = _context.Calendars.Where(c => c.OwnerID == userID);
+            return result.ToList(); //return list
         }
 
         public async Task<IEnumerable<Calendar>> SearchCalendar(string searchInput)
