@@ -92,19 +92,50 @@ export class RemoteConnectService {
   }
 
   confirmEmail(confirmInfo: ConfirmEmailModel) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    let url     = this.site + "confirmemail";
 
+    return this.http.post(url, confirmInfo, options)
+        .map(this.extractData) 
+        .catch(this.handleError); 
   }
 
   forgotPassword(forgotPWInfo: ForgotPasswordModel) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    let url     = this.site + "forgotpassword";
 
+    return this.http.post(url, forgotPWInfo, options)
+        .map(this.extractData) 
+        .catch(this.handleError); 
   }
 
   resetPassword(resetPWInfo: ResetPasswordModel) {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    let url     = this.site + "resetpassword";
 
+    return this.http.post(url, resetPWInfo, options)
+        .map(this.extractData) 
+        .catch(this.handleError); 
   }
 
   changePassword(changePWInfo: ChangePasswordModel) {
-    
+    let userInfo: UserInfo = this.getUserInfo();
+    let token: string = userInfo.token;
+
+    let headers = new Headers({ 'Content-Type': 'application/json' }); 
+
+    headers.append( 'Authorization', 'Bearer ' + token)
+    let options = new RequestOptions({
+        headers: headers
+    });
+
+    let url     = this.site + "changepassword";
+    return this.http.post(url, changePWInfo, options)
+        .map(this.extractData) 
+        .catch(this.handleError); 
   }
 
   // Retreival of JSON from .NET is a success.
