@@ -30,6 +30,8 @@ namespace APIServer.Repositories
                 CalendarID = calendarID
             };
 
+            _context.Events.Add(newEvent);
+            _context.SaveChanges();
             // return eventID
             return null;
         }
