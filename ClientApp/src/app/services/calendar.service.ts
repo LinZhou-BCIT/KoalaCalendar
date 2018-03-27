@@ -5,6 +5,7 @@ import { Observable }     from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw'; 
+import 'rxjs/add/observable/of'; 
 import { RemoteConnectService, UserInfo } from './remote-connect.service';
 
 export class Event {
@@ -26,27 +27,35 @@ export class Calendar {
 @Injectable()
 export class CalendarService {
   private site: string;
-  private calendars: Calendar[];
+
   constructor(private http: Http, private remoteService: RemoteConnectService) {
     this.site = "https://apiserver20180208041703.azurewebsites.net/api/calendarapi/";
   }
 
-  fetchCalendarForMonth(month: number, year: number) {
-    let userInfo: UserInfo = this.remoteService.getUserInfo();
-    let token: string = userInfo.token;
+  getCalendarForMonth(month: number, year: number): Observable<Calendar[]>  {
+    let keyForSession: string = "cal-" + year + "-" + month;
+    let item = sessionStorage.getItem(keyForSession);
+    if (item == null) {
+      let userInfo: UserInfo = this.remoteService.getUserInfo();
+      let token: string = userInfo.token;
+  
+      let headers = new Headers({ 'Content-Type': 'application/json' }); 
+  
+      headers.append( 'Authorization', 'Bearer ' + token)
+      let options = new RequestOptions({
+          headers: headers
+      });
+      console.log(headers);
+  
+      let dataUrl = this.site + 'getcalendar?year=' + year + "&month=" + month;  
+      return this.http.get(dataUrl, options)
+          .map(this.extractData)
+          .catch(this.handleError);
+    }
+    else {
+      return Observable.of(JSON.parse(item));
+    }
 
-    let headers = new Headers({ 'Content-Type': 'application/json' }); 
-
-    headers.append( 'Authorization', 'Bearer ' + token)
-    let options = new RequestOptions({
-        headers: headers
-    });
-    console.log(headers);
-
-    let dataUrl = this.site + 'getcalendar?year=' + year + "&month=" + month;  
-    return this.http.get(dataUrl, options)
-        .map(this.extractData)
-        .catch(this.handleError);
   }
 
   private extractData(res: Response) {
