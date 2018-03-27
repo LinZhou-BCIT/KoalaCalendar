@@ -44,9 +44,9 @@ namespace APIServer.Repositories
         }
         
         /*  Update Calendar */
-        public async Task<bool> UpdateCalendar(string calendarID, string calendarName)
+        public async Task<bool> UpdateCalendar(Guid calendarID, string calendarName)
         {
-            var result = _context.Calendars.First(c => c.CalendarID.ToString() == calendarID); //Find Calendar
+            var result = _context.Calendars.First(c => c.CalendarID == calendarID); //Find Calendar
 
             if (result != null)
             {
@@ -72,23 +72,13 @@ namespace APIServer.Repositories
                     acCode += calendarIdString[ran.Next(0, calendarIdString.Length)];   //  Get random character from calendar's id and add that to the access code
                 }
 
-                var acTest = _context.Calendars.First(c => c.AccessCode == acCode); //Test if access code is already being used
-
-                if (acTest != null)
+                if (_context.Calendars.Any(c => c.AccessCode == acCode)) //Test if in database
                 {
                     acCode = "";    //If it is, loop
                 }
             }
 
-            if (acCode == "")
-            {
-                throw new System.Exception("Invalid access code generated");   
-                /*  
-                    This should never be triggered
-                */
-            }
-
-            var result = _context.Calendars.First(c => c.CalendarID == calendarID); //Get calendar to update access code
+            var result = _context.Calendars.Where(c => c.CalendarID == calendarID).First(); //Get calendar to update access code
 
             if (result != null)
             {
