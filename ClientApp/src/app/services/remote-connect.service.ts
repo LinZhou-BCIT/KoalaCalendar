@@ -19,6 +19,28 @@ export class RegisterModel {
   Role: string;
 }
 
+export class ConfirmEmailModel {
+  Email: string;
+  Code: string;
+}
+
+export class ForgotPasswordModel {
+  Email: string;
+}
+
+export class ResetPasswordModel {
+  Email: string;
+  Password: string;
+  ConfirmPassword: string;
+  Code: string;
+}
+
+export class ChangePasswordModel {
+  Email: string;
+  Password: string;
+  ConfirmPassword: string;
+}
+
 export class UserInfo {
   token: string;
   email: string;
@@ -28,6 +50,7 @@ export class UserInfo {
 @Injectable()
 export class RemoteConnectService {
   private site: string;
+
   constructor(private http: Http) { 
      this.site = "https://apiserver20180208041703.azurewebsites.net/api/accountapi/";
   }
@@ -56,23 +79,34 @@ export class RemoteConnectService {
         .catch(this.handleError); 
   } 
 
-  // getUsers(): Observable<Comment[]> {
-  //   let headers = new Headers({ 'Content-Type': 'application/json' }); 
+  getLoginStatus() {
+    if(sessionStorage.getItem("userInfo") == null) {
+      return false;
+    }else {
+      return true;
+    }
+  }
 
-  //   // Need to include 'Authorization' property with token in header.
-  //   // Read token value from the JavaScript session.
-  //   headers.append( 'Authorization', 'Bearer ' 
-  //                + sessionStorage.getItem('auth_token'))
-  //   let options = new RequestOptions({
-  //       headers: headers
-  //   });
-  //   console.log(headers);
+  logout() {
+    sessionStorage.removeItem('userInfo');
+  }
 
-  //   let dataUrl = this.site + 'users';  
-  //   return this.http.get(dataUrl, options)
-  //       .map(this.extractData)
-  //       .catch(this.handleError);
-  // } 
+  confirmEmail(confirmInfo: ConfirmEmailModel) {
+
+  }
+
+  forgotPassword(forgotPWInfo: ForgotPasswordModel) {
+
+  }
+
+  resetPassword(resetPWInfo: ResetPasswordModel) {
+
+  }
+
+  changePassword(changePWInfo: ChangePasswordModel) {
+    
+  }
+
   // Retreival of JSON from .NET is a success.
   private extractData(res: Response) {
     let body = res.json();

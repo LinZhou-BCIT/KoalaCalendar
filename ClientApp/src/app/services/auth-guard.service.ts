@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router}    from '@angular/router';
+import { RemoteConnectService } from './remote-connect.service';
 
 @Injectable()
 export class AuthGuardService implements CanActivate  {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private remoteService: RemoteConnectService) {}
   canActivate(): boolean 
   {
-    if (sessionStorage.getItem('logged_in') == 'true'){
+    if (this.remoteService.getLoginStatus()){
       return true;
     }
 
