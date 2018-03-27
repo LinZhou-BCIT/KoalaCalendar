@@ -1,4 +1,11 @@
 import { Injectable } from '@angular/core';
+import { URLSearchParams, QueryEncoder} from '@angular/http';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import { Observable }     from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw'; 
+import { RemoteConnectService, UserInfo } from './remote-connect.service';
 
 export class Event {
   eventID: string;
@@ -20,12 +27,37 @@ export class Calendar {
 export class CalendarService {
   private site: string;
   private calendars: Calendar[];
-  constructor() {
+  constructor(private http: Http, private remoteService: RemoteConnectService) {
     this.site = "https://apiserver20180208041703.azurewebsites.net/api/calendarapi/";
   }
 
-  getCalendarFromServer() {
+  fetchCalendarForMonth(month: number, year: number) {
+    let userInfo: UserInfo = this.remoteService.getUserInfo();
+    let token: string = userInfo.token;
 
+    let headers = new Headers({ 'Content-Type': 'application/json' }); 
+
+    headers.append( 'Authorization', 'Bearer ' + token)
+    let options = new RequestOptions({
+        headers: headers
+    });
+    console.log(headers);
+
+    let dataUrl = this.site + 'getcalendar?year=' + year + "&month=" + month;  
+    return this.http.get(dataUrl, options)
+        .map(this.extractData)
+        .catch(this.handleError);
   }
+
+  private extractData(res: Response) {
+    let body = res.json();
+    return body;
+  }
+
+  private handleError(error: any) {
+    let errMsg = (error.message) ? error.message :
+        error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+    return Observable.throw(errMsg);
+}
 
 }

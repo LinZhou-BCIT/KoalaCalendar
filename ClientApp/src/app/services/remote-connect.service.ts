@@ -32,6 +32,10 @@ export class RemoteConnectService {
      this.site = "https://apiserver20180208041703.azurewebsites.net/api/accountapi/";
   }
 
+  getUserInfo() {
+    return JSON.parse(sessionStorage.getItem("userInfo"));
+  }
+
   postRegister(regInfo: RegisterModel): Observable<Comment[]> {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
