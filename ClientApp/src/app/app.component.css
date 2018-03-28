@@ -44,6 +44,8 @@
     flex-direction: row;
     justify-content: space-between;
     font-size: 40px;
+    font-weight: bold;
+    font-family: 'Arial';
   }
 
   .year-nav {
@@ -53,6 +55,7 @@
     justify-content: space-between;
     font-family: 'Arial';
     font-size: 40px;
+    font-weight: bold;
   }
 
   
@@ -64,6 +67,7 @@
       border-bottom-left-radius: 3px;
       font-size: 30px;
       margin-left: 25px;
+      font-weight: bold;
     }
 
     .weeks {
