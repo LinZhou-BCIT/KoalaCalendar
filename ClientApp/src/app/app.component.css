@@ -31,31 +31,39 @@
   }
 
   .calendar-navs {
-    background-color: gainsboro;
+    background-color: #f9ffff;
+  }
+
+  .month-grid{
+    background-color: #f9ffff;
   }
 
   .month-nav {
-    padding: 20px;
+    padding: 10px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    font-size: 40px;
   }
 
   .year-nav {
-    padding: 20px;
+    padding: 10px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    font-family: 'Montserrat';
+    font-family: 'Arial';
+    font-size: 40px;
   }
 
   
     .day-names {
       display: flex;
       flex-direction: row;
-      background: grey;
+      background: #f9ffff;
       border-bottom-right-radius: 3px;
       border-bottom-left-radius: 3px;
+      font-size: 30px;
+      margin-left: 25px;
     }
 
     .weeks {
@@ -77,16 +85,18 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      background-color: #f9ffff;
     }
 
     .week-date {
-      height: 30px;
+      height: 50px;
       position: relative;
+      margin-left: 5px;
     }
 
       .date-text {
         z-index: 10;
-        font-size: 20px;
+        font-size: 30px;
         font-family: 'Montserrat', sans-serif;
       }
 
@@ -107,16 +117,17 @@
         cursor: pointer;
       }
     
-      .week-date:hover:after {
+      .week-date:hover {
           
-            background-color: blue;
+            background-color: #bffce4;
+            border-radius: 50%;
           
         }
-      
-        .week-date.selected:after:hover {
+      /* not working when selected */
+        .week-date.selected::after:hover {
             color: white;
        
-          background-color: green;
+          background-color: #29d893;
         
       }
 
