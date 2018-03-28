@@ -80,7 +80,7 @@ namespace APIServer.Controllers
 
             foreach(string calendarID in model.CalendarIDs)
             {
-                var events = await _eventRepo.GetEvents(calendarID, model.StartTime, model.EndTime);
+                var events = await _eventRepo.GetEvents(Guid.Parse(calendarID), model.StartTime, model.EndTime);
                 listOfEventLists.Add(events);
             }
 
@@ -119,7 +119,7 @@ namespace APIServer.Controllers
         [HttpPost]
         public async Task<string> AddEvent([FromBody] EventVM model)
         {
-            return await _eventRepo.CreateEvent(model.CalendarID, model.EventName, model.StartTime, model.EndTime);
+            return await _eventRepo.CreateEvent(Guid.Parse(model.CalendarID), model.EventName, model.StartTime, model.EndTime);
         }
 
         [HttpPut]
