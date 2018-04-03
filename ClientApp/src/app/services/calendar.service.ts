@@ -44,7 +44,7 @@ export class CalendarService {
     this.site = "https://apiserver20180208041703.azurewebsites.net/api/calendarapi/";
   }
 
-  getCalendarsForMonth(month: number, year: number): Observable<CalendarGroups>  {
+  getCalendarsForDate(year: number, month: number, day?: number): Observable<CalendarGroups>  {
     // not using session for now for simplicity
 
     // let key: string = year + "-" + month;
@@ -56,6 +56,9 @@ export class CalendarService {
       let params = new URLSearchParams();
       params.set('year', String(year));
       params.set('month', String(month));
+      if(day) {
+        params.set('day', String(month));
+      }
       let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
   
       headers.append( 'Authorization', 'Bearer ' + token)
