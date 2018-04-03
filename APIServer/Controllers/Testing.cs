@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 //FOR TESTING
 namespace APIServer.Controllers
 {
@@ -51,7 +52,13 @@ namespace APIServer.Controllers
         public async Task<object> test_SearchCalendar([FromForm] string input)
         {
             var result = await _calendarRepo.SearchCalendar(input); //stop sql injection
-            return Ok(result);
+            var settings = new JsonSerializerSettings
+            {
+                Formatting = Newtonsoft.Json.Formatting.Indented, // Just for humans
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
+
+            return Ok(JsonConvert.SerializeObject(result,settings)); //Important
         }
         [HttpPost]
         public async Task<object> test_UpdateCalendar()
@@ -70,6 +77,13 @@ namespace APIServer.Controllers
         {
             var result = await _calendarRepo.RemoveCalendar(Guid.Parse("0eec9477-4ac1-4530-862b-db88b3b322cd"));
             return Ok(result);
+        }
+        //Event
+        [HttpPost]
+        public async Task<object> test_createEvent([FromForm] EventVM model)
+        {
+            string result = await _eventRepo.CreateEvent(Guid.Parse(model.CalendarID), model.EventName, model.StartTime, model.EndTime);
+            return Ok("Event Created with ID: "+result);
         }
     }
 }
