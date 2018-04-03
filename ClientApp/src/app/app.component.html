@@ -38,7 +38,8 @@
                         <div class="week-date enabled"
                              *ngIf="isSelectedMonth(day.mDate)"
                              (click)="selectDate(day)"
-                             [ngClass]="{ today: day.today, selected: day.selected }">
+                             [ngClass]="{ today: day.today, selected: day.selected }"
+                             routerLink="event/list" routerLinkActive="active">
                           <span class="date-text">{{ day.mDate.date() }}</span>
                         </div>
                       </ng-container>
@@ -58,7 +59,7 @@
 
  
   
-    <p>Client App Last Updated: Tuesday March 27, 2018</p>
+    <p>Client App Last Updated: Tuesday April 3, 2018</p>
 
 </div>
 

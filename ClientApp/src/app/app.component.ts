@@ -1,4 +1,7 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, 
+  ChangeDetectionStrategy,
+  ViewChild,
+  TemplateRef } from '@angular/core';
 
 import * as moment from 'moment';
 import * as _ from 'lodash';

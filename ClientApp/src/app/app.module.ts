@@ -28,7 +28,8 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
 
 import { RemoteConnectService } from './services/remote-connect.service'
 import { AuthGuardService } from './services/auth-guard.service';
-import { CalendarService } from './services/calendar.service'
+import { CalendarService } from './services/calendar.service';
+import { EventListComponent } from './components/event-list/event-list.component'
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { CalendarService } from './services/calendar.service'
     ProfileComponent,
     LogoutComponent,
     ResetPasswordComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    EventListComponent
   ],
   imports: [
     BrowserModule,
