@@ -27,20 +27,20 @@ namespace APIServer.Repositories
 
             _context.SaveChanges();
             //return calendarID once it is created
-            return newCal.CalendarID.ToString();
+            return await Task.FromResult(newCal.CalendarID.ToString());
         }
 
-        public async Task<IEnumerable<Calendar>> GetAllCalendarsForUser(string userID)
+        public async Task<IEnumerable<Calendar>> GetAllCalendarsForUser(string userID) //Get subbed cal too
         {
             // query for user
-            var result = _context.Calendars.Where(c => c.OwnerID == userID);
-            return result.ToList(); //return list
+            var result = _context.Calendars.Where(c => c.OwnerID == userID).AsEnumerable<Calendar>();
+            return await Task.FromResult(result); //return list
         }
 
-        public async Task<IEnumerable<Calendar>> SearchCalendar(string searchInput)
+        public async Task<IEnumerable<Calendar>> SearchCalendar(string searchInput) //Get subbed cal too
         {
-            var results = _context.Calendars.Where(c => c.Name.Contains(searchInput));
-            return results;
+            var results = _context.Calendars.Where(c => c.Name.Contains(searchInput)).AsEnumerable<Calendar>();
+            return await Task.FromResult(results);
         }
         
         /*  Update Calendar */
@@ -52,9 +52,9 @@ namespace APIServer.Repositories
             {
                 result.Name = calendarName; //Update name
                 _context.SaveChanges();     //Save changes
-                return true;
+                return await Task.FromResult(true);
             }
-            return false;
+            return await Task.FromResult(false);
         }
         /*  End Update Calendar */
 
@@ -90,7 +90,7 @@ namespace APIServer.Repositories
                 //Calendar id that was fed in was not in database
             }
 
-            return acCode;  //Returns access code
+            return await Task.FromResult(acCode);  //Returns access code
         }
         /*  End Access Code Generation  */
 
@@ -103,10 +103,10 @@ namespace APIServer.Repositories
             {
                 _context.Calendars.Remove(result);  //Delete Result
                 _context.SaveChanges(); //Save Changes
-                return true;
+                return await Task.FromResult(true);
             }else
             {
-                return false;   //Return false if calendar was not found
+                return await Task.FromResult(false);   //Return false if calendar was not found
             }
         }
         /*  End Remove Calendar */
@@ -118,10 +118,10 @@ namespace APIServer.Repositories
             {
                 _context.Subscriptions.Remove(result);
                 _context.SaveChanges();
-                return true;
+                return await Task.FromResult(true);
             }else
             {
-                return false;
+                return await Task.FromResult(false);
             }
         }
 
