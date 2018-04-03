@@ -17,8 +17,16 @@ namespace APIServer.Repositories
         }
         public async Task<IEnumerable<Event>> GetEvents(Guid calendarID, DateTime startTime, DateTime endTime)
         {
-            var result = _context.Events.Where(c => c.CalendarID == calendarID && c.EndTime <= endTime && c.StartTime >= startTime).AsEnumerable<Event>();
-            return await Task.FromResult(result);
+            if (startTime != null && endTime != null)
+            {
+                var result = _context.Events.Where(c => c.CalendarID == calendarID && c.EndTime <= endTime && c.StartTime >= startTime).AsEnumerable<Event>();
+                return await Task.FromResult(result);
+            }
+            else
+            {
+                var result = _context.Events.Where(c => c.CalendarID == calendarID).AsEnumerable<Event>();
+                return await Task.FromResult(result);
+            }
         }
 
         public async Task<string> CreateEvent(Guid calendarID, string eventName, DateTime startTime, DateTime endTime)
