@@ -2,10 +2,13 @@
 <h4>Subscribe</h4>
 <hr>
 
-<form action="/calendar">
+<form (submit)="subscribe()">
   <div class="form-group">
     <label for="subAccessCode">Acess Code</label>
-    <input id="subAccessCode" name="subAccessCode" class="form-control mr-sm-2" type="text" placeholder="Enter Access Code" aria-label="">
+    <input id="subAccessCode" name="subAccessCode" 
+      class="form-control mr-sm-2" type="text" 
+      placeholder="Enter Access Code" aria-label=""
+      [(ngModel)]="accessCode">
   </div>
   <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Subscribe</button>
 </form>

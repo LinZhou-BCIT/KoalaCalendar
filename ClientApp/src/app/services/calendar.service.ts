@@ -11,8 +11,10 @@ import { RemoteConnectService, UserInfo } from './remote-connect.service';
 export class Event {
   eventID: string;
   name: string;
-  startTime: Date;
-  endTime: Date;
+  // did not use Date type here so that they can be used to model data from json
+  // parse the dates in individual components later
+  startTime: string;
+  endTime: string;
   calendarID: string;
 }
 
@@ -43,9 +45,11 @@ export class CalendarService {
   }
 
   getCalendarsForMonth(month: number, year: number): Observable<CalendarGroups>  {
-    let key: string = year + "-" + month;
-    let item = sessionStorage.getItem(key);
-    if (item == null) {
+    // not using session for now for simplicity
+
+    // let key: string = year + "-" + month;
+    // let item = sessionStorage.getItem(key);
+    // if (item == null) {
       let userInfo: UserInfo = this.remoteService.getUserInfo();
       let token: string = userInfo.token;
       
@@ -65,10 +69,10 @@ export class CalendarService {
       return this.http.get(dataUrl, options)
           .map(this.extractCalendars)
           .catch(this.handleError);
-    }
-    else {
-      return Observable.of(JSON.parse(item));
-    }
+    // }
+    // else {
+    //   return Observable.of(JSON.parse(item));
+    // }
 
   }
 
@@ -217,14 +221,14 @@ export class CalendarService {
 
   private extractCalendars(res: Response) {
     let body = res.json();
-    let key = body.month;
+    // let key = body.month;
     let calendars = body.calendars;
     
     let ownedCalendarsLite : CalendarLite[] = calendars.owned.map(this.calendarToLite);
     let subbedCalendarsLite : CalendarLite[] = calendars.subbed.map(this.calendarToLite);
     sessionStorage.setItem('ownedCalendars', JSON.stringify(ownedCalendarsLite));
     sessionStorage.setItem('subbedCalendars', JSON.stringify(subbedCalendarsLite));
-    sessionStorage.setItem(key, JSON.stringify(calendars));
+    // sessionStorage.setItem(key, JSON.stringify(calendars));
     return calendars;
   }
 
