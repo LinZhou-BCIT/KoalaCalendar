@@ -16,6 +16,7 @@ import { ForgetPasswordComponent } from '../components/forget-password/forget-pa
 import { ChangePasswordComponent } from '../components/change-password/change-password.component';
 import { ProfileComponent } from '../components/profile/profile.component';
 import { AuthGuardService } from '../services/auth-guard.service'
+import { EventListComponent } from '../components/event-list/event-list.component';
 
 const appRoutes: Routes = [
   { path: 'calendar', component: CalendarListComponent, canActivate: [AuthGuardService]  },
@@ -23,6 +24,7 @@ const appRoutes: Routes = [
   { path: 'calendar/list', component: CalendarListComponent, canActivate: [AuthGuardService]  },
   { path: 'calendar/sub', component: CalendarSubComponent, canActivate: [AuthGuardService] },
   { path: 'event/create', component: EventCreateComponent, canActivate: [AuthGuardService] },
+  { path: 'event/list', component: EventListComponent, canActivate: [AuthGuardService] },
   { path: 'about', component: AboutComponent },
   { path: 'account/login', component: LoginComponent },
   { path: 'account/logout', component: LogoutComponent, canActivate: [AuthGuardService] },
