@@ -17,7 +17,8 @@ namespace APIServer.Repositories
         }
         public async Task<IEnumerable<Event>> GetEvents(Guid calendarID, DateTime startTime, DateTime endTime)
         {
-            return null;
+            var result = _context.Events.Where(c => c.CalendarID == calendarID && c.EndTime <= endTime && c.StartTime >= startTime).AsEnumerable<Event>();
+            return await Task.FromResult(result);
         }
 
         public async Task<string> CreateEvent(Guid calendarID, string eventName, DateTime startTime, DateTime endTime)
@@ -33,24 +34,24 @@ namespace APIServer.Repositories
             _context.Events.Add(newEvent);
             _context.SaveChanges();
             // return eventID
-            return null;
+            return await Task.FromResult(newEvent.EventID.ToString());
         }
 
-        public async Task<bool> UpdateEvent(string eventID, string eventName, DateTime startTime, DateTime endTime)
+        public async Task<bool> UpdateEvent(Guid eventID, string eventName, DateTime newStartTime, DateTime newEndTime)
         {
-            return true;
+            return await Task.FromResult(true);
         }
 
-        public async Task<bool> DeleteEvent(string eventID)
+        public async Task<bool> DeleteEvent(Guid eventID)
         {
-            return true;
+            return await Task.FromResult(true);
         }
 
-        public async Task<Event> GetEventByID(string eventID)
+        public async Task<Event> GetEventByID(Guid eventID)
         {
             Event e = new Event();
         
-            return e;
+            return await Task.FromResult(e);
         }
 
         //controller verify that userID = ownerID
