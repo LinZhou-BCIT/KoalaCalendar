@@ -1,10 +1,10 @@
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule }    from '@angular/forms';
+import { FormsModule, FormGroup, FormControl, ReactiveFormsModule, Validators }    from '@angular/forms';
 import { HttpModule} from '@angular/http';
-import { RecaptchaModule } from 'ng-recaptcha';
-// import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
+import { RecaptchaModule, RECAPTCHA_SETTINGS } from 'ng-recaptcha';
+import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 
 import { AppComponent } from './app.component';
 import { CalendarCreateComponent } from './components/calendar-create/calendar-create.component';
@@ -25,7 +25,6 @@ import { LogoutComponent } from './components/logout/logout.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
-
 
 @NgModule({
   declarations: [
@@ -50,11 +49,19 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
     HttpModule,
     AppRoutingModule,
     NgbModule.forRoot(),
-    RecaptchaModule.forRoot()
+    RecaptchaModule.forRoot(),
+    RecaptchaFormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     RemoteConnectService,
-    AuthGuardService
+    AuthGuardService,
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useValue: { 
+        siteKey: '6LfgsVAUAAAAABBh9wfepmS00ZzVDd_dVW-ymYqR',
+      }
+    }
   ],
   bootstrap: [AppComponent]
 })
