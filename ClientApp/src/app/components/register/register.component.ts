@@ -38,4 +38,9 @@ export class RegisterComponent implements OnInit {
           alert(error);
       });
   }
+
+  resolved(captchaResponse: string) {
+    console.log(`Resolved captcha with response ${captchaResponse}:`);
+}
+
 }

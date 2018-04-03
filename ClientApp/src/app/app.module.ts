@@ -3,7 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule }    from '@angular/forms';
 import { HttpModule} from '@angular/http';
-
+import { RecaptchaModule } from 'ng-recaptcha';
+// import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 
 import { AppComponent } from './app.component';
 import { CalendarCreateComponent } from './components/calendar-create/calendar-create.component';
@@ -48,7 +49,8 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    RecaptchaModule.forRoot()
   ],
   providers: [
     RemoteConnectService,

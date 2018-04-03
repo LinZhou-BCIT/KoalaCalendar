@@ -28,6 +28,9 @@
                   <input class="form-control" type="password" id="ConfirmPassword" name="ConfirmPassword" [(ngModel)]="confirmPassword"/>
                   <!-- <span class="text-danger field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span> -->
               </div>
+
+              <re-captcha (resolved)="resolved($event)" siteKey="6LfgsVAUAAAAABBh9wfepmS00ZzVDd_dVW-ymYqR"></re-captcha><br>
+
               <div class="form-group">
                   <button type="submit" class="btn btn-default" (click)="register()">Sign Up</button>
               </div>
