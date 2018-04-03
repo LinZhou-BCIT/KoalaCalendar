@@ -125,19 +125,19 @@ namespace APIServer.Controllers
         [HttpPut]
         public async Task<bool> UpdateEvent([FromBody] EventVM model)
         {
-            return await _eventRepo.UpdateEvent(model.EventID, model.EventName, model.StartTime, model.EndTime);
+            return await _eventRepo.UpdateEvent(Guid.Parse(model.EventID), model.EventName, model.StartTime, model.EndTime);
         }
 
         [HttpDelete]
         public async Task<bool> DeleteEvent([FromBody] EventVM model)
         {
-            return await _eventRepo.DeleteEvent(model.EventID);
+            return await _eventRepo.DeleteEvent(Guid.Parse(model.EventID));
         }
 
         [HttpPost]
         public async Task<object> GetEventByID([FromBody] EventVM model)
         {
-            return await _eventRepo.GetEventByID(model.EventID);
+            return await _eventRepo.GetEventByID(Guid.Parse(model.EventID));
         }
     }
 }
