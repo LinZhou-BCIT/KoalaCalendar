@@ -21,6 +21,8 @@ namespace APIServer.Controllers
         private readonly IEventRepo _eventRepo;
         private readonly UserManager<ApplicationUser> _userManager;
 
+        private const string DevUser = "a3ca0059-2788-40a7-aa23-ac6082d2d696";
+
         //injection
         public Testing(
             UserManager<ApplicationUser> userManager,
@@ -31,28 +33,30 @@ namespace APIServer.Controllers
             _calendarRepo = calendarRepo;
             _eventRepo = eventRepo;
         }
+
         [HttpPost]
-        public async Task<object> test_createCal()
+        public async Task<object> test_createCal([FromForm] CalendarVM model)
         {
-            string returnId = await _calendarRepo.CreateCalendar("Test Calendar", "5ff3d103-a4aa-45d4-b288-7f55f77a3d4f");
-            return Ok(returnId);
+            string returnId = await _calendarRepo.CreateCalendar(model.CalendarName, DevUser);
+            return Ok("Calendar Id : " +returnId);
         }
+
         [HttpPost]
         public async Task<object> test_GetAllCalendarsForUser()
         {
-            var result = await _calendarRepo.GetAllCalendarsForUser("5ff3d103-a4aa-45d4-b288-7f55f77a3d4f");
+            var result = await _calendarRepo.GetAllCalendarsForUser(DevUser);
             return Ok(result.First());
         }
         [HttpPost]
-        public async Task<object> test_SearchCalendar()
+        public async Task<object> test_SearchCalendar([FromForm] string input)
         {
-            var result = await _calendarRepo.SearchCalendar("Test");
-            return Ok(result.First());
+            var result = await _calendarRepo.SearchCalendar(input); //stop sql injection
+            return Ok(result);
         }
         [HttpPost]
         public async Task<object> test_UpdateCalendar()
         {
-            var result = await _calendarRepo.UpdateCalendar(Guid.Parse("0eec9477-4ac1-4530-862b-db88b3b322cd"),"Test Calendar NEW");
+            var result = await _calendarRepo.UpdateCalendar(Guid.Parse("0eec9477-4ac1-4530-862b-db88b3b322cd"),"Test Calendar NEW"); //stop sql injection
             return Ok(result);
         }
         [HttpPost]
