@@ -1,0 +1,26 @@
+[
+  {
+    "CalendarID": "d7bdde71-2e67-4817-ba4f-47cdf6de6e69",
+    "Name": "TestCal0",
+    "AccessCode": null,
+    "OwnerID": "a3ca0059-2788-40a7-aa23-ac6082d2d696",
+    "Owner": null,
+    "Events": [
+      {
+        "EventID": "3a8badc0-e238-4482-b62f-7a5c629d2f77",
+        "Name": "Test Event 0",
+        "StartTime": "2016-06-03T10:34:00",
+        "EndTime": "2016-06-03T10:34:00",
+        "CalendarID": "d7bdde71-2e67-4817-ba4f-47cdf6de6e69"
+      },
+      {
+        "EventID": "d42fb511-c016-48be-a03b-861be3b3c398",
+        "Name": "Test Event 1",
+        "StartTime": "2016-06-03T10:34:00",
+        "EndTime": "2016-06-03T10:34:00",
+        "CalendarID": "d7bdde71-2e67-4817-ba4f-47cdf6de6e69"
+      }
+    ],
+    "Subscriptions": null
+  }
+]
