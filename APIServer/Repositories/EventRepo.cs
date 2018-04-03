@@ -37,21 +37,38 @@ namespace APIServer.Repositories
             return await Task.FromResult(newEvent.EventID.ToString());
         }
 
-        public async Task<bool> UpdateEvent(Guid eventID, string eventName, DateTime newStartTime, DateTime newEndTime)
+        public async Task<bool> UpdateEvent(Guid eventID, string newEventName, DateTime newStartTime, DateTime newEndTime)
         {
-            return await Task.FromResult(true);
+            var result = _context.Events.Where(c => c.EventID == eventID).First();
+
+            if (result != null)
+            {
+                if (newEventName != null)result.Name         = newEventName;
+                if (newStartTime != null)result.StartTime    = newStartTime;
+                if (newEndTime   != null)result.EndTime      = newEndTime;
+                _context.SaveChanges();
+                return await Task.FromResult(true);
+            }
+            return await Task.FromResult(false);
         }
 
         public async Task<bool> DeleteEvent(Guid eventID)
         {
-            return await Task.FromResult(true);
+            var result = _context.Events.Where(c => c.EventID == eventID).First();
+
+            if (result != null)
+            {
+                _context.Events.Remove(result);
+                _context.SaveChanges();
+                return await Task.FromResult(true);
+            }
+            return await Task.FromResult(false);
         }
 
         public async Task<Event> GetEventByID(Guid eventID)
         {
-            Event e = new Event();
-        
-            return await Task.FromResult(e);
+            var result = _context.Events.Where(c => c.EventID == eventID).First();
+            return await Task.FromResult(result);
         }
 
         //controller verify that userID = ownerID
