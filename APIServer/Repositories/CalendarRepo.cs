@@ -1,5 +1,6 @@
 ﻿using APIServer.Data;
 using APIServer.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,10 +40,10 @@ namespace APIServer.Repositories
 
         public async Task<IEnumerable<Calendar>> SearchCalendar(string searchInput) //Get subbed cal too
         {
-            var results = _context.Calendars.Where(c => c.Name.Contains(searchInput)).AsEnumerable<Calendar>();
+            var results = _context.Calendars.Include(b => b.Events).Where(c => c.Name.Contains(searchInput)).AsEnumerable<Calendar>();
             return await Task.FromResult(results);
         }
-        
+
         /*  Update Calendar */
         public async Task<bool> UpdateCalendar(Guid calendarID, string calendarName)
         {
