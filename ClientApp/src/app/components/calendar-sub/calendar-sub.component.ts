@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class CalendarSubComponent implements OnInit {
 
-  private accessCode: string;
+  accessCode: string;
   constructor(private router: Router, private calendarService: CalendarService) { }
 
   ngOnInit() {

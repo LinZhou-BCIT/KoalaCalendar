@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class CalendarCreateComponent implements OnInit {
 
-  private name: string;
+  name: string;
   constructor(private router: Router, private calendarService: CalendarService) { }
 
   ngOnInit() {
