@@ -1,35 +1,65 @@
+<script src='https://www.google.com/recaptcha/api.js?render=explicit'></script>
+
 <hr>
 <h4>Sign Up</h4>
 <hr>
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
         <section>
-            <form action="/calendar">
+            <form action="/calendar" #loginForm="ngForm">
               <!-- <div class="text-danger validation-summary-valid" data-valmsg-summary="true"><ul><li style="display:none"></li></ul></div> -->
                 <div class ="form-group">
                         <label class="radio-inline">
-                            <input type="radio" name="role" value="professor" [(ngModel)]="role"> Professor &nbsp;&nbsp;</label> 
+                            <input type="radio" name="role" value="professor" [(ngModel)]="role" required> Professor &nbsp;&nbsp;</label> 
                             
                         <label class="radio-inline">
-                            <input type="radio" name="role" value="student" [(ngModel)]="role"> Student </label>
+                            <input type="radio" name="role" value="student" [(ngModel)]="role" required> Student </label>
                 </div>
               <div class="form-group">
                   <label for="Email">Email</label>
-                  <input class="form-control" type="email" id="Email" name="Email" [(ngModel)]="email" />
+                  <input class="form-control" type="email" id="Email" name="Email" [(ngModel)]="email" required />
                   <!-- <span class="text-danger field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span> -->
               </div>
               <div class="form-group">
                   <label for="Password">Password</label>
-                  <input class="form-control" type="password" id="Password" name="Password" [(ngModel)]="password"/>
+                  <input class="form-control" type="password" id="Password" name="Password" [(ngModel)]="password" required />
                   <!-- <span class="text-danger field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span> -->
               </div>
               <div class="form-group">
                   <label for="ConfirmPassword">Confirm Password</label>
-                  <input class="form-control" type="password" id="ConfirmPassword" name="ConfirmPassword" [(ngModel)]="confirmPassword"/>
+                  <input class="form-control" type="password" id="ConfirmPassword" name="ConfirmPassword" [(ngModel)]="confirmPassword" required/>
                   <!-- <span class="text-danger field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span> -->
               </div>
+
+              <!-- <div class="form-group">
+                <re-captcha (resolved)="resolved($event)" siteKey="6LfgsVAUAAAAABBh9wfepmS00ZzVDd_dVW-ymYqR" required></re-captcha>
+              </div> -->
+              
+              <br><form [formGroup]="reactiveForm">
+                <re-captcha 
+                  formControlName="recaptchaReactive"
+                ></re-captcha>
+                <!-- <button [disabled]="reactiveForm.invalid">Submit</button> -->
+              </form><br>
+              
+                <!-- <re-captcha
+                  [(ngModel)]="formModel.captcha"
+                  name="captcha"
+                  required
+                  siteKey="6LfgsVAUAAAAABBh9wfepmS00ZzVDd_dVW-ymYqR"
+                  #captchaControl="ngModel"
+                ></re-captcha> -->
+
+              <!-- <re-captcha
+              [(ngModel)]="formModel.captcha"
+              name="captcha"
+              required
+              siteKey="6LfgsVAUAAAAABBh9wfepmS00ZzVDd_dVW-ymYqR"
+            ></re-captcha> -->
+              
+
               <div class="form-group">
-                  <button type="submit" class="btn btn-default" (click)="register()">Sign Up</button>
+                  <button [disabled]="reactiveForm.invalid" type="submit" class="btn btn-success" (click)="register()">Sign Up</button>
               </div>
             </form>
         </section>
