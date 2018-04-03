@@ -5,16 +5,16 @@
     <div  class="col-md-10 col-md-offset-1">
         <section>
             <p *ngIf="message">{{message}}</p>
-            <form action="/calendar">
+            <form action="/calendar" #loginForm="ngForm">
               <!-- <div class="text-danger validation-summary-valid" data-valmsg-summary="true"><ul><li style="display:none"></li></ul></div> -->
               <div class="form-group">
                   <label for="Email">Email</label>
-                  <input class="form-control" type="email" id="Email" name="Email" [(ngModel)]="email"/>
+                  <input class="form-control" type="email" id="Email" name="Email" [(ngModel)]="email" required />
                   <!-- <span class="text-danger field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span> -->
               </div>
               <div class="form-group">
                   <label for="Password">Password</label>
-                  <input class="form-control" type="password" id="Password" name="Password" [(ngModel)]="password"/>
+                  <input class="form-control" type="password" id="Password" name="Password" [(ngModel)]="password" required />
                   <!-- <span class="text-danger field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span> -->
               </div>
               <div class="form-group">
@@ -26,7 +26,7 @@
                   </div>
               </div>
               <div class="form-group">
-                  <button type="submit" class="btn btn-default" (click)="login()">Log in</button>
+                  <button type="submit" class="btn btn-success" (click)="login()" [disabled]="!loginForm.form.valid">Log in</button>
               </div>
             </form>
             <div class="form-group">
