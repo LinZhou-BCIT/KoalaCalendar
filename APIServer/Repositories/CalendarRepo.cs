@@ -13,36 +13,44 @@ namespace APIServer.Repositories
         ApplicationDbContext _context;
         public CalendarRepo(ApplicationDbContext context)
         {
-            _context = context;
+            _context = context; //Import context
         }
 
-        public async Task<string> CreateCalendar(string calendarName, string ownerID)
+        /* Created Calendar */
+        public async Task<string> CreateCalendar(string calendarName, string ownerID) //Creates a new calendar
         {
-            Calendar newCal = new Calendar()
+            Calendar newCal = new Calendar() //Create instance of new calendar and set properties 
             {
-                Name = calendarName,
+                Name = calendarName, 
                 CalendarID = Guid.NewGuid(),
                 OwnerID = ownerID
             };
-            _context.Calendars.Add(newCal);
+            _context.Calendars.Add(newCal); //Add new calendar to database
 
-            _context.SaveChanges();
-            //return calendarID once it is created
-            return await Task.FromResult(newCal.CalendarID.ToString());
+            _context.SaveChanges(); //Save changes
+
+            return await Task.FromResult(newCal.CalendarID.ToString()); //Return newly created calendars ID
         }
+        /* End Create Calendar */
 
-        public async Task<IEnumerable<Calendar>> GetAllCalendarsForUser(string userID) //Get subbed cal too
+        /* Get Calendars */
+        public async Task<IEnumerable<Calendar>> GetAllCalendarsForUser(string userID) //Get all calendars user has made
         {
-            // query for user
-            var result = _context.Calendars.Where(c => c.OwnerID == userID).AsEnumerable<Calendar>();
+            var result = _context.Calendars.Where(c => c.OwnerID == userID).AsEnumerable<Calendar>(); //query for user
+
             return await Task.FromResult(result); //return list
         }
+        /* End Get Calendars */
 
-        public async Task<IEnumerable<Calendar>> SearchCalendar(string searchInput) //Get subbed cal too
+        /* Search Calendar */
+        public async Task<IEnumerable<Calendar>> SearchCalendar(string searchInput)
         {
-            var results = _context.Calendars.Include(b => b.Events).Where(c => c.Name.Contains(searchInput)).AsEnumerable<Calendar>();
-            return await Task.FromResult(results);
+            var results = _context.Calendars.Include(b => b.Events).Where(c => c.Name.Contains(searchInput)).AsEnumerable<Calendar>(); //Get all calendars with name that matches input
+
+            return await Task.FromResult(results); //Return IEnumerable
         }
+        /* End Search Calendar */
+
 
         /*  Update Calendar */
         public async Task<bool> UpdateCalendar(Guid calendarID, string calendarName)
@@ -70,7 +78,7 @@ namespace APIServer.Repositories
             {
                 for (int i = 0; i < codeLen; i++)
                 {
-                    acCode += calendarIdString[ran.Next(0, calendarIdString.Length)];   //  Get random character from calendar's id and add that to the access code
+                    acCode += calendarIdString[ran.Next(0, calendarIdString.Length)];   //Get random character from calendar's id and add that to the access code
                 }
 
                 if (_context.Calendars.Any(c => c.AccessCode == acCode)) //Test if in database
@@ -84,7 +92,7 @@ namespace APIServer.Repositories
             if (result != null)
             {
                 result.AccessCode = acCode; //Access code prop is updated
-                _context.SaveChanges();     //Save changed
+                _context.SaveChanges();     //Save changes
             }else
             {
                 throw new System.ArgumentException(String.Format("{0} is an invalid calendar id, calendar id does not exist", calendarID));
@@ -112,9 +120,11 @@ namespace APIServer.Repositories
         }
         /*  End Remove Calendar */
 
+
         public async Task<bool> UnsubUserFromCalendar(string userID, Guid calendarID)
         {
-            var result = _context.Subscriptions.Where(c => c.UserID == userID && c.CalendarID == calendarID).FirstOrDefault();
+            var result = _context.Subscriptions.Where(c => c.UserID == userID && c.CalendarID == calendarID).FirstOrDefault(); //Find sub to remove
+
             if (result != null)
             {
                 _context.Subscriptions.Remove(result);
@@ -125,6 +135,7 @@ namespace APIServer.Repositories
                 return await Task.FromResult(false);
             }
         }
+
 
     }
 }
