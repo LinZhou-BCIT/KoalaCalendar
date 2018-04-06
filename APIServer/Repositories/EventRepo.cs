@@ -62,7 +62,7 @@ namespace APIServer.Repositories
 
         public async Task<bool> DeleteEvent(Guid eventID)
         {
-            var result = _context.Events.Where(c => c.EventID == eventID).First();
+            var result = _context.Events.Where(c => c.EventID == eventID).FirstOrDefault();
 
             if (result != null)
             {
