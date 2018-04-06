@@ -15,19 +15,6 @@ namespace APIServer.Repositories
             _context = context;
 
         }
-        public async Task<IEnumerable<Event>> GetEvents(Guid calendarID, DateTime startTime, DateTime endTime)
-        {
-            if (startTime != null && endTime != null)
-            {
-                var result = _context.Events.Where(c => c.CalendarID == calendarID && c.EndTime <= endTime && c.StartTime >= startTime).AsEnumerable<Event>();
-                return await Task.FromResult(result);
-            }
-            else
-            {
-                var result = _context.Events.Where(c => c.CalendarID == calendarID).AsEnumerable<Event>();
-                return await Task.FromResult(result);
-            }
-        }
 
         public async Task<string> CreateEvent(Guid calendarID, string eventName, DateTime startTime, DateTime endTime)
         {
@@ -38,11 +25,24 @@ namespace APIServer.Repositories
                 EndTime = endTime,
                 CalendarID = calendarID
             };
+            if (newEvent.Name == null) newEvent.Name = "Event";
 
             _context.Events.Add(newEvent);
             _context.SaveChanges();
             // return eventID
             return await Task.FromResult(newEvent.EventID.ToString());
+        }
+
+        public async Task<IEnumerable<Event>> GetEvents(Guid calendarID)
+        {
+            var result = _context.Events.Where(c => c.CalendarID == calendarID).AsEnumerable<Event>();
+            return await Task.FromResult(result);
+        }
+
+        public async Task<IEnumerable<Event>> GetEvents(Guid calendarID, DateTime startTime, DateTime endTime)
+        {
+            var result = _context.Events.Where(c => c.CalendarID == calendarID && c.EndTime <= endTime && c.StartTime >= startTime).AsEnumerable<Event>();
+            return await Task.FromResult(result);
         }
 
         public async Task<bool> UpdateEvent(Guid eventID, string newEventName, DateTime newStartTime, DateTime newEndTime)
@@ -79,7 +79,7 @@ namespace APIServer.Repositories
             return await Task.FromResult(result);
         }
 
-        //controller verify that userID = ownerID
+        // controller verify that userID = ownerID
         // check if user is subscribe to that calendar
     }
 }

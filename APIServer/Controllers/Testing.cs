@@ -14,7 +14,6 @@ using Newtonsoft.Json;
 //FOR TESTING
 namespace APIServer.Controllers
 {
-    //[Produces("application/json")]
     [Route("testingliam/[action]")]
     public class Testing : Controller
     {
@@ -39,7 +38,7 @@ namespace APIServer.Controllers
         public async Task<object> test_createCal([FromForm] CalendarVM model)
         {
             string returnId = await _calendarRepo.CreateCalendar(model.CalendarName, DevUser);
-            return Ok("Calendar Id : " +returnId);
+            return Ok("Calendar Id : " + returnId);
         }
 
         [HttpPost]
@@ -58,12 +57,12 @@ namespace APIServer.Controllers
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
 
-            return Ok(JsonConvert.SerializeObject(result,settings)); //Important
+            return Ok(JsonConvert.SerializeObject(result, settings)); //Important
         }
         [HttpPost]
         public async Task<object> test_UpdateCalendar()
         {
-            var result = await _calendarRepo.UpdateCalendar(Guid.Parse("0eec9477-4ac1-4530-862b-db88b3b322cd"),"Test Calendar NEW"); //stop sql injection
+            var result = await _calendarRepo.UpdateCalendar(Guid.Parse("0eec9477-4ac1-4530-862b-db88b3b322cd"), "Test Calendar NEW");
             return Ok(result);
         }
         [HttpPost]
@@ -83,7 +82,22 @@ namespace APIServer.Controllers
         public async Task<object> test_createEvent([FromForm] EventVM model)
         {
             string result = await _eventRepo.CreateEvent(Guid.Parse(model.CalendarID), model.EventName, model.StartTime, model.EndTime);
-            return Ok("Event Created with ID: "+result);
+            return Ok("Event Created with ID: " + result);
         }
+
+        [HttpPost]
+        public async Task<object> test_getEventsTimeSpan([FromForm] string calID, DateTime start, DateTime end)
+        {
+            var result = await _eventRepo.GetEvents(Guid.Parse(calID), start, end);
+
+            return Ok(result);
+        }
+        [HttpPost]
+        public async Task<object> test_getEvents([FromForm] string calID)
+        {
+             var result = await _eventRepo.GetEvents(Guid.Parse(calID));
+            return Ok(result);
+        }
+
     }
 }
