@@ -30,6 +30,7 @@ import { RemoteConnectService } from './services/remote-connect.service'
 import { AuthGuardService } from './services/auth-guard.service';
 import { CalendarService } from './services/calendar.service';
 import { EventListComponent } from './components/event-list/event-list.component'
+import { CalendarModule } from 'angular-calendar';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { EventListComponent } from './components/event-list/event-list.component
     NgbModule.forRoot(),
     RecaptchaModule.forRoot(),
     RecaptchaFormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CalendarModule.forRoot()
   ],
   providers: [
     RemoteConnectService,

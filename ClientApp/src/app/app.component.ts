@@ -5,6 +5,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import { RouterModule, Routes, Router }  from '@angular/router';
 
 export interface CalendarDate {
   mDate: moment.Moment;
@@ -30,7 +31,7 @@ export class AppComponent implements OnInit, OnChanges{
   @Input() selectedDates: CalendarDate[] = [];
   @Output() onSelectDate = new EventEmitter<CalendarDate>();
 
-  constructor() {}
+  constructor(private _router: Router) {}
   
     ngOnInit(): void {
       this.generateCalendar();
@@ -61,8 +62,27 @@ export class AppComponent implements OnInit, OnChanges{
     return moment(date).isSame(this.currentDate, 'month');
   }
 
+  //
+
   selectDate(date: CalendarDate): void {
     this.onSelectDate.emit(date);
+    //////
+    console.log(date);
+    // day = date.mdate.getday()
+    var year = date.mDate.get('year');
+    var month = date.mDate.get('month');
+    var day = date.mDate.get('date');
+    // var monthName = date.mDate.get('month');
+   
+    // console.log(monthName);
+
+    // console.log(year);
+    // console.log(month);
+    // console.log(day);
+    this._router.navigate(['/event/list', year, month, day]);
+    //get month
+    // get yeae
+    // this.router.navigate ...' /event-list/'+year+'/'+month+'/+'day
   }
 
   // actions from calendar

@@ -39,7 +39,7 @@
                              *ngIf="isSelectedMonth(day.mDate)"
                              (click)="selectDate(day)"
                              [ngClass]="{ today: day.today, selected: day.selected }"
-                             routerLink="event/list" routerLinkActive="active">
+                             >
                           <span class="date-text">{{ day.mDate.date() }}</span>
                         </div>
                       </ng-container>
