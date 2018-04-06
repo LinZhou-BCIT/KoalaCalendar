@@ -98,6 +98,17 @@ namespace APIServer.Controllers
              var result = await _eventRepo.GetEvents(Guid.Parse(calID));
             return Ok(result);
         }
-
+        [HttpPost]
+        public async Task<object> test_updateEvent([FromForm] Event model, string eventID)
+        {
+            var result = await _eventRepo.UpdateEvent(model.EventID, model.Name, model.StartTime, model.EndTime);
+            return Ok(result);
+        }
+        [HttpPost]
+        public async Task<object> test_deleteEvent([FromForm] string eventID)
+        {
+            var result = await _eventRepo.DeleteEvent(Guid.Parse(eventID));
+            return Ok(result);
+        }
     }
 }
