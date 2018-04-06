@@ -38,14 +38,20 @@ namespace APIServer.Controllers
         public async Task<object> test_createCal([FromForm] CalendarVM model)
         {
             string returnId = await _calendarRepo.CreateCalendar(model.CalendarName, DevUser);
-            return Ok("Calendar Id : " + returnId);
+            return await Task.FromResult(Ok("Calendar Id : " + returnId));
         }
 
         [HttpPost]
         public async Task<object> test_GetAllCalendarsForUser()
         {
             var result = await _calendarRepo.GetAllCalendarsForUser(DevUser);
-            return Ok(result.First());
+            var settings = new JsonSerializerSettings
+            {
+                Formatting = Newtonsoft.Json.Formatting.Indented, // Just for humans
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
+
+            return await Task.FromResult(Ok(JsonConvert.SerializeObject(result, settings))); //Important
         }
         [HttpPost]
         public async Task<object> test_SearchCalendar([FromForm] string input)
@@ -57,32 +63,32 @@ namespace APIServer.Controllers
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
 
-            return Ok(JsonConvert.SerializeObject(result, settings)); //Important
+            return await Task.FromResult(Ok(JsonConvert.SerializeObject(result, settings))); //Important
         }
         [HttpPost]
         public async Task<object> test_UpdateCalendar()
         {
             var result = await _calendarRepo.UpdateCalendar(Guid.Parse("0eec9477-4ac1-4530-862b-db88b3b322cd"), "Test Calendar NEW");
-            return Ok(result);
+            return await Task.FromResult(Ok(result));
         }
         [HttpPost]
         public async Task<object> test_genAcc()
         {
             var result = await _calendarRepo.GenerateAccessCode(Guid.Parse("0eec9477-4ac1-4530-862b-db88b3b322cd"));
-            return Ok(result);
+            return await Task.FromResult(Ok(result));
         }
         [HttpPost]
         public async Task<object> test_deleteCal()
         {
             var result = await _calendarRepo.RemoveCalendar(Guid.Parse("0eec9477-4ac1-4530-862b-db88b3b322cd"));
-            return Ok(result);
+            return await Task.FromResult(Ok(result));
         }
         //Event
         [HttpPost]
         public async Task<object> test_createEvent([FromForm] EventVM model)
         {
             string result = await _eventRepo.CreateEvent(Guid.Parse(model.CalendarID), model.EventName, model.StartTime, model.EndTime);
-            return Ok("Event Created with ID: " + result);
+            return await Task.FromResult(Ok("Event Created with ID: " + result));
         }
 
         [HttpPost]
@@ -90,25 +96,31 @@ namespace APIServer.Controllers
         {
             var result = await _eventRepo.GetEvents(Guid.Parse(calID), start, end);
 
-            return Ok(result);
+            return await Task.FromResult(Ok(result));
         }
         [HttpPost]
         public async Task<object> test_getEvents([FromForm] string calID)
         {
-             var result = await _eventRepo.GetEvents(Guid.Parse(calID));
-            return Ok(result);
+            var result = await _eventRepo.GetEvents(Guid.Parse(calID));
+            return await Task.FromResult(Ok(result));
         }
         [HttpPost]
         public async Task<object> test_updateEvent([FromForm] Event model, string eventID)
         {
             var result = await _eventRepo.UpdateEvent(model.EventID, model.Name, model.StartTime, model.EndTime);
-            return Ok(result);
+            return await Task.FromResult(Ok(result));
         }
         [HttpPost]
         public async Task<object> test_deleteEvent([FromForm] string eventID)
         {
             var result = await _eventRepo.DeleteEvent(Guid.Parse(eventID));
-            return Ok(result);
+            return await Task.FromResult(Ok(result));
+        }
+        [HttpPost]
+        public async Task<object> text_getEvent([FromForm] string eventID)
+        {
+            var result = await _eventRepo.GetEventByID(Guid.Parse(eventID));
+            return await Task.FromResult(Ok(result));
         }
     }
 }
