@@ -31,6 +31,8 @@ import { AuthGuardService } from './services/auth-guard.service';
 import { CalendarService } from './services/calendar.service';
 import { EventListComponent } from './components/event-list/event-list.component'
 import { CalendarModule } from 'angular-calendar';
+import { EventDetailComponent } from './components/event-detail/event-detail.component';
+import { CalendarDetailComponent } from './components/calendar-detail/calendar-detail.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,9 @@ import { CalendarModule } from 'angular-calendar';
     LogoutComponent,
     ResetPasswordComponent,
     ChangePasswordComponent,
-    EventListComponent
+    EventListComponent,
+    EventDetailComponent,
+    CalendarDetailComponent
   ],
   imports: [
     BrowserModule,

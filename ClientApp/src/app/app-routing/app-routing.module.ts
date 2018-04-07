@@ -17,14 +17,18 @@ import { ChangePasswordComponent } from '../components/change-password/change-pa
 import { ProfileComponent } from '../components/profile/profile.component';
 import { AuthGuardService } from '../services/auth-guard.service'
 import { EventListComponent } from '../components/event-list/event-list.component';
+import { EventDetailComponent } from '../components/event-detail/event-detail.component';
+import { CalendarDetailComponent } from '../components/calendar-detail/calendar-detail.component';
 
 const appRoutes: Routes = [
   { path: 'calendar', component: CalendarListComponent, canActivate: [AuthGuardService]  },
   { path: 'calendar/create', component: CalendarCreateComponent, canActivate: [AuthGuardService]},
   { path: 'calendar/list', component: CalendarListComponent, canActivate: [AuthGuardService]  },
+  { path: 'calendar/detail', component: CalendarDetailComponent, canActivate: [AuthGuardService] },
   { path: 'calendar/sub', component: CalendarSubComponent, canActivate: [AuthGuardService] },
   { path: 'event/create', component: EventCreateComponent, canActivate: [AuthGuardService] },
   { path: 'event/list/:year/:month/:day', component: EventListComponent, canActivate: [AuthGuardService] },
+  { path: 'event/detail', component: EventDetailComponent, canActivate: [AuthGuardService] },
   { path: 'about', component: AboutComponent },
   { path: 'account/login', component: LoginComponent },
   { path: 'account/logout', component: LogoutComponent, canActivate: [AuthGuardService] },
