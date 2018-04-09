@@ -132,6 +132,20 @@ namespace APIServer.Controllers
             return listOfEventLists;
         }
 
+        [HttpPut]
+        public async Task<object> UpdateCalendar([FromBody] CalendarVM model)
+        {
+            // validate if user is owner of calendar here ***********************************
+            bool success = await _calendarRepo.UpdateCalendar(model.CalendarID, model.CalendarName);
+            if (success)
+            {
+                return Ok(new { Message = "Update successful." });
+            } else
+            {
+                return StatusCode(400, new { Message = "Calendar not found." });
+            }
+        }
+
         [HttpDelete]
         public async Task<object> DeleteCalendar(Guid calendarID)
         {
@@ -166,25 +180,28 @@ namespace APIServer.Controllers
         [HttpPost]
         public async Task<string> AddEvent([FromBody] EventVM model)
         {
+            // validate if user is owner of calendar here ***********************************
             return await _eventRepo.CreateEvent(Guid.Parse(model.CalendarID), model.EventName, model.StartTime, model.EndTime);
         }
 
         [HttpPut]
         public async Task<bool> UpdateEvent([FromBody] EventVM model)
         {
+            // validate if user is owner of calendar here ***********************************
             return await _eventRepo.UpdateEvent(Guid.Parse(model.EventID), model.EventName, model.StartTime, model.EndTime);
         }
 
         [HttpDelete]
         public async Task<bool> DeleteEvent([FromBody] EventVM model)
         {
+            // validate if user is owner of calendar here ***********************************
             return await _eventRepo.DeleteEvent(Guid.Parse(model.EventID));
         }
 
-        [HttpPost]
-        public async Task<object> GetEventByID([FromBody] EventVM model)
+        [HttpGet]
+        public async Task<object> GetEventByID(string eventID)
         {
-            return await _eventRepo.GetEventByID(Guid.Parse(model.EventID));
+            return await _eventRepo.GetEventByID(Guid.Parse(eventID));
         }
     }
 }

@@ -7,7 +7,7 @@ namespace APIServer.Models.CalendarViewModels
 {
     public class EventRequestVM
     {
-        public List<string> CalendarIDs { get; set; }
+        public string[] CalendarIDs { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
     }
