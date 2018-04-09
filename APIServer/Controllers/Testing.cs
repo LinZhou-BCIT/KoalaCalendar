@@ -44,7 +44,7 @@ namespace APIServer.Controllers
         [HttpPost]
         public async Task<object> test_GetAllCalendarsForUser()
         {
-            var result = await _calendarRepo.GetAllCalendarsForUser(DevUser);
+            var result = await _calendarRepo.GetOwnedCalendars(DevUser);
             var settings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented, // Just for humans
@@ -56,7 +56,8 @@ namespace APIServer.Controllers
         [HttpPost]
         public async Task<object> test_SearchCalendar([FromForm] string input)
         {
-            var result = await _calendarRepo.SearchCalendar(input); //stop sql injection
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            var result = await _calendarRepo.SearchCalendar(userID, input); //stop sql injection
             var settings = new JsonSerializerSettings
             {
                 Formatting = Newtonsoft.Json.Formatting.Indented, // Just for humans

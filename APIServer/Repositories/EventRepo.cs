@@ -41,7 +41,9 @@ namespace APIServer.Repositories
 
         public async Task<IEnumerable<Event>> GetEvents(Guid calendarID, DateTime startTime, DateTime endTime)
         {
-            var result = _context.Events.Where(c => c.CalendarID == calendarID && c.EndTime <= endTime && c.StartTime >= startTime).AsEnumerable<Event>();
+            //var result = _context.Events.Where(c => c.CalendarID == calendarID && c.EndTime <= endTime && c.StartTime >= startTime).AsEnumerable<Event>();
+            // get all overlapping events
+            var result = _context.Events.Where(c => c.CalendarID == calendarID && c.EndTime >= startTime && c.StartTime <= endTime).AsEnumerable<Event>();
             return await Task.FromResult(result);
         }
 

@@ -52,25 +52,68 @@ namespace APIServer.Controllers
             return StatusCode(403, new { Message = "Only Professors can create custom calendars." });
         }
 
-        [HttpPost]
-        public async Task<object> SubscribeCalendar(string accesCode)
+        [HttpGet]
+        public async Task<object> GetCalendar(Guid calendarID)
         {
-            return Ok("You are now subscribed to the calendar.");
+            Calendar calendar = await _calendarRepo.GetCalendarByID(calendarID);
+            if (calendar != null)
+            {
+                return Ok(new { calendar = _calendarRepo.ConvertToVM(calendar) });
+            }
+            else
+            {
+                return StatusCode(400, new { Message = "Calendar not found." });
+            }
         }
 
         [HttpGet]
-        public async Task<object> GetCalendar(string searchInput)
+        public async Task<object> GetOwnedCalendars()
         {
-            //var listOfCalendars = await _calendarRepo.GetAllCalendarsForUser();
-
-            //if (searchInput == null)
-            //{
-            //    return listOfCalendars;
-            //}
-
-            //return _calendarRepo.SearchCalendar(searchInput);
-            return null;
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            var calendars = await _calendarRepo.GetOwnedCalendars(userID);
+            return Ok(new { calendars });
         }
+
+        [HttpGet]
+        public async Task<object> GetSubbedCalendars()
+        {
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            var calendars = await _calendarRepo.GetSubbedCalendars(userID);
+            return Ok(new { calendars });
+        }
+
+        [HttpGet]
+        public async Task<object> SubscribeToCalendar(string accessCode)
+        {
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            bool success = await _calendarRepo.SubToCalendar(userID, accessCode);
+            if (success)
+            {
+                return Ok(new { Message = "Subscription successful." });
+            }
+            else
+            {
+                return StatusCode(400, new { Message = "Calendar not found." });
+            }
+        }
+
+        //[HttpGet]
+        //public async Task<object> Get
+
+        // This functionality will not be included for now
+        //[HttpGet]
+        //public async Task<object> SearchCalendar(string searchInput)
+        //{
+        //    //var listOfCalendars = await _calendarRepo.GetAllCalendarsForUser();
+
+        //    //if (searchInput == null)
+        //    //{
+        //    //    return listOfCalendars;
+        //    //}
+
+        //    //return _calendarRepo.SearchCalendar(searchInput);
+        //    return null;
+        //}
 
         // Get any events of any calendar by ID, starttime and endtime
         [HttpPost]
@@ -88,9 +131,11 @@ namespace APIServer.Controllers
         }
 
         [HttpDelete]
-        public async Task<object> DeleteCalendar([FromBody] CalendarVM model)
+        public async Task<object> DeleteCalendar(Guid calendarID)
         {
-            bool result = await _calendarRepo.RemoveCalendar(model.CalendarID);
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            // validate if user is owner of calendar here ***********************************
+            bool result = await _calendarRepo.RemoveCalendar(calendarID);
 
             if (result)
             {

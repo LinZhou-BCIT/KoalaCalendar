@@ -1,5 +1,6 @@
 ﻿using APIServer.Data;
 using APIServer.Models;
+using APIServer.Models.CalendarViewModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -25,27 +26,53 @@ namespace APIServer.Repositories
                 CalendarID = Guid.NewGuid(),
                 OwnerID = ownerID
             };
-            _context.Calendars.Add(newCal); //Add new calendar to database
 
-            _context.SaveChanges(); //Save changes
+            await _context.Calendars.AddAsync(newCal); //Add new calendar to database
+            await _context.SaveChangesAsync(); //Save changes
+            await GenerateAccessCode(newCal.CalendarID);
 
-            return await Task.FromResult(newCal.CalendarID.ToString()); //Return newly created calendars ID
+            return newCal.CalendarID.ToString(); //Return newly created calendars ID
         }
         /* End Create Calendar */
 
-        /* Get Calendars */
-        public async Task<IEnumerable<Calendar>> GetAllCalendarsForUser(string userID) //Get all calendars user has made
+        /* Get Calendar By ID */
+        public async Task<Calendar> GetCalendarByID(Guid calendarID)
         {
-            var result = _context.Calendars.Where(c => c.OwnerID == userID).AsEnumerable<Calendar>(); //query for user
-
-            return await Task.FromResult(result); //return list
+            Calendar result = await _context.Calendars.Where(c => c.CalendarID == calendarID).FirstOrDefaultAsync();
+            return result;
         }
-        /* End Get Calendars */
+        /* End Get Calendar By ID */
+
+        /* Get Owned Calendars */
+        public async Task<IEnumerable<CalendarVM>> GetOwnedCalendars(string userID) //Get all calendars user has made
+        {
+            //var result = _context.Calendars.Where(c => c.OwnerID == userID).AsEnumerable<Calendar>(); //query for user
+            //return await Task.FromResult(result); //return list
+            IQueryable<CalendarVM> ownedCalendars = _context.Calendars.Where(c => c.OwnerID == userID)
+                .Select(c => ConvertToVM(c));
+            return await ownedCalendars.ToListAsync();
+        }
+        /* End Get Owned Calendars */
+
+        /* Get Subbed Calendars */
+        public async Task<IEnumerable<CalendarVM>> GetSubbedCalendars(string userID) //Get all calendars user has made
+        {
+            IQueryable<CalendarVM> sharedCalendars = _context.Calendars
+                .Join(_context.Subscriptions,
+                        c => c.CalendarID,
+                        s => s.CalendarID,
+                        (c, s) => new { c, s })
+                        .Where(joined => joined.s.UserID == userID)
+                        .Select(j => ConvertToVM(j.c));
+            return await sharedCalendars.ToListAsync();
+        }
+        /* End Get Subbed Calendars */
 
         /* Search Calendar */
-        public async Task<IEnumerable<Calendar>> SearchCalendar(string searchInput)
+        public async Task<IEnumerable<Calendar>> SearchCalendar(string userID, string searchInput)
         {
-            var results = _context.Calendars.Include(b => b.Events).Where(c => c.Name.Contains(searchInput)).AsEnumerable<Calendar>(); //Get all calendars with name that matches input
+            var results = _context.Calendars.Include(b => b.Events)
+                .Where(c => c.Name.Contains(searchInput) && c.OwnerID == userID).AsEnumerable<Calendar>(); //Get all calendars with name that matches input
 
             return await Task.FromResult(results); //Return IEnumerable
         }
@@ -120,6 +147,30 @@ namespace APIServer.Repositories
         }
         /*  End Remove Calendar */
 
+        public async Task<bool> SubToCalendar(string userID, string accessCode)
+        {
+            Calendar calendar = await _context.Calendars.Where(c => c.AccessCode == accessCode)
+                .FirstOrDefaultAsync();
+            if (calendar != null)
+            {
+                Subscription newSub = new Subscription()
+                {
+                    UserID = userID,
+                    CalendarID = calendar.CalendarID
+                };
+                Subscription checkExistSub = await _context.Subscriptions
+                    .Where(s => s.UserID == userID && s.CalendarID == newSub.CalendarID).FirstOrDefaultAsync();
+                if (checkExistSub == null)
+                {
+                    // only insert of not already subbed
+                    await _context.Subscriptions.AddAsync(newSub);
+                }
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
 
         public async Task<bool> UnsubUserFromCalendar(string userID, Guid calendarID)
         {
@@ -136,6 +187,16 @@ namespace APIServer.Repositories
             }
         }
 
-
+        public CalendarVM ConvertToVM(Calendar calendar)
+        {
+            CalendarVM vm = new CalendarVM()
+            {
+                CalendarID = calendar.CalendarID,
+                CalendarName = calendar.Name,
+                AccessCode = calendar.AccessCode,
+                OwnerID = calendar.OwnerID
+            };
+            return vm;
+        }
     }
 }
