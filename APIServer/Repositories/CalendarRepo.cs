@@ -29,7 +29,6 @@ namespace APIServer.Repositories
 
             await _context.Calendars.AddAsync(newCal); //Add new calendar to database
             await _context.SaveChangesAsync(); //Save changes
-            await GenerateAccessCode(newCal.CalendarID);
 
             return newCal.CalendarID.ToString(); //Return newly created calendars ID
         }

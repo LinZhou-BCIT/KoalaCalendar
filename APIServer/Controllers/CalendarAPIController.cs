@@ -47,6 +47,8 @@ namespace APIServer.Controllers
             if (isProf)
             {
                 string newCalendarID = await _calendarRepo.CreateCalendar(model.CalendarName, userID);
+                // remove if not generating accessCode on create 
+                await _calendarRepo.GenerateAccessCode(Guid.Parse(newCalendarID));
                 return Ok(new { calendarID = newCalendarID });
             }
             return StatusCode(403, new { Message = "Only Professors can create custom calendars." });
