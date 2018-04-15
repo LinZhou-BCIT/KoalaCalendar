@@ -2,18 +2,23 @@
   <hr>
   <h4>My Calendars</h4>
   <hr>
-  <h5>Owned Calendars</h5>
+  <p *ngIf="ownedCalendars">Owned Calendars:</p>
   <div *ngFor="let cal of ownedCalendars" class="form-check">
-      <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" checked="checked" value="">
+    <label class="form-check-label">
+      <input class="form-check-input" type="checkbox" checked="checked" value="">
+        <a routerLink="/calendar/own/{{cal.calendarID}}" routerLinkActive="active">
           {{cal.calendarName}}
-      </label>
+        </a>
+    </label>
   </div>
-  <h5>Subscribed Calendars</h5>
+  <hr>
+  <p *ngIf="subbedCalendars">Subscribed Calendars:</p>
   <div *ngFor="let cal of subbedCalendars" class="form-check">
     <label class="form-check-label">
       <input class="form-check-input" type="checkbox" checked="checked" value="">
-        {{cal.calendarName}}
+        <a routerLink="/calendar/sub/{{cal.calendarID}}" routerLinkActive="active">
+          {{cal.calendarName}}
+        </a>
     </label>
   </div>
   <hr>
