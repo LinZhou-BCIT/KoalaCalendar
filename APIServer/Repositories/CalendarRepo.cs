@@ -163,6 +163,7 @@ namespace APIServer.Repositories
                 {
                     // only insert of not already subbed
                     await _context.Subscriptions.AddAsync(newSub);
+                    await _context.SaveChangesAsync();
                 }
                 return true;
             } else

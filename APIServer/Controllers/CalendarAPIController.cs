@@ -133,13 +133,13 @@ namespace APIServer.Controllers
 
 
         [HttpGet]
-        public async Task<object> UnsubscribeCalendar(string calendarID)
+        public async Task<object> UnsubscribeFromCalendar(string calendarID)
         {
             string userID = HttpContext.User.Claims.ElementAt(2).Value;
             bool result = await _calendarRepo.UnsubUserFromCalendar(userID, Guid.Parse(calendarID));
             if (result)
             {
-                return Ok("You have successfully unsubscribe to the calendar");
+                return Ok(new { Message = "You have successfully unsubscribe to the calendar" });
             } else
             {
                 return StatusCode(400, new { Message = "Unsub failed." });

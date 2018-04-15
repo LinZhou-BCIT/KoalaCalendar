@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using APIServer.Services;
 using APIServer.Models.ManageViewModels;
+using APIServer.Repositories;
 
 namespace APIServer.Controllers
 {
@@ -29,34 +30,29 @@ namespace APIServer.Controllers
         private readonly IConfiguration _configuration;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
+        private readonly ICalendarRepo _calendarRepo;
 
         public AccountAPI(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration,
             RoleManager<IdentityRole> roleManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ICalendarRepo calendarRepo)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _roleManager = roleManager;
             _emailSender = emailSender;
+            _calendarRepo = calendarRepo;
         }
-
-        // test data action for authorzation 
-        [HttpGet]       
-        public IEnumerable<string> Users()
-        {
-            return _userManager.Users.Select(u => u.UserName);
-        }
-
 
         [HttpPost]
         [AllowAnonymous]
         public async Task<object> Register([FromBody] RegisterViewModel model)
         {
-            // quick hack
+            // role creation, enable if db refreshed
             // await CreateInitialRolesAsync();
 
             if (ModelState.IsValid)
@@ -86,6 +82,8 @@ namespace APIServer.Controllers
                     await _signInManager.SignInAsync(user, false);
                     //ApplicationUser appUser = _userManager.Users.SingleOrDefault(r => r.Email == model.Email);
                     ApplicationUser appUser = await _userManager.FindByEmailAsync(model.Email);
+                    // create default calendar for user
+                    await _calendarRepo.CreateCalendar("Default Calendar", appUser.Id);
                     return await AuthOkWithToken(appUser);
                 }
                 else
