@@ -22,8 +22,7 @@ export class Calendar {
   calendarID: string;
   name: string;
   accessCode: string;
-  owner: string; // just the email
-  events: Event[];
+  ownerID: string;
 }
 
 export class CalendarLite {
@@ -31,9 +30,8 @@ export class CalendarLite {
   name: string;
 }
 
-export class CalendarGroups {
-  owned: Calendar[];
-  subbed: Calendar[];
+export class CalendarCreateDto {
+  CalendarName: string;
 }
 
 @Injectable()
@@ -44,102 +42,70 @@ export class CalendarService {
     this.site = "https://apiserver20180208041703.azurewebsites.net/api/calendarapi/";
   }
 
-  getCalendarsForDate(year: number, month: number, day?: number): Observable<CalendarGroups>  {
-    // not using session for now for simplicity
-
-    // let key: string = year + "-" + month;
-    // let item = sessionStorage.getItem(key);
-    // if (item == null) {
+  getCalendarById(id: string): Observable<any> {
       let userInfo: UserInfo = this.remoteService.getUserInfo();
       let token: string = userInfo.token;
       
       let params = new URLSearchParams();
-      params.set('year', String(year));
-      params.set('month', String(month));
-      if(day) {
-        params.set('day', String(month));
-      }
+      params.set('calendarID', id);
       let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
-  
+
       headers.append( 'Authorization', 'Bearer ' + token)
       let options = new RequestOptions({
           headers: headers,
           search: params
       });
-      // console.log(headers);
-  
       let dataUrl = this.site + 'getcalendar';  
       return this.http.get(dataUrl, options)
-          .map(this.extractCalendars)
+          .map(this.extractData)
           .catch(this.handleError);
-    // }
-    // else {
-    //   return Observable.of(JSON.parse(item));
-    // }
-
   }
 
-  subToCalendar(accessCode: string) : Observable<Comment[]>  {
-    let userInfo: UserInfo = this.remoteService.getUserInfo();
-    let token: string = userInfo.token;
+  getOwnedCalendars(): Observable<any> {
+      let userInfo: UserInfo = this.remoteService.getUserInfo();
+      let token: string = userInfo.token;
+      let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
     
-    let params = new URLSearchParams();
-    params.set('accessCode', accessCode);
-    let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
-
-    headers.append( 'Authorization', 'Bearer ' + token)
-    let options = new RequestOptions({
-        headers: headers,
-        search: params
-    });
-    // console.log(headers);
-
-    let dataUrl = this.site + 'subToCalendar';  
-    return this.http.get(dataUrl, options)
-        .map(this.extractData)
-        .catch(this.handleError);
+      headers.append( 'Authorization', 'Bearer ' + token)
+      let options = new RequestOptions({
+          headers: headers
+      });
+      let dataUrl = this.site + 'getownedcalendars';  
+      return this.http.get(dataUrl, options)
+          .map(this.extractData)
+          .catch(this.handleError);
   }
 
-  unsubFromCalendar(id: string) : Observable<Comment[]> {
+  getSubbedCalendars(): Observable<any> {
     let userInfo: UserInfo = this.remoteService.getUserInfo();
     let token: string = userInfo.token;
-    
-    let params = new URLSearchParams();
-    params.set('calendarID', id);
     let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
-
-    headers.append( 'Authorization', 'Bearer ' + token)
-    let options = new RequestOptions({
-        headers: headers,
-        search: params
-    });
-    // console.log(headers);
-
-    let dataUrl = this.site + 'unsubFromCalendar';  
-    return this.http.get(dataUrl, options)
-        .map(this.extractData)
-        .catch(this.handleError);
-  }
-
-  createCalendar(name: string) : Observable<Comment[]> {
-    let userInfo: UserInfo = this.remoteService.getUserInfo();
-    // maybe check the role here? or leave it to the server
-    let token: string = userInfo.token;
-    
-    let content = new URLSearchParams();
-    content.set('calendarName', name);
-    let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
-
+  
     headers.append( 'Authorization', 'Bearer ' + token)
     let options = new RequestOptions({
         headers: headers
     });
-    // console.log(headers);
-
-    let dataUrl = this.site + 'createCalendar';  
-    return this.http.post(dataUrl, content.toString(), options)
+    let dataUrl = this.site + 'getsubbedcalendars';  
+    return this.http.get(dataUrl, options)
         .map(this.extractData)
         .catch(this.handleError);
+  }
+  
+  createCalendar(calendarToCreate: CalendarCreateDto) : Observable<Comment[]> {
+      let userInfo: UserInfo = this.remoteService.getUserInfo();
+      // maybe check the role here? or leave it to the server
+      let token: string = userInfo.token;
+      
+      let headers = new Headers({ 'Content-Type': 'application/json' }); 
+      headers.append( 'Authorization', 'Bearer ' + token)
+      let options = new RequestOptions({
+          headers: headers
+      });
+
+      let dataUrl = this.site + 'createCalendar';  
+      return this.http.post(dataUrl, calendarToCreate, options)
+          .map(this.extractData)
+          .catch(this.handleError);
   }
 
   deleteCalendar(id: string) : Observable<Comment[]> {
@@ -163,6 +129,84 @@ export class CalendarService {
         .map(this.extractData)
         .catch(this.handleError);
   }
+
+  // getCalendarsForDate(year: number, month: number, day?: number): Observable<CalendarGroups>  {
+  //   // not using session for now for simplicity
+
+  //   // let key: string = year + "-" + month;
+  //   // let item = sessionStorage.getItem(key);
+  //   // if (item == null) {
+  //     let userInfo: UserInfo = this.remoteService.getUserInfo();
+  //     let token: string = userInfo.token;
+      
+  //     let params = new URLSearchParams();
+  //     params.set('year', String(year));
+  //     params.set('month', String(month));
+  //     if(day) {
+  //       params.set('day', String(month));
+  //     }
+  //     let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
+  
+  //     headers.append( 'Authorization', 'Bearer ' + token)
+  //     let options = new RequestOptions({
+  //         headers: headers,
+  //         search: params
+  //     });
+  //     // console.log(headers);
+  
+  //     let dataUrl = this.site + 'getcalendar';  
+  //     return this.http.get(dataUrl, options)
+  //         .map(this.extractCalendars)
+  //         .catch(this.handleError);
+  //   // }
+  //   // else {
+  //   //   return Observable.of(JSON.parse(item));
+  //   // }
+
+  // }
+
+  subToCalendar(accessCode: string) : Observable<Comment[]>  {
+    let userInfo: UserInfo = this.remoteService.getUserInfo();
+    let token: string = userInfo.token;
+    
+    let params = new URLSearchParams();
+    params.set('accessCode', accessCode);
+    let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
+
+    headers.append( 'Authorization', 'Bearer ' + token)
+    let options = new RequestOptions({
+        headers: headers,
+        search: params
+    });
+    // console.log(headers);
+
+    let dataUrl = this.site + 'subscribetocalendar';  
+    return this.http.get(dataUrl, options)
+        .map(this.extractData)
+        .catch(this.handleError);
+  }
+
+  unsubFromCalendar(id: string) : Observable<Comment[]> {
+    let userInfo: UserInfo = this.remoteService.getUserInfo();
+    let token: string = userInfo.token;
+    
+    let params = new URLSearchParams();
+    params.set('calendarID', id);
+    let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
+
+    headers.append( 'Authorization', 'Bearer ' + token)
+    let options = new RequestOptions({
+        headers: headers,
+        search: params
+    });
+    // console.log(headers);
+
+    let dataUrl = this.site + 'UnsubscribeCalendar';  
+    return this.http.get(dataUrl, options)
+        .map(this.extractData)
+        .catch(this.handleError);
+  }
+
 
   // For events: check user with calendar owner?
   addEvent(event: Event) : Observable<Comment[]> {

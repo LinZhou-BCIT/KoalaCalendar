@@ -2,49 +2,33 @@
   <hr>
   <h4>My Calendars</h4>
   <hr>
-  <div class="form-check">
+  <h5>Owned Calendars</h5>
+  <div *ngFor="let cal of ownedCalendars" class="form-check">
       <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" value="">
-          ASP.NET
+        <input class="form-check-input" type="checkbox" checked="checked" value="">
+          {{cal.calendarName}}
       </label>
   </div>
-  <div class="form-check">
-      <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" value="">
-          Angular
-      </label>
-  </div>
-  <div class="form-check">
-      <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" value="">
-          Java
-      </label>
-  </div>
-  <div class="form-check">
-      <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" value="">
-          JavaScript
-      </label>
-  </div>
-  <div class="form-check">
-      <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" value="">
-          My Calendar
-      </label>
+  <h5>Subscribed Calendars</h5>
+  <div *ngFor="let cal of subbedCalendars" class="form-check">
+    <label class="form-check-label">
+      <input class="form-check-input" type="checkbox" checked="checked" value="">
+        {{cal.calendarName}}
+    </label>
   </div>
   <hr>
   <p>
-    <a routerLink="/calendar/create" routerLinkActive="active">New Calendar</a>
+    <a *ngIf="isProf" routerLink="/calendar/create" routerLinkActive="active">New Calendar</a>
   </p>
   <p>
     <a routerLink="/calendar/sub" routerLinkActive="active">Subscribe with Access Code</a>
   </p>
   <hr>
-  <form>
+  <!-- <form>
       <div class="form-group">
         <input class="form-control" type="text" placeholder="Search" aria-label="Search">
       </div>
       <button class="btn btn-outline-success" type="submit">Search</button>    
   </form>
-  <hr>
+  <hr> -->
 </div>

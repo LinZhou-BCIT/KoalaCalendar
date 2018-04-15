@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CalendarService } from '../../services/calendar.service';
+import { CalendarService, CalendarCreateDto } from '../../services/calendar.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,7 +16,10 @@ export class CalendarCreateComponent implements OnInit {
   }
 
   create() {
-    this.calendarService.createCalendar(this.name).subscribe(
+    let calendarToCreate: CalendarCreateDto = {
+      CalendarName: this.name
+    }
+    this.calendarService.createCalendar(calendarToCreate).subscribe(
       result => {
         // process the message from server
         this.router.navigate(['/calendar']);
