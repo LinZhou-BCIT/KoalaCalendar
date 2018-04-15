@@ -84,53 +84,6 @@ namespace APIServer.Controllers
             return Ok(new { calendars });
         }
 
-        [HttpGet]
-        public async Task<object> SubscribeToCalendar(string accessCode)
-        {
-            string userID = HttpContext.User.Claims.ElementAt(2).Value;
-            bool success = await _calendarRepo.SubToCalendar(userID, accessCode);
-            if (success)
-            {
-                return Ok(new { Message = "Subscription successful." });
-            }
-            else
-            {
-                return StatusCode(400, new { Message = "Calendar not found." });
-            }
-        }
-
-        //[HttpGet]
-        //public async Task<object> Get
-
-        // This functionality will not be included for now
-        //[HttpGet]
-        //public async Task<object> SearchCalendar(string searchInput)
-        //{
-        //    //var listOfCalendars = await _calendarRepo.GetAllCalendarsForUser();
-
-        //    //if (searchInput == null)
-        //    //{
-        //    //    return listOfCalendars;
-        //    //}
-
-        //    //return _calendarRepo.SearchCalendar(searchInput);
-        //    return null;
-        //}
-
-        // Get any events of any calendar by ID, starttime and endtime
-        [HttpPost]
-        public async Task<object> GetEventsByCalendarIDs([FromBody] EventRequestVM model)
-        {
-            List<IEnumerable<Event>> listOfEventLists = new List<IEnumerable<Event>>();
-
-            foreach(string calendarID in model.CalendarIDs)
-            {
-                var events = await _eventRepo.GetEvents(Guid.Parse(calendarID), model.StartTime, model.EndTime);
-                listOfEventLists.Add(events);
-            }
-
-            return listOfEventLists;
-        }
 
         [HttpPut]
         public async Task<object> UpdateCalendar([FromBody] CalendarVM model)
@@ -140,7 +93,8 @@ namespace APIServer.Controllers
             if (success)
             {
                 return Ok(new { Message = "Update successful." });
-            } else
+            }
+            else
             {
                 return StatusCode(400, new { Message = "Calendar not found." });
             }
@@ -162,19 +116,70 @@ namespace APIServer.Controllers
             return BadRequest("The calendar cannot be deleted.");
         }
 
-        [HttpPost]
-        public async Task<object> UnsubscribeCalendar([FromBody] CalendarVM model)
+        [HttpGet]
+        public async Task<object> SubscribeToCalendar(string accessCode)
         {
-            string userID = "sampleid";
-           
-            bool result = await _calendarRepo.UnsubUserFromCalendar(userID, model.CalendarID);
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            bool success = await _calendarRepo.SubToCalendar(userID, accessCode);
+            if (success)
+            {
+                return Ok(new { Message = "Subscription successful." });
+            }
+            else
+            {
+                return StatusCode(400, new { Message = "Subscription failed." });
+            }
+        }
 
+
+        [HttpGet]
+        public async Task<object> UnsubscribeCalendar(string calendarID)
+        {
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            bool result = await _calendarRepo.UnsubUserFromCalendar(userID, Guid.Parse(calendarID));
             if (result)
             {
                 return Ok("You have successfully unsubscribe to the calendar");
+            } else
+            {
+                return StatusCode(400, new { Message = "Unsub failed." });
+            }
+        }
+
+        // This functionality will not be included for now
+        //[HttpGet]
+        //public async Task<object> SearchCalendar(string searchInput)
+        //{
+        //    //var listOfCalendars = await _calendarRepo.GetAllCalendarsForUser();
+
+        //    //if (searchInput == null)
+        //    //{
+        //    //    return listOfCalendars;
+        //    //}
+
+        //    //return _calendarRepo.SearchCalendar(searchInput);
+        //    return null;
+        //}
+
+        // Get any events of any calendar by ID, starttime and endtime
+        [HttpPost]
+        public async Task<object> GetEventsOfTimeRange([FromBody] EventRequestVM model)
+        {
+            List<IEnumerable<Event>> listOfEventLists = new List<IEnumerable<Event>>();
+
+            foreach(string calendarID in model.CalendarIDs)
+            {
+                var events = await _eventRepo.GetEvents(Guid.Parse(calendarID), model.StartTime, model.EndTime);
+                listOfEventLists.Add(events);
             }
 
-            return BadRequest("The request to unsubscribe to the calendar is unsuccessful.");
+            return listOfEventLists;
+        }
+
+        [HttpGet]
+        public async Task<object> GetEventByID(string eventID)
+        {
+            return await _eventRepo.GetEventByID(Guid.Parse(eventID));
         }
 
         [HttpPost]
@@ -198,10 +203,5 @@ namespace APIServer.Controllers
             return await _eventRepo.DeleteEvent(Guid.Parse(model.EventID));
         }
 
-        [HttpGet]
-        public async Task<object> GetEventByID(string eventID)
-        {
-            return await _eventRepo.GetEventByID(Guid.Parse(eventID));
-        }
     }
 }
