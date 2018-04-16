@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using APIServer.Data;
 using APIServer.Models;
+using APIServer.Models.CalendarViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace APIServer.Repositories
 {
@@ -39,12 +41,14 @@ namespace APIServer.Repositories
             return await Task.FromResult(result);
         }
 
-        public async Task<IEnumerable<Event>> GetEvents(Guid calendarID, DateTime startTime, DateTime endTime)
+        public async Task<IEnumerable<EventVM>> GetEvents(Guid calendarID, DateTime startTime, DateTime endTime)
         {
             //var result = _context.Events.Where(c => c.CalendarID == calendarID && c.EndTime <= endTime && c.StartTime >= startTime).AsEnumerable<Event>();
             // get all overlapping events
-            var result = _context.Events.Where(c => c.CalendarID == calendarID && c.EndTime >= startTime && c.StartTime <= endTime).AsEnumerable<Event>();
-            return await Task.FromResult(result);
+            IQueryable<EventVM> result = _context.Events
+                .Where(c => c.CalendarID == calendarID && c.EndTime >= startTime && c.StartTime <= endTime)
+                .Include(e => e.Calendar).Select(e => ConvertToVM(e));
+            return await result.ToListAsync();
         }
 
         public async Task<bool> UpdateEvent(Guid eventID, string newEventName, DateTime newStartTime, DateTime newEndTime)
@@ -77,8 +81,22 @@ namespace APIServer.Repositories
 
         public async Task<Event> GetEventByID(Guid eventID)
         {
-            var result = _context.Events.Where(c => c.EventID == eventID).First();
-            return await Task.FromResult(result);
+            var result = await _context.Events.Where(c => c.EventID == eventID).Include(e => e.Calendar).FirstOrDefaultAsync();
+            return result;
+        }
+
+        public EventVM ConvertToVM(Event ev)
+        {
+            EventVM vm = new EventVM()
+            {
+                EventID = ev.EventID.ToString(),
+                CalendarID = ev.CalendarID.ToString(),
+                Name = ev.Name,
+                StartTime = ev.StartTime,
+                EndTime = ev.EndTime,
+                CalendarName = ev.Calendar.Name
+            };
+            return vm;
         }
 
         // controller verify that userID = ownerID

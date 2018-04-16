@@ -11,5 +11,6 @@ namespace APIServer.Models.CalendarViewModels
         public string Name { get; set; }
         public string AccessCode { get; set; }
         public string OwnerID { get; set; }
+        public string OwnerEmail { get; set; }
     }
 }
