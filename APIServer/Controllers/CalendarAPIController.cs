@@ -103,7 +103,7 @@ namespace APIServer.Controllers
                 }
             }else
             {
-                return StatusCode(403, "Insufficient credentials");
+                return StatusCode(403, new { Message = "Insufficient credentials." })
             }
 
         }
@@ -111,8 +111,8 @@ namespace APIServer.Controllers
         [HttpDelete]
         public async Task<object> DeleteCalendar(Guid calendarID)
         {
-            string userID = HttpContext.User.Claims.ElementAt(2).Value;
             // validate if user is owner of calendar here ***********************************
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
             if (await _calendarRepo.VerifyCalendarOwnner(userID, calendarID))
             {
                 bool result = await _calendarRepo.RemoveCalendar(calendarID);
@@ -127,7 +127,7 @@ namespace APIServer.Controllers
                 }
             }else
             {
-                return StatusCode(403, "Insufficient credentials");
+                return StatusCode(403, new { Message = "Insufficient credentials." })
             }
 
         }
@@ -216,24 +216,47 @@ namespace APIServer.Controllers
         }
 
         [HttpPost]
-        public async Task<string> AddEvent([FromBody] EventVM model)
+        public async Task<object> AddEvent([FromBody] EventVM model)
         {
             // validate if user is owner of calendar here ***********************************
-            return await _eventRepo.CreateEvent(Guid.Parse(model.CalendarID), model.Name, model.StartTime, model.EndTime);
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            if (await _calendarRepo.VerifyCalendarOwnner(userID, Guid.Parse(model.CalendarID)))
+            {
+                return await _eventRepo.CreateEvent(Guid.Parse(model.CalendarID), model.Name, model.StartTime, model.EndTime);
+            }else
+            {
+                return StatusCode(403, new { Message = "Insufficient credentials." })
+            }
         }
 
         [HttpPut]
-        public async Task<bool> UpdateEvent([FromBody] EventVM model)
+        public async Task<object> UpdateEvent([FromBody] EventVM model)
         {
             // validate if user is owner of calendar here ***********************************
-            return await _eventRepo.UpdateEvent(Guid.Parse(model.EventID), model.Name, model.StartTime, model.EndTime);
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            if (await _calendarRepo.VerifyCalendarOwnner(userID, Guid.Parse(model.CalendarID)))
+            {
+                return await _eventRepo.UpdateEvent(Guid.Parse(model.EventID), model.Name, model.StartTime, model.EndTime);
+            }else
+            {
+                return StatusCode(403, new { Message = "Insufficient credentials." })
+            }
         }
 
         [HttpDelete]
-        public async Task<bool> DeleteEvent(string eventID)
+        public async Task<object> DeleteEvent(string eventID)
         {
             // validate if user is owner of calendar here ***********************************
-            return await _eventRepo.DeleteEvent(Guid.Parse(eventID));
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            var result = await _eventRepo.GetEventByID(Guid.Parse(eventID));
+            if (await _calendarRepo.VerifyCalendarOwnner(userID,result.CalendarID))
+            {
+                return await _eventRepo.DeleteEvent(Guid.Parse(eventID));
+            }else
+            {
+                return StatusCode(403, new { Message = "Insufficient credentials." });
+            }
+            
         }
 
     }
