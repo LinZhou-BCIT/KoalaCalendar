@@ -52,7 +52,7 @@ export class RemoteConnectService {
   private site: string;
 
   constructor(private http: Http) { 
-     this.site = "https://apiserver20180208041703.azurewebsites.net/api/accountapi/";
+     this.site = "https://koalacalendar.azurewebsites.net/api/accountapi/";
   }
 
   getUserInfo() {

@@ -40,7 +40,7 @@ export class CalendarService {
   private site: string;
 
   constructor(private http: Http, private remoteService: RemoteConnectService) {
-    this.site = "https://apiserver20180208041703.azurewebsites.net/api/calendarapi/";
+    this.site = "https://koalacalendar.azurewebsites.net/api/calendarapi/";
   }
 
   getCalendarById(id: string): Observable<any> {
