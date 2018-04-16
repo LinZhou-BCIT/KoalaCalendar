@@ -33,7 +33,41 @@ export class CalendarDetailComponent implements OnInit {
           this.router.navigate(['/calendar']);
         }
       )
-    })
+    });
+  }
+
+  back(){
+    this.router.navigate(['/calendar']);
+  }
+
+  update(){
+
+  }
+
+  unsub(){
+    this.calendarService.unsubFromCalendar(this.id).subscribe(
+      data => {
+        console.log(data["message"]);
+        this.router.navigate(['/calendar']);
+      },
+      error => {
+        alert(error);
+        console.log(error);
+      }
+    );
+  }
+
+  delete(){
+    this.calendarService.deleteCalendar(this.id).subscribe(
+      data => {
+        console.log(data["message"]);
+        this.router.navigate(['/calendar']);
+      },
+      error => {
+        alert(error);
+        console.log(error);
+      }
+    );
   }
 
 }

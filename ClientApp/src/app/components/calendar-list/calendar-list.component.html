@@ -3,30 +3,28 @@
   <h4>My Calendars</h4>
   <hr>
   <p *ngIf="ownedCalendars">Owned Calendars:</p>
-  <div *ngFor="let cal of ownedCalendars" class="form-check">
-    <label class="form-check-label">
-      <input class="form-check-input" type="checkbox" checked="checked" value="">
-        <a routerLink="/calendar/own/{{cal.calendarID}}" routerLinkActive="active">
-          {{cal.calendarName}}
-        </a>
-    </label>
-  </div>
+  <ul *ngFor="let cal of ownedCalendars" class="list-group">
+    <li class="list-group-item">
+      <a routerLink="/calendar/own/{{cal.calendarID}}" routerLinkActive="active">
+        {{cal.calendarName}}
+      </a>
+    </li>
+  </ul>
   <hr>
   <p *ngIf="subbedCalendars">Subscribed Calendars:</p>
-  <div *ngFor="let cal of subbedCalendars" class="form-check">
-    <label class="form-check-label">
-      <input class="form-check-input" type="checkbox" checked="checked" value="">
-        <a routerLink="/calendar/sub/{{cal.calendarID}}" routerLinkActive="active">
-          {{cal.calendarName}}
-        </a>
-    </label>
-  </div>
+  <ul *ngFor="let cal of subbedCalendars" class="list-group">
+    <li class="list-group-item">
+      <a routerLink="/calendar/sub/{{cal.calendarID}}" routerLinkActive="active">
+        {{cal.calendarName}}
+      </a>
+    </li>
+  </ul>
   <hr>
   <p>
     <a *ngIf="isProf" routerLink="/calendar/create" routerLinkActive="active">New Calendar</a>
   </p>
   <p>
-    <a routerLink="/calendar/sub" routerLinkActive="active">Subscribe with Access Code</a>
+    <a routerLink="/calendar/sub" routerLinkActive="active">New Subscription</a>
   </p>
   <hr>
   <!-- <form>

@@ -1,4 +1,5 @@
-<form *ngIf="calendar" action="/calendar">
+<hr>
+<form *ngIf="calendar">
   <div class="form-group">
     <label for="calendarName">Calendar Name</label>
     <input id="calendarName" name="calendarName" class="form-control mr-sm-2" type="text" value="{{calendar.calendarName}}" aria-label="Course Name">
@@ -12,12 +13,12 @@
     <input id="owner" name="owner" class="form-control mr-sm-2" type="text" value="{{calendar.ownerID}}" aria-label="Owner" readonly>
   </div><br><br>
   <div>
-    <button class="btn btn-outline-success" type="submit" *ngIf="owned">Rename</button>
-    <button class="btn btn-outline-warning" type="submit" *ngIf="!owned">Unsub</button>
-    <button class="btn btn-outline-secondary" type="submit">Cancel</button>
+    <button class="btn btn-outline-success" *ngIf="owned" (click)="update()">Update</button>
+    <button class="btn btn-outline-warning" *ngIf="!owned" (click)="unsub()">Unsub</button>
+    <button class="btn btn-outline-secondary" (click)="back()">Back</button>
   </div><br>
   <div>
-    <button class="btn btn-outline-danger" type="submit" *ngIf="owned">Delete</button>
+    <button class="btn btn-outline-danger" *ngIf="owned" (click)="delete()">Delete</button>
   </div>
   
 </form>

@@ -19,11 +19,13 @@ export class CalendarSubComponent implements OnInit {
     this.calendarService.subToCalendar(this.accessCode).subscribe(
       result => {
         // process the message from server
+        console.log(result["message"]);
         this.router.navigate(['/calendar']);
       },
       error => {
         // process and display the message from server?
         alert(error);
+        console.log(error);
       }
     );
   }

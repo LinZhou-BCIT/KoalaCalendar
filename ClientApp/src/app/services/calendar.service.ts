@@ -201,7 +201,7 @@ export class CalendarService {
     });
     // console.log(headers);
 
-    let dataUrl = this.site + 'UnsubscribeCalendar';  
+    let dataUrl = this.site + 'unsubscribefromcalendar';  
     return this.http.get(dataUrl, options)
         .map(this.extractData)
         .catch(this.handleError);
