@@ -8,3 +8,7 @@
 .inner-nav {
     max-width: 1024px;
 }
+
+nav ul a:hover{
+    color: lightblue;
+}
