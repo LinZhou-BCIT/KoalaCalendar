@@ -6,7 +6,6 @@ import { FormsModule, FormGroup, FormControl, ReactiveFormsModule, Validators } 
 import { HttpModule} from '@angular/http';
 import { RecaptchaModule, RECAPTCHA_SETTINGS } from 'ng-recaptcha';
 import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 import { AppComponent } from './app.component';
@@ -32,7 +31,6 @@ import { RemoteConnectService } from './services/remote-connect.service'
 import { AuthGuardService } from './services/auth-guard.service';
 import { CalendarService } from './services/calendar.service';
 import { EventListComponent } from './components/event-list/event-list.component'
-import { CalendarModule } from 'angular-calendar';
 import { EventDetailComponent } from './components/event-detail/event-detail.component';
 import { CalendarDetailComponent } from './components/calendar-detail/calendar-detail.component';
 

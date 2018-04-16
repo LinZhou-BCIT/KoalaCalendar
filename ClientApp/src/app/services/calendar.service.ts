@@ -23,9 +23,10 @@ export class Calendar {
   ownerID: string;
 }
 
-export class CalendarLite {
-  calendarID: string;
-  name: string;
+export class EventRequestModel {
+  calendarIDs: string[];
+  startTime: Date;
+  endTime: Date;
 }
 
 export class CalendarCreateDto {
@@ -128,40 +129,27 @@ export class CalendarService {
         .catch(this.handleError);
   }
 
-  // getCalendarsForDate(year: number, month: number, day?: number): Observable<CalendarGroups>  {
-  //   // not using session for now for simplicity
+  getCalendarsForTimeRange(request: EventRequestModel): Observable<any>  {
+      let userInfo: UserInfo = this.remoteService.getUserInfo();
+      let token: string = userInfo.token;
 
-  //   // let key: string = year + "-" + month;
-  //   // let item = sessionStorage.getItem(key);
-  //   // if (item == null) {
-  //     let userInfo: UserInfo = this.remoteService.getUserInfo();
-  //     let token: string = userInfo.token;
-      
-  //     let params = new URLSearchParams();
-  //     params.set('year', String(year));
-  //     params.set('month', String(month));
-  //     if(day) {
-  //       params.set('day', String(month));
-  //     }
-  //     let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
+      let headers = new Headers({ 'Content-Type': 'application/json' }); 
   
-  //     headers.append( 'Authorization', 'Bearer ' + token)
-  //     let options = new RequestOptions({
-  //         headers: headers,
-  //         search: params
-  //     });
-  //     // console.log(headers);
+      headers.append( 'Authorization', 'Bearer ' + token)
+      let options = new RequestOptions({
+          headers: headers
+      });
   
-  //     let dataUrl = this.site + 'getcalendar';  
-  //     return this.http.get(dataUrl, options)
-  //         .map(this.extractCalendars)
-  //         .catch(this.handleError);
-  //   // }
-  //   // else {
-  //   //   return Observable.of(JSON.parse(item));
-  //   // }
+      let dataUrl = this.site + 'GetEventsOfTimeRange';  
+      return this.http.post(dataUrl, request, options)
+          .map(this.extractData)
+          .catch(this.handleError);
+    // }
+    // else {
+    //   return Observable.of(JSON.parse(item));
+    // }
 
-  // }
+  }
 
   subToCalendar(accessCode: string) : Observable<Comment[]>  {
     let userInfo: UserInfo = this.remoteService.getUserInfo();
@@ -262,26 +250,6 @@ export class CalendarService {
     return this.http.delete(dataUrl, options)
         .map(this.extractData)
         .catch(this.handleError);
-  }
-
-  private extractCalendars(res: Response) {
-    let body = res.json();
-    // let key = body.month;
-    let calendars = body.calendars;
-    
-    let ownedCalendarsLite : CalendarLite[] = calendars.owned.map(this.calendarToLite);
-    let subbedCalendarsLite : CalendarLite[] = calendars.subbed.map(this.calendarToLite);
-    sessionStorage.setItem('ownedCalendars', JSON.stringify(ownedCalendarsLite));
-    sessionStorage.setItem('subbedCalendars', JSON.stringify(subbedCalendarsLite));
-    // sessionStorage.setItem(key, JSON.stringify(calendars));
-    return calendars;
-  }
-
-  private calendarToLite(calendar: Calendar) {
-    let calendarLite = new CalendarLite();
-    calendarLite.calendarID = calendar.calendarID;
-    calendarLite.name = calendar.name;
-    return calendarLite;
   }
 
   private extractData(res: Response) {
