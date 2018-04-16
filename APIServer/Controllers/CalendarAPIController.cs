@@ -167,7 +167,7 @@ namespace APIServer.Controllers
         public async Task<object> GetEventsOfTimeRange([FromBody] EventRequestVM model)
         {
             string userID = HttpContext.User.Claims.ElementAt(2).Value;
-            List<Event> listOfEvents = new List<Event>();
+            List<EventVM> listOfEvents = new List<EventVM>();
             List<string> listOfCalendarIDs = new List<string>();
             if (model.CalendarIDs == null || model.CalendarIDs.Length == 0)
             {
@@ -192,7 +192,12 @@ namespace APIServer.Controllers
         [HttpGet]
         public async Task<object> GetEventByID(string eventID)
         {
-            return await _eventRepo.GetEventByID(Guid.Parse(eventID));
+            Event ev = await _eventRepo.GetEventByID(Guid.Parse(eventID));
+            if (ev != null)
+            {
+                return Ok(new { Event = _eventRepo.ConvertToVM(ev) });
+            }
+            return StatusCode(400, new { Message = "Get event failed." });
         }
 
         [HttpPost]

@@ -37,7 +37,7 @@ namespace APIServer.Repositories
         /* Get Calendar By ID */
         public async Task<Calendar> GetCalendarByID(Guid calendarID)
         {
-            Calendar result = await _context.Calendars.Where(c => c.CalendarID == calendarID).FirstOrDefaultAsync();
+            Calendar result = await _context.Calendars.Where(c => c.CalendarID == calendarID).Include(c => c.Owner).FirstOrDefaultAsync();
             return result;
         }
         /* End Get Calendar By ID */
@@ -47,7 +47,7 @@ namespace APIServer.Repositories
         {
             //var result = _context.Calendars.Where(c => c.OwnerID == userID).AsEnumerable<Calendar>(); //query for user
             //return await Task.FromResult(result); //return list
-            IQueryable<CalendarVM> ownedCalendars = _context.Calendars.Where(c => c.OwnerID == userID)
+            IQueryable<CalendarVM> ownedCalendars = _context.Calendars.Where(c => c.OwnerID == userID).Include(c => c.Owner)
                 .Select(c => ConvertToVM(c));
             return await ownedCalendars.ToListAsync();
         }
@@ -56,14 +56,15 @@ namespace APIServer.Repositories
         /* Get Subbed Calendars */
         public async Task<IEnumerable<CalendarVM>> GetSubbedCalendars(string userID) //Get all calendars user has made
         {
-            IQueryable<CalendarVM> sharedCalendars = _context.Calendars
+            IQueryable<Calendar> sharedCalendars = _context.Calendars
                 .Join(_context.Subscriptions,
                         c => c.CalendarID,
                         s => s.CalendarID,
                         (c, s) => new { c, s })
                         .Where(joined => joined.s.UserID == userID)
-                        .Select(j => ConvertToVM(j.c));
-            return await sharedCalendars.ToListAsync();
+                        .Select(j => j.c);
+            IQueryable<CalendarVM> sharedCalendarVMs = sharedCalendars.Include(c => c.Owner).Select(c => ConvertToVM(c));
+            return await sharedCalendarVMs.ToListAsync();
         }
         /* End Get Subbed Calendars */
 
@@ -194,7 +195,8 @@ namespace APIServer.Repositories
                 CalendarID = calendar.CalendarID,
                 Name = calendar.Name,
                 AccessCode = calendar.AccessCode,
-                OwnerID = calendar.OwnerID
+                OwnerID = calendar.OwnerID,
+                OwnerEmail = calendar.Owner.Email
             };
             return vm;
         }
