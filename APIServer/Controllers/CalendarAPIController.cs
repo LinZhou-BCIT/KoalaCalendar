@@ -109,11 +109,12 @@ namespace APIServer.Controllers
 
             if (result)
             {
-                string message = "Calendar has been deleted successfully.";
-                return Ok(message);
+                return Ok(new { message = "Calendar has been deleted successfully." });
             }
-
-            return BadRequest("The calendar cannot be deleted.");
+            else
+            {
+                return StatusCode(400, new { Message = "Deletion failed." });
+            }
         }
 
         [HttpGet]
@@ -173,7 +174,7 @@ namespace APIServer.Controllers
                 listOfEventLists.Add(events);
             }
 
-            return listOfEventLists;
+            return Ok(new { events = listOfEventLists });
         }
 
         [HttpGet]
