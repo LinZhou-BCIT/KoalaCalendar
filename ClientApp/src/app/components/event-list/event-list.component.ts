@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { CalendarService, Event, EventRequestModel } from '../../services/calendar.service';
 
 @Component({
@@ -9,10 +9,12 @@ import { CalendarService, Event, EventRequestModel } from '../../services/calend
 })
 
 export class EventListComponent implements OnInit {
+  id: string;
   date: Date;
   events: Event[];
 
-  constructor(private route: ActivatedRoute,
+  constructor(private router: Router,
+    private route: ActivatedRoute,
     private calendarService: CalendarService) { 
   }
 
@@ -46,7 +48,5 @@ export class EventListComponent implements OnInit {
         }
       );
   }
-
-
 
 }
