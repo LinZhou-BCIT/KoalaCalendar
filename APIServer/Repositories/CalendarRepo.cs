@@ -201,7 +201,7 @@ namespace APIServer.Repositories
             return vm;
         }
 
-        public async Task<bool> VerifyCalendarOwnder(string userID, Guid calendarID)
+        public async Task<bool> VerifyCalendarOwner(string userID, Guid calendarID)
         {
             var result = await _context.Calendars.Where(c => c.OwnerID == userID).Select(b => b.CalendarID).ToListAsync();
             if (result.Contains(calendarID)) {
