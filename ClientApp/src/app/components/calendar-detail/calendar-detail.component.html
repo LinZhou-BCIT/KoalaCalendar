@@ -5,16 +5,17 @@
     <input id="calendarName" name="calendarName" class="form-control mr-sm-2" type="text" 
       [(ngModel)]="calendar.name" aria-label="Course Name">
   </div>
-  <div>
+  <div class="form-group">
     <label>Access Code: </label>
     <input id="accessCode" name="accessCode" class="form-control mr-sm-2" type="text" 
       [(ngModel)]="calendar.accessCode" aria-label="Access Code" readonly>
   </div>
-  <div *ngIf="!owned">
+  <div *ngIf="!owned" class="form-group">
     <label>Owner:</label>
     <input id="owner" name="owner" class="form-control mr-sm-2" type="text" 
-      [(ngModel)]="calendar.ownerID" aria-label="Owner" readonly>
-  </div><br><br>
+      [(ngModel)]="calendar.ownerEmail" aria-label="Owner" readonly>
+  </div>
+  <hr>
   <div>
     <button class="btn btn-outline-success" *ngIf="owned" (click)="update()">Update</button>
     <button class="btn btn-outline-warning" *ngIf="!owned" (click)="unsub()">Unsub</button>

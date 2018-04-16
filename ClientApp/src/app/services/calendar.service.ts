@@ -14,6 +14,7 @@ export class Event {
   startTime: Date;
   endTime: Date;
   calendarID: string;
+  calendarName: string;
 }
 
 export class Calendar {
@@ -21,6 +22,7 @@ export class Calendar {
   name: string;
   accessCode: string;
   ownerID: string;
+  ownerEmail: string;
 }
 
 export class EventRequestModel {
