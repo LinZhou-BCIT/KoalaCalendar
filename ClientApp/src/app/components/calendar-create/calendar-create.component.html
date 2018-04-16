@@ -4,8 +4,11 @@
 <form>
   <div class="form-group">
     <label for="calendarName">Calendar Name</label>
-    <input id="calendarName" name="calendarName" class="form-control mr-sm-2" type="text" placeholder="New Calendar" aria-label="Course Name">
+    <input id="calendarName" name="calendarName" class="form-control mr-sm-2" 
+      type="text" placeholder="New Calendar" aria-label="Course Name"
+      [(ngModel)]="name">
   </div>
-  <button class="btn btn-outline-success">Create</button>
+  <button type="button" class="btn btn-outline-success" (click)="create()">Create</button>
+  <button class="btn btn-outline-secondary" routerLink="/calendar">Back</button>
 </form>
 <hr>

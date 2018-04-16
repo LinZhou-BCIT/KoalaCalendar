@@ -2,20 +2,23 @@
 <form *ngIf="calendar">
   <div class="form-group">
     <label for="calendarName">Calendar Name</label>
-    <input id="calendarName" name="calendarName" class="form-control mr-sm-2" type="text" value="{{calendar.calendarName}}" aria-label="Course Name">
+    <input id="calendarName" name="calendarName" class="form-control mr-sm-2" type="text" 
+      [(ngModel)]="calendar.calendarName" aria-label="Course Name">
   </div>
   <div>
     <label>Access Code: </label>
-    <input id="accessCode" name="accessCode" class="form-control mr-sm-2" type="text" value="{{calendar.accessCode}}" aria-label="Access Code" readonly>
+    <input id="accessCode" name="accessCode" class="form-control mr-sm-2" type="text" 
+      [(ngModel)]="calendar.accessCode" aria-label="Access Code" readonly>
   </div>
   <div *ngIf="!owned">
     <label>Owner:</label>
-    <input id="owner" name="owner" class="form-control mr-sm-2" type="text" value="{{calendar.ownerID}}" aria-label="Owner" readonly>
+    <input id="owner" name="owner" class="form-control mr-sm-2" type="text" 
+      [(ngModel)]="calendar.ownerID" aria-label="Owner" readonly>
   </div><br><br>
   <div>
     <button class="btn btn-outline-success" *ngIf="owned" (click)="update()">Update</button>
     <button class="btn btn-outline-warning" *ngIf="!owned" (click)="unsub()">Unsub</button>
-    <button class="btn btn-outline-secondary" (click)="back()">Back</button>
+    <button class="btn btn-outline-secondary" routerLink="/calendar">Back</button>
   </div><br>
   <div>
     <button class="btn btn-outline-danger" *ngIf="owned" (click)="delete()">Delete</button>

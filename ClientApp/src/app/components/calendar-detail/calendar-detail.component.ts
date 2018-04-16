@@ -36,38 +36,38 @@ export class CalendarDetailComponent implements OnInit {
     });
   }
 
-  back(){
-    this.router.navigate(['/calendar']);
-  }
-
   update(){
 
   }
 
   unsub(){
-    this.calendarService.unsubFromCalendar(this.id).subscribe(
-      data => {
-        console.log(data["message"]);
-        this.router.navigate(['/calendar']);
-      },
-      error => {
-        alert(error);
-        console.log(error);
-      }
-    );
+    if (confirm("Are you sure you want to delete this calendar?")){
+      this.calendarService.unsubFromCalendar(this.id).subscribe(
+        data => {
+          console.log(data["message"]);
+          this.router.navigate(['/calendar']);
+        },
+        error => {
+          alert(error);
+          console.log(error);
+        }
+      );
+    }
   }
 
   delete(){
-    this.calendarService.deleteCalendar(this.id).subscribe(
-      data => {
-        console.log(data["message"]);
-        this.router.navigate(['/calendar']);
-      },
-      error => {
-        alert(error);
-        console.log(error);
-      }
-    );
+    if (confirm("Are you sure you want to delete this calendar?")){
+      this.calendarService.deleteCalendar(this.id).subscribe(
+        data => {
+          console.log(data["message"]);
+          this.router.navigate(['/calendar']);
+        },
+        error => {
+          alert(error);
+          console.log(error);
+        }
+      );
+    }
   }
 
 }
