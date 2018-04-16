@@ -166,15 +166,27 @@ namespace APIServer.Controllers
         [HttpPost]
         public async Task<object> GetEventsOfTimeRange([FromBody] EventRequestVM model)
         {
-            List<IEnumerable<Event>> listOfEventLists = new List<IEnumerable<Event>>();
-
-            foreach(string calendarID in model.CalendarIDs)
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            List<Event> listOfEvents = new List<Event>();
+            List<string> listOfCalendarIDs = new List<string>();
+            if (model.CalendarIDs == null || model.CalendarIDs.Length == 0)
             {
-                var events = await _eventRepo.GetEvents(Guid.Parse(calendarID), model.StartTime, model.EndTime);
-                listOfEventLists.Add(events);
+                IEnumerable<CalendarVM> ownedCalendars = await _calendarRepo.GetOwnedCalendars(userID);
+                IEnumerable<CalendarVM> subbedCalendars = await _calendarRepo.GetSubbedCalendars(userID);
+                listOfCalendarIDs.AddRange(ownedCalendars.Select(c => c.CalendarID.ToString()));
+                listOfCalendarIDs.AddRange(subbedCalendars.Select(c => c.CalendarID.ToString()));
+            } else
+            {
+                listOfCalendarIDs = model.CalendarIDs.ToList();
             }
 
-            return Ok(new { events = listOfEventLists });
+            foreach(string calendarID in listOfCalendarIDs)
+            {
+                var events = await _eventRepo.GetEvents(Guid.Parse(calendarID), model.StartTime, model.EndTime);
+                listOfEvents.AddRange(events);
+            }
+            listOfEvents = listOfEvents.OrderBy(e => e.StartTime).ToList();
+            return Ok(new { events = listOfEvents });
         }
 
         [HttpGet]

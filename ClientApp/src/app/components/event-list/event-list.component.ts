@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+import { CalendarService, Event, EventRequestModel } from '../../services/calendar.service';
 
 @Component({
   selector: 'app-event-list',
@@ -8,23 +9,41 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 
 export class EventListComponent implements OnInit {
-  year: number;
-  month: number;
-  day: number;
+  date: Date;
+  events: Event[];
 
-  constructor(private route: ActivatedRoute) { 
+  constructor(private route: ActivatedRoute,
+    private calendarService: CalendarService) { 
   }
 
   ngOnInit() {
     this.route.params.forEach((params: Params) => {
       let calendarYear = params['year'];
-      this.year = calendarYear;
-
       let calendarMonth = params['month'];
-      this.month = calendarMonth;
-
       let calendarDay = params['day'];
-      this.day = calendarDay;
+      this.date = new Date(calendarYear, calendarMonth, calendarDay);
+      let nextDay = new Date(this.date);
+      nextDay.setDate(nextDay.getDate() + 1);
+      let request: EventRequestModel = {
+        // catch all
+        calendarIDs: [],
+        startTime: this.date,
+        endTime: nextDay
+      }
+      this.calendarService.getEventsForTimeRange(request).subscribe(
+        data => {
+          this.events = data.events.map((event) => {
+            event.startTime = event.startTime + 'Z';
+            event.endTime = event.endTime + 'Z';
+            return event;
+          });
+          console.log(this.events);
+        },
+        error => {
+          alert(error);
+        }
+      );
+
 
     })
   }

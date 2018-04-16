@@ -3,8 +3,8 @@
   <h4>My Calendars</h4>
   <hr>
   <p *ngIf="ownedCalendars">Owned Calendars:</p>
-  <ul *ngFor="let cal of ownedCalendars" class="list-group">
-    <li class="list-group-item">
+  <ul class="list-group">
+    <li *ngFor="let cal of ownedCalendars" class="list-group-item">
       <a routerLink="/calendar/own/{{cal.calendarID}}" routerLinkActive="active">
         {{cal.name}}
       </a>
@@ -12,8 +12,8 @@
   </ul>
   <hr>
   <p *ngIf="subbedCalendars">Subscribed Calendars:</p>
-  <ul *ngFor="let cal of subbedCalendars" class="list-group">
-    <li class="list-group-item">
+  <ul class="list-group">
+    <li *ngFor="let cal of subbedCalendars" class="list-group-item">
       <a routerLink="/calendar/sub/{{cal.calendarID}}" routerLinkActive="active">
         {{cal.name}}
       </a>

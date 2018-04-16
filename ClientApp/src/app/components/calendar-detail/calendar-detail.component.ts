@@ -41,7 +41,7 @@ export class CalendarDetailComponent implements OnInit {
   }
 
   unsub(){
-    if (confirm("Are you sure you want to delete this calendar?")){
+    if (confirm("Are you sure you want to unsubscribe from this calendar?")){
       this.calendarService.unsubFromCalendar(this.id).subscribe(
         data => {
           console.log(data["message"]);

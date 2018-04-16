@@ -60,13 +60,11 @@ import { CalendarDetailComponent } from './components/calendar-detail/calendar-d
     HttpModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    NgbModule.forRoot(),
     RecaptchaModule.forRoot(),
     RecaptchaFormsModule,
     ReactiveFormsModule,
     OwlDateTimeModule, 
     OwlNativeDateTimeModule,
-    CalendarModule.forRoot()
   ],
   providers: [
     RemoteConnectService,

@@ -129,7 +129,7 @@ export class CalendarService {
         .catch(this.handleError);
   }
 
-  getCalendarsForTimeRange(request: EventRequestModel): Observable<any>  {
+  getEventsForTimeRange(request: EventRequestModel): Observable<any>  {
       let userInfo: UserInfo = this.remoteService.getUserInfo();
       let token: string = userInfo.token;
 
@@ -144,11 +144,6 @@ export class CalendarService {
       return this.http.post(dataUrl, request, options)
           .map(this.extractData)
           .catch(this.handleError);
-    // }
-    // else {
-    //   return Observable.of(JSON.parse(item));
-    // }
-
   }
 
   subToCalendar(accessCode: string) : Observable<Comment[]>  {

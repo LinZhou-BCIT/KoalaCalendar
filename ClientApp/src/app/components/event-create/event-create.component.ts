@@ -26,6 +26,8 @@ export class EventCreateComponent implements OnInit {
   }
 
   create() {
+    this.toAdd.startTime.setSeconds(0);
+    this.toAdd.endTime.setSeconds(0);
     console.log(this.toAdd);
     this.calendarService.addEvent(this.toAdd).subscribe(
       result => {
