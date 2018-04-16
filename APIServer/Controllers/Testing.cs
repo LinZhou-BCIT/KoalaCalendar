@@ -37,7 +37,7 @@ namespace APIServer.Controllers
         [HttpPost]
         public async Task<object> test_createCal([FromForm] CalendarVM model)
         {
-            string returnId = await _calendarRepo.CreateCalendar(model.CalendarName, DevUser);
+            string returnId = await _calendarRepo.CreateCalendar(model.Name, DevUser);
             return await Task.FromResult(Ok("Calendar Id : " + returnId));
         }
 
@@ -88,7 +88,7 @@ namespace APIServer.Controllers
         [HttpPost]
         public async Task<object> test_createEvent([FromForm] EventVM model)
         {
-            string result = await _eventRepo.CreateEvent(Guid.Parse(model.CalendarID), model.EventName, model.StartTime, model.EndTime);
+            string result = await _eventRepo.CreateEvent(Guid.Parse(model.CalendarID), model.Name, model.StartTime, model.EndTime);
             return await Task.FromResult(Ok("Event Created with ID: " + result));
         }
 

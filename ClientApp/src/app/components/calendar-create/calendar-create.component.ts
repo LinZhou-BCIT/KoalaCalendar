@@ -17,7 +17,7 @@ export class CalendarCreateComponent implements OnInit {
 
   create() {
     let calendarToCreate: CalendarCreateDto = {
-      CalendarName: this.name
+      name: this.name
     }
     this.calendarService.createCalendar(calendarToCreate).subscribe(
       result => {

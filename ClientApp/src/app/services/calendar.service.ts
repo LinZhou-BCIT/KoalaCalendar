@@ -11,10 +11,8 @@ import { RemoteConnectService, UserInfo } from './remote-connect.service';
 export class Event {
   eventID: string;
   name: string;
-  // did not use Date type here so that they can be used to model data from json
-  // parse the dates in individual components later
-  startTime: string;
-  endTime: string;
+  startTime: Date;
+  endTime: Date;
   calendarID: string;
 }
 
@@ -31,7 +29,7 @@ export class CalendarLite {
 }
 
 export class CalendarCreateDto {
-  CalendarName: string;
+  name: string;
 }
 
 @Injectable()

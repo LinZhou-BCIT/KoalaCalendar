@@ -46,7 +46,7 @@ namespace APIServer.Controllers
             bool isProf = await _userManager.IsInRoleAsync(user, "PROFESSOR");
             if (isProf)
             {
-                string newCalendarID = await _calendarRepo.CreateCalendar(model.CalendarName, userID);
+                string newCalendarID = await _calendarRepo.CreateCalendar(model.Name, userID);
                 // remove if not generating accessCode on create 
                 await _calendarRepo.GenerateAccessCode(Guid.Parse(newCalendarID));
                 return Ok(new { calendarID = newCalendarID });
@@ -89,7 +89,7 @@ namespace APIServer.Controllers
         public async Task<object> UpdateCalendar([FromBody] CalendarVM model)
         {
             // validate if user is owner of calendar here ***********************************
-            bool success = await _calendarRepo.UpdateCalendar(model.CalendarID, model.CalendarName);
+            bool success = await _calendarRepo.UpdateCalendar(model.CalendarID, model.Name);
             if (success)
             {
                 return Ok(new { Message = "Update successful." });
@@ -187,14 +187,14 @@ namespace APIServer.Controllers
         public async Task<string> AddEvent([FromBody] EventVM model)
         {
             // validate if user is owner of calendar here ***********************************
-            return await _eventRepo.CreateEvent(Guid.Parse(model.CalendarID), model.EventName, model.StartTime, model.EndTime);
+            return await _eventRepo.CreateEvent(Guid.Parse(model.CalendarID), model.Name, model.StartTime, model.EndTime);
         }
 
         [HttpPut]
         public async Task<bool> UpdateEvent([FromBody] EventVM model)
         {
             // validate if user is owner of calendar here ***********************************
-            return await _eventRepo.UpdateEvent(Guid.Parse(model.EventID), model.EventName, model.StartTime, model.EndTime);
+            return await _eventRepo.UpdateEvent(Guid.Parse(model.EventID), model.Name, model.StartTime, model.EndTime);
         }
 
         [HttpDelete]

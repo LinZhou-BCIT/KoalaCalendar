@@ -1,11 +1,13 @@
 import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, FormGroup, FormControl, ReactiveFormsModule, Validators }    from '@angular/forms';
 import { HttpModule} from '@angular/http';
 import { RecaptchaModule, RECAPTCHA_SETTINGS } from 'ng-recaptcha';
 import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 import { AppComponent } from './app.component';
 import { AppNavbarComponent } from './components/app-navbar/app-navbar.component';
@@ -58,11 +60,14 @@ import { CalendarDetailComponent } from './components/calendar-detail/calendar-d
     BrowserModule,
     FormsModule,
     HttpModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     NgbModule.forRoot(),
     RecaptchaModule.forRoot(),
     RecaptchaFormsModule,
     ReactiveFormsModule,
+    OwlDateTimeModule, 
+    OwlNativeDateTimeModule,
     CalendarModule.forRoot()
   ],
   providers: [

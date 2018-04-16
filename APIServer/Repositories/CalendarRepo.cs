@@ -192,7 +192,7 @@ namespace APIServer.Repositories
             CalendarVM vm = new CalendarVM()
             {
                 CalendarID = calendar.CalendarID,
-                CalendarName = calendar.Name,
+                Name = calendar.Name,
                 AccessCode = calendar.AccessCode,
                 OwnerID = calendar.OwnerID
             };

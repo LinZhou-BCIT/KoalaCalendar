@@ -6,7 +6,7 @@
   <ul *ngFor="let cal of ownedCalendars" class="list-group">
     <li class="list-group-item">
       <a routerLink="/calendar/own/{{cal.calendarID}}" routerLinkActive="active">
-        {{cal.calendarName}}
+        {{cal.name}}
       </a>
     </li>
   </ul>
@@ -15,7 +15,7 @@
   <ul *ngFor="let cal of subbedCalendars" class="list-group">
     <li class="list-group-item">
       <a routerLink="/calendar/sub/{{cal.calendarID}}" routerLinkActive="active">
-        {{cal.calendarName}}
+        {{cal.name}}
       </a>
     </li>
   </ul>

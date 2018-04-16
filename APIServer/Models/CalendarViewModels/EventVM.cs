@@ -9,7 +9,7 @@ namespace APIServer.Models.CalendarViewModels
     {
         public string EventID { get; set; }
         public string CalendarID { get; set; }
-        public string EventName { get; set; }
+        public string Name { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
     }
