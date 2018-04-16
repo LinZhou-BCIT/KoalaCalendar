@@ -1,45 +1,30 @@
-<p>
-  event-detail works!
-</p>
-
 <hr>
-<h4>Event</h4>
+<h4>Event Detail</h4>
 <hr>
-<form action="/calendar">
-
-<!-- <div class="form-group">
-  <label for="EventID" class="control-label">Event ID</label>
-  <input id="EventID" name="EventID" class="form-control" /> 
-</div> -->
-<div class="form-group">
-  <label for="EventTitle" class="control-label">Event Title</label>
-  <input id="EventTitle" name="EventTitle" type="text" placeholder="Event Title" class="form-control" /> 
-</div>
-<div class="form-group">
-  <label for="StartDate" class="control-label">Start Date</label>
-  <input id="StartDate" name="StartDate" type="date" placeholder="mm/dd/yyyy" class="form-control" />
-</div>
-<div class="form-group">
-  <label for="StartTime" class="control-label">Start Time</label>
-  <input id="StartTime" name="StartTime" type="time" placeholder="h:mm:ss" class="form-control" />
-</div>
-<div class="form-group">
-  <label for="EndDate" class="control-label">End Date</label>
-  <input id="EndDate" name="EndDate" type="date" placeholder="mm/dd/yyyy" class="form-control" />
-</div>
-<div class="form-group">
-  <label for="EndTime" class="control-label">End Time</label>
-  <input id="EndTime" name="EndTime" type="time" placeholder="h:mm:ss" class="form-control" />
-</div>
-<div class="form-group">
-  <label for="CalendarName" class="control-label">Choose Calendar</label>
-  <input id="CalendarName" name="CalendarName" type="text" placeholder="Calendar Name" class="form-control" />
-  </div>           
-
-<div class="form-group">
-  <button class="btn btn-outline-success" type="submit">Save</button>
-  <button class="btn btn-outline-secondary" type="submit">Cancel</button>
-  <button class="btn btn-outline-danger" type="submit">Delete</button>
-</div>
+<form *ngIf="event" (submit)="update()">
+    <div class="form-group">
+        <label for="EventTitle" class="control-label">Event Title</label>
+        <input id="EventTitle" name="EventTitle" type="text" [(ngModel)]="event.name" placeholder="Event Title" class="form-control" /> 
+    </div>
+    <div class="form-group">
+        <label for="StartDate" class="control-label">Start Time</label>
+        <input id="StartDate" name="StartDate" [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1" 
+            [(ngModel)]="event.startTime" class="form-control" />
+        <owl-date-time #dt1></owl-date-time>
+    </div>
+    <div class="form-group">
+        <label for="EndTime" class="control-label">End Time</label>
+        <input id="EndTime" name="EndTime" [owlDateTime]="dt2" [owlDateTimeTrigger]="dt2" 
+            [(ngModel)]="event.endTime" class="form-control" />
+        <owl-date-time #dt2></owl-date-time>
+    </div>
+    <div class="form-group">
+        <label for="CalendarID" class="control-label">Calendar</label>
+        <input id="CalendarID" name="CalendarID" [(ngModel)]="event.calendarName" type="text" class="form-control" readonly>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-outline-success" type="submit">Update</button>
+        <button class="btn btn-outline-secondary" routerLink="/calendar">Back</button>
+    </div>
 </form>
 <hr>

@@ -3,7 +3,7 @@
 <hr>
 <ul class="list-group">
   <li *ngFor="let ev of events" class="list-group-item">
-    <p><a routerLink="">{{ev.name}}</a></p>
+    <p><a routerLink="/event/{{ev.eventID}}">{{ev.name}}</a></p>
     <p>{{ev.startTime | date: "H:mm"}} - {{ev.endTime | date: "H:mm"}}</p>
     
   </li>
