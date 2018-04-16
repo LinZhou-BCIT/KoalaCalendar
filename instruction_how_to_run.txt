@@ -19,3 +19,6 @@ How to run the project?
 9. Copy the newly created "dist" folder in ClientApp folder, and replace the current dist folder inside "wwwwroot" folder in APIServer folder with this new copied item.
 
 10. Host it up with the service of your choice.
+
+Please note:
+To view the ERD, USE Case Diagrams, and Functional requirements, please navigate to "doc" folder, and navigate to the file "Phase3_doc_submission.docx".
