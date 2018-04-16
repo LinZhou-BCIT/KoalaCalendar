@@ -22,7 +22,8 @@ export class EventListComponent implements OnInit {
       let calendarMonth = params['month'];
       let calendarDay = params['day'];
       this.date = new Date(calendarYear, calendarMonth, calendarDay);
-      let nextDay = new Date(this.date);
+    });
+    let nextDay = new Date(this.date);
       nextDay.setDate(nextDay.getDate() + 1);
       let request: EventRequestModel = {
         // catch all
@@ -33,6 +34,7 @@ export class EventListComponent implements OnInit {
       this.calendarService.getEventsForTimeRange(request).subscribe(
         data => {
           this.events = data.events.map((event) => {
+            // timezone fix
             event.startTime = event.startTime + 'Z';
             event.endTime = event.endTime + 'Z';
             return event;
@@ -43,9 +45,6 @@ export class EventListComponent implements OnInit {
           alert(error);
         }
       );
-
-
-    })
   }
 
 

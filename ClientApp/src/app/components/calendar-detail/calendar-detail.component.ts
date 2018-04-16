@@ -37,7 +37,7 @@ export class CalendarDetailComponent implements OnInit {
   }
 
   update(){
-
+    alert('this function does not work right now.');
   }
 
   unsub(){

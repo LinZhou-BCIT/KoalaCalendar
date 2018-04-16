@@ -28,7 +28,7 @@ const appRoutes: Routes = [
   { path: 'calendar/sub', component: CalendarSubComponent, canActivate: [AuthGuardService] },
   { path: 'event/create', component: EventCreateComponent, canActivate: [AuthGuardService] },
   { path: 'event/list/:year/:month/:day', component: EventListComponent, canActivate: [AuthGuardService] },
-  { path: 'event/detail', component: EventDetailComponent, canActivate: [AuthGuardService] },
+  { path: 'event/:id', component: EventDetailComponent, canActivate: [AuthGuardService] },
   { path: 'about', component: AboutComponent },
   { path: 'account/login', component: LoginComponent },
   { path: 'account/logout', component: LogoutComponent, canActivate: [AuthGuardService] },

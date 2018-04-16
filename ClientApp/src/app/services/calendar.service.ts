@@ -14,6 +14,7 @@ export class Event {
   startTime: Date;
   endTime: Date;
   calendarID: string;
+  calendarName: string;
 }
 
 export class Calendar {
@@ -21,6 +22,7 @@ export class Calendar {
   name: string;
   accessCode: string;
   ownerID: string;
+  ownerEmail: string;
 }
 
 export class EventRequestModel {
@@ -188,8 +190,27 @@ export class CalendarService {
         .catch(this.handleError);
   }
 
-
+  
   // For events: check user with calendar owner?
+  getEventById(id: string): Observable<any> {
+    let userInfo: UserInfo = this.remoteService.getUserInfo();
+    let token: string = userInfo.token;
+    
+    let params = new URLSearchParams();
+    params.set('eventID', id);
+    let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); 
+
+    headers.append( 'Authorization', 'Bearer ' + token)
+    let options = new RequestOptions({
+        headers: headers,
+        search: params
+    });
+    let dataUrl = this.site + 'geteventbyid';  
+    return this.http.get(dataUrl, options)
+        .map(this.extractData)
+        .catch(this.handleError);
+    }
+
   addEvent(event: Event) : Observable<Comment[]> {
     let userInfo: UserInfo = this.remoteService.getUserInfo();
     let token: string = userInfo.token;
