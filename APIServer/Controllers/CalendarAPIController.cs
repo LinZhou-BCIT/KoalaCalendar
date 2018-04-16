@@ -215,10 +215,10 @@ namespace APIServer.Controllers
         }
 
         [HttpDelete]
-        public async Task<bool> DeleteEvent([FromBody] EventVM model)
+        public async Task<bool> DeleteEvent(string eventID)
         {
             // validate if user is owner of calendar here ***********************************
-            return await _eventRepo.DeleteEvent(Guid.Parse(model.EventID));
+            return await _eventRepo.DeleteEvent(Guid.Parse(eventID));
         }
 
     }
