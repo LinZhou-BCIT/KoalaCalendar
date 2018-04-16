@@ -23,7 +23,8 @@ body {
  }
 
  .starter-template {
-     height: auto;
+    height: auto;
+    background-color: #f9ffff;
  }
 
 .side-bar {
