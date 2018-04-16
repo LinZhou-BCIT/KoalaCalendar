@@ -1,0 +1,21 @@
+How to run the project?
+1. The source code contains two main project folders.
+
+2. ClientApp folder holds the client-side Angular project.
+
+3. APIServer folder holds the server-side .NET project.
+
+4. There is already a compiled version of the client-side project inside the "wwwwroot" folder of the server-side project.
+
+5. The server-side app uses sqLite database with sample data seeded.
+
+6. To start with a blank slate database, uncomment line#56 in AccountAPIController in the APIServer folder - to create roles.
+
+7. Navigate to ClientApp and in Services >> calendar.service.ts and remote-connect.service.ts --> change the URL for 
+"this.site" to the location of where you're hosting the server-side project.
+
+8. To rebuild the client-side, run "ng build --prod --bh /dist/" inside the ClientApp folder. 
+
+9. Copy the newly created "dist" folder in ClientApp folder, and replace the current dist folder inside "wwwwroot" folder in APIServer folder with this new copied item.
+
+10. Host it up with the service of your choice.
