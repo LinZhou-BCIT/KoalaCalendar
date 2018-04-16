@@ -89,15 +89,23 @@ namespace APIServer.Controllers
         public async Task<object> UpdateCalendar([FromBody] CalendarVM model)
         {
             // validate if user is owner of calendar here ***********************************
-            bool success = await _calendarRepo.UpdateCalendar(model.CalendarID, model.Name);
-            if (success)
+            string userID = HttpContext.User.Claims.ElementAt(2).Value;
+            if (await _calendarRepo.VerifyCalendarOwnner(userID, model.CalendarID))
             {
-                return Ok(new { Message = "Update successful." });
-            }
-            else
+                bool success = await _calendarRepo.UpdateCalendar(model.CalendarID, model.Name);
+                if (success)
+                {
+                    return Ok(new { Message = "Update successful." });
+                }
+                else
+                {
+                    return StatusCode(400, new { Message = "Calendar not found." });
+                }
+            }else
             {
-                return StatusCode(400, new { Message = "Calendar not found." });
+                return StatusCode(403, "Insufficient credentials");
             }
+
         }
 
         [HttpDelete]
@@ -105,16 +113,23 @@ namespace APIServer.Controllers
         {
             string userID = HttpContext.User.Claims.ElementAt(2).Value;
             // validate if user is owner of calendar here ***********************************
-            bool result = await _calendarRepo.RemoveCalendar(calendarID);
+            if (await _calendarRepo.VerifyCalendarOwnner(userID, calendarID))
+            {
+                bool result = await _calendarRepo.RemoveCalendar(calendarID);
 
-            if (result)
+                if (result)
+                {
+                    return Ok(new { message = "Calendar has been deleted successfully." });
+                }
+                else
+                {
+                    return StatusCode(400, new { Message = "Deletion failed." });
+                }
+            }else
             {
-                return Ok(new { message = "Calendar has been deleted successfully." });
+                return StatusCode(403, "Insufficient credentials");
             }
-            else
-            {
-                return StatusCode(400, new { Message = "Deletion failed." });
-            }
+
         }
 
         [HttpGet]
