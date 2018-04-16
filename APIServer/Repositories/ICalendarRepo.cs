@@ -20,5 +20,6 @@ namespace APIServer.Repositories
         Task<bool> SubToCalendar(string userID, string accessCode);
         Task<bool> UnsubUserFromCalendar(string userID, Guid calendarID);
         CalendarVM ConvertToVM(Calendar calendar);
+        Task<bool> VerifyCalendarOwnner(string userID, Guid calendarID);
     }
 }
