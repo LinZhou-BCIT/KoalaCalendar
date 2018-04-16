@@ -1,7 +1,7 @@
 <hr>
 <h4>Event Detail</h4>
 <hr>
-<form *ngIf="event" (submit)="update()">
+<form *ngIf="event">
     <div class="form-group">
         <label for="EventTitle" class="control-label">Event Title</label>
         <input id="EventTitle" name="EventTitle" type="text" [(ngModel)]="event.name" placeholder="Event Title" class="form-control" /> 
@@ -23,8 +23,11 @@
         <input id="CalendarID" name="CalendarID" [(ngModel)]="event.calendarName" type="text" class="form-control" readonly>
     </div>
     <div class="form-group">
-        <button class="btn btn-outline-success" type="submit">Update</button>
+        <button class="btn btn-outline-success" (click)="update()">Update</button>
         <button class="btn btn-outline-secondary" routerLink="/calendar">Back</button>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-outline-danger" *ngIf="owned" (click)="delete()">Delete</button>
     </div>
 </form>
 <hr>

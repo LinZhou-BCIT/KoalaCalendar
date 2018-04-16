@@ -34,6 +34,7 @@ export class EventListComponent implements OnInit {
       this.calendarService.getEventsForTimeRange(request).subscribe(
         data => {
           this.events = data.events.map((event) => {
+            // timezone fix
             event.startTime = event.startTime + 'Z';
             event.endTime = event.endTime + 'Z';
             return event;
