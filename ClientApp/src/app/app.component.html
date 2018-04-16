@@ -1,7 +1,7 @@
 <app-navbar></app-navbar> 
 
-<div class="container-fluid">
-    <div class="row">
+<div class="container-fluid wrapper">
+    <div class="row main-row">
         <div class="side-bar col-sm-3">
                 
             <router-outlet></router-outlet>
@@ -13,14 +13,14 @@
             <div class="calendar">
                 <div class="calendar-navs">
                   <div class="month-nav">
-                    <button (click)="prevMonth()">&lt;</button>
+                    <button (click)="prevMonth()" class="btn">&lt;</button>
                     <span class="p4">{{ currentDate.format('MMMM') }}</span>
-                    <button (click)="nextMonth()">&gt;</button>
+                    <button (click)="nextMonth()" class="btn">&gt;</button>
                   </div>
                   <div class="year-nav">
-                    <button (click)="prevYear()">&lt;</button>
+                    <button (click)="prevYear()" class="btn">&lt;</button>
                     <span>{{ currentDate.format('YYYY') }}</span>
-                    <button (click)="nextYear()">&gt;</button>
+                    <button (click)="nextYear()" class="btn">&gt;</button>
                   </div>
                 </div>
                 <div class="month-grid">
@@ -47,20 +47,15 @@
                   </div>
                 </div>
               </div>
-
-
         </div>
     </div>
     <a routerLink="/event/create" routerLinkActive="active" class="big-red">+</a>
+    <hr>
     <p>Example student account - Email:"student@koalademo.com", Password:"!QAZ2wsx"</p>
     <p>Example professor accounr - Email:"professor@koalademo.com", Password:"!QAZ2wsx"</p>
-    <p>The two types of roles behave the same on the client side right now.</p>
-    <p><a href="https://github.com/LinZhou-BCIT/KoalaCalendar/blob/master/docs/InternalProjectPhase2.docx">Doc Link</a> Last Updated: Tuesday Feb 13, 2018</p><br><br>
-
- 
-  
-    <p>Client App Last Updated: Tuesday April 3, 2018</p>
-
+    <p><a href="https://github.com/LinZhou-BCIT/KoalaCalendar/blob/master/docs/InternalProjectPhase2.docx">Doc Link</a> Last Updated: Tuesday Feb 13, 2018</p>
+    <p>Client App Last Updated: Sunday April 15, 2018</p>
+    <hr>
 </div>
 
 

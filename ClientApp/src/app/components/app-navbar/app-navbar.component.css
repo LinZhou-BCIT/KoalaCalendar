@@ -4,3 +4,7 @@
     -o-object-fit: contain;
     object-fit: contain;
   }
+
+.inner-nav {
+    max-width: 1024px;
+}
