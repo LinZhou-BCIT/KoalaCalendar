@@ -43,7 +43,7 @@ namespace APIServer.Services
                 = new SmtpClient("smtp.sendgrid.net", Convert.ToInt32(587));
 
                 System.Net.NetworkCredential credentials
-                = new System.Net.NetworkCredential("linzhou", "8:19ADistantLand.s");
+                = new System.Net.NetworkCredential("placeholderUsername", "placeholderPW");
 
                 smtpClient.Credentials = credentials;
                 smtpClient.Send(mailMsg);
